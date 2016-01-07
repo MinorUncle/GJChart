@@ -7,15 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C515E2AC1C3BA28600E82071 /* CoordinateView.m in Sources */ = {isa = PBXBuildFile; fileRef = C515E2AB1C3BA28600E82071 /* CoordinateView.m */; };
 		C559E1AE1C3B6F380001D68A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C559E1AD1C3B6F380001D68A /* main.m */; };
 		C559E1B11C3B6F380001D68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C559E1B01C3B6F380001D68A /* AppDelegate.m */; };
 		C559E1B41C3B6F380001D68A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C559E1B31C3B6F380001D68A /* ViewController.m */; };
 		C559E1B71C3B6F380001D68A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C559E1B51C3B6F380001D68A /* Main.storyboard */; };
 		C559E1B91C3B6F380001D68A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C559E1B81C3B6F380001D68A /* Assets.xcassets */; };
 		C559E1BC1C3B6F380001D68A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C559E1BA1C3B6F380001D68A /* LaunchScreen.storyboard */; };
+		C559E1C51C3B705E0001D68A /* CustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = C559E1C41C3B705E0001D68A /* CustomView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C515E2AA1C3BA28600E82071 /* CoordinateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoordinateView.h; sourceTree = "<group>"; };
+		C515E2AB1C3BA28600E82071 /* CoordinateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoordinateView.m; sourceTree = "<group>"; };
 		C559E1A91C3B6F380001D68A /* 贝塞尔曲线.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "贝塞尔曲线.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C559E1AD1C3B6F380001D68A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C559E1AF1C3B6F380001D68A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -26,6 +30,8 @@
 		C559E1B81C3B6F380001D68A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C559E1BB1C3B6F380001D68A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C559E1BD1C3B6F380001D68A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C559E1C31C3B705E0001D68A /* CustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomView.h; sourceTree = "<group>"; };
+		C559E1C41C3B705E0001D68A /* CustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +73,10 @@
 				C559E1BA1C3B6F380001D68A /* LaunchScreen.storyboard */,
 				C559E1BD1C3B6F380001D68A /* Info.plist */,
 				C559E1AC1C3B6F380001D68A /* Supporting Files */,
+				C559E1C31C3B705E0001D68A /* CustomView.h */,
+				C559E1C41C3B705E0001D68A /* CustomView.m */,
+				C515E2AA1C3BA28600E82071 /* CoordinateView.h */,
+				C515E2AB1C3BA28600E82071 /* CoordinateView.m */,
 			);
 			path = "贝塞尔曲线";
 			sourceTree = "<group>";
@@ -149,7 +159,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C515E2AC1C3BA28600E82071 /* CoordinateView.m in Sources */,
 				C559E1B41C3B6F380001D68A /* ViewController.m in Sources */,
+				C559E1C51C3B705E0001D68A /* CustomView.m in Sources */,
 				C559E1B11C3B6F380001D68A /* AppDelegate.m in Sources */,
 				C559E1AE1C3B6F380001D68A /* main.m in Sources */,
 			);
@@ -298,6 +310,7 @@
 				C559E1C21C3B6F380001D68A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
