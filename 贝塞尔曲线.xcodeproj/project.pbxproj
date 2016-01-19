@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C515E2AC1C3BA28600E82071 /* CoordinateView.m in Sources */ = {isa = PBXBuildFile; fileRef = C515E2AB1C3BA28600E82071 /* CoordinateView.m */; };
+		C53FCD231C4D015200B527D2 /* PointTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = C53FCD221C4D015200B527D2 /* PointTextView.m */; };
 		C559E1AE1C3B6F380001D68A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C559E1AD1C3B6F380001D68A /* main.m */; };
 		C559E1B11C3B6F380001D68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C559E1B01C3B6F380001D68A /* AppDelegate.m */; };
 		C559E1B41C3B6F380001D68A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C559E1B31C3B6F380001D68A /* ViewController.m */; };
@@ -15,11 +16,15 @@
 		C559E1B91C3B6F380001D68A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C559E1B81C3B6F380001D68A /* Assets.xcassets */; };
 		C559E1BC1C3B6F380001D68A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C559E1BA1C3B6F380001D68A /* LaunchScreen.storyboard */; };
 		C559E1C51C3B705E0001D68A /* CustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = C559E1C41C3B705E0001D68A /* CustomView.m */; };
+		C5A23EE11C4E2CF800B78567 /* PointCircularLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C5A23EE01C4E2CF800B78567 /* PointCircularLayer.m */; };
+		C5A23F0D1C4E47E800B78567 /* SquareLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C5A23F0C1C4E47E800B78567 /* SquareLayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		C515E2AA1C3BA28600E82071 /* CoordinateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoordinateView.h; sourceTree = "<group>"; };
 		C515E2AB1C3BA28600E82071 /* CoordinateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoordinateView.m; sourceTree = "<group>"; };
+		C53FCD211C4D015200B527D2 /* PointTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointTextView.h; sourceTree = "<group>"; };
+		C53FCD221C4D015200B527D2 /* PointTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PointTextView.m; sourceTree = "<group>"; };
 		C559E1A91C3B6F380001D68A /* 贝塞尔曲线.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "贝塞尔曲线.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C559E1AD1C3B6F380001D68A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C559E1AF1C3B6F380001D68A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -32,6 +37,10 @@
 		C559E1BD1C3B6F380001D68A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C559E1C31C3B705E0001D68A /* CustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomView.h; sourceTree = "<group>"; };
 		C559E1C41C3B705E0001D68A /* CustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomView.m; sourceTree = "<group>"; };
+		C5A23EDF1C4E2CF800B78567 /* PointCircularLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointCircularLayer.h; sourceTree = "<group>"; };
+		C5A23EE01C4E2CF800B78567 /* PointCircularLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PointCircularLayer.m; sourceTree = "<group>"; };
+		C5A23F0B1C4E47E800B78567 /* SquareLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquareLayer.h; sourceTree = "<group>"; };
+		C5A23F0C1C4E47E800B78567 /* SquareLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquareLayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,8 +84,14 @@
 				C559E1AC1C3B6F380001D68A /* Supporting Files */,
 				C559E1C31C3B705E0001D68A /* CustomView.h */,
 				C559E1C41C3B705E0001D68A /* CustomView.m */,
+				C5A23EDF1C4E2CF800B78567 /* PointCircularLayer.h */,
+				C5A23EE01C4E2CF800B78567 /* PointCircularLayer.m */,
+				C5A23F0B1C4E47E800B78567 /* SquareLayer.h */,
+				C5A23F0C1C4E47E800B78567 /* SquareLayer.m */,
 				C515E2AA1C3BA28600E82071 /* CoordinateView.h */,
 				C515E2AB1C3BA28600E82071 /* CoordinateView.m */,
+				C53FCD211C4D015200B527D2 /* PointTextView.h */,
+				C53FCD221C4D015200B527D2 /* PointTextView.m */,
 			);
 			path = "贝塞尔曲线";
 			sourceTree = "<group>";
@@ -163,6 +178,9 @@
 				C559E1B41C3B6F380001D68A /* ViewController.m in Sources */,
 				C559E1C51C3B705E0001D68A /* CustomView.m in Sources */,
 				C559E1B11C3B6F380001D68A /* AppDelegate.m in Sources */,
+				C5A23EE11C4E2CF800B78567 /* PointCircularLayer.m in Sources */,
+				C53FCD231C4D015200B527D2 /* PointTextView.m in Sources */,
+				C5A23F0D1C4E47E800B78567 /* SquareLayer.m in Sources */,
 				C559E1AE1C3B6F380001D68A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -274,6 +292,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "贝塞尔曲线/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "--.-----";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -285,6 +304,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "贝塞尔曲线/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "--.-----";
 				PRODUCT_NAME = "$(TARGET_NAME)";

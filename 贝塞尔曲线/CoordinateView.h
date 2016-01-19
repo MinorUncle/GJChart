@@ -24,6 +24,7 @@
 
 
 -(void)addValue:(CGPoint)value;
+-(void)beginWithValue:(CGPoint)value;
 
 
 @end

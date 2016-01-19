@@ -31,6 +31,7 @@
 }
 -(void)setFrame:(CGRect)frame{
     [super setFrame:frame];
+    [self setNeedsDisplay];
     shapeLayer.frame = CGRectMake(frame.size.width * 0.25, frame.size.width * 0.25, frame.size.width*0.5, frame.size.height*0.5);
 
 }
@@ -54,7 +55,6 @@
 
     
     [shapeLayer addAnimation:anima forKey:nil];
-
 
 
 }
