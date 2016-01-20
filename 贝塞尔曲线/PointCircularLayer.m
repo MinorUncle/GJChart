@@ -23,6 +23,8 @@
     self = [super init];
     if (self) {
         _pointArry = [[NSMutableArray alloc]init];
+        _insideColor = [UIColor greenColor];
+        _outsideColor = [UIColor blueColor];
     }
     return self;
 }
@@ -42,18 +44,16 @@
 
 -(void)drawCirularWithContext:(CGContextRef)ctx{
     for (NSValue* value in _pointArry) {
-        CGContextSetFillColorWithColor(ctx, [UIColor blackColor].CGColor);
+        CGContextSetFillColorWithColor(ctx, _outsideColor.CGColor);
         CGPoint point = [value CGPointValue];
         CGRect rect = CGRectMake(point.x - BIG_RADIUS, point.y - BIG_RADIUS, 2*BIG_RADIUS, 2*BIG_RADIUS);
         CGContextAddEllipseInRect(ctx, rect);
         CGContextDrawPath(ctx, kCGPathFill);
         
-        CGContextSetFillColorWithColor(ctx, [UIColor greenColor].CGColor);
+        CGContextSetFillColorWithColor(ctx, _insideColor.CGColor);
         rect = CGRectMake(point.x - SMALL_RADIUS, point.y - SMALL_RADIUS, 2*SMALL_RADIUS, 2*SMALL_RADIUS);
         CGContextAddEllipseInRect(ctx, rect);
         CGContextDrawPath(ctx, kCGPathFill);
-        
-        CGContextSetFillColorWithColor(ctx, [UIColor blackColor].CGColor);
     }
 }
 @end

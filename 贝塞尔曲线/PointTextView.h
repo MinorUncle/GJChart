@@ -10,6 +10,10 @@
 
 @interface PointTextView : UIView
 @property(nonatomic,retain,readonly)NSMutableDictionary* textDic;////[nsstring,cgpoint]
+@property(nonatomic,retain)NSFont* font;////
+@property(nonatomic,retain)UIColor* fontColor;////
+
+
 -(void)addTextWithDic:(NSDictionary*)dic;
 -(void)addTextWithPoint:(CGPoint)point text:(NSString*)str;
 @end

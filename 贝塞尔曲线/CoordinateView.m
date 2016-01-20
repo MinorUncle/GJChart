@@ -13,15 +13,13 @@
 #define ARROW_SIZE 5    ///箭头大小
 #define POINT_SIZE 5    //点大小
 #import "CoordinateView.h"
-#import "PointTextView.h"
-#import "PointCircularLayer.h"
+
 
 @interface CoordinateView()
 {
     CAShapeLayer* _shaperLayer;
     UIBezierPath* _path;
-    PointTextView* pointView;
-    PointCircularLayer* _circularLayer;
+
     CGFloat unitW ;
     CGFloat unitH ;
 }
@@ -52,6 +50,13 @@
         _beginValue = CGPointMake(0, 0);
         _speed = 0.01;
        
+        
+        ////背景方块条
+        _squareLayer = [[SquareLayer alloc]init];
+        _squareLayer.frame = self.layer.bounds;
+        [self.layer addSublayer:_squareLayer];
+
+        ////坐标轴，
         _shaperLayer = [CAShapeLayer layer];
         [self.layer addSublayer:_shaperLayer];
         _shaperLayer.frame = self.layer.bounds;
@@ -60,9 +65,11 @@
         _circularLayer.frame = self.layer.bounds;
         [self.layer addSublayer:_circularLayer];
         
-        pointView = [[PointTextView alloc]init];
-        pointView.backgroundColor = [UIColor clearColor];
-        [self addSubview:pointView];
+        /////文字
+        _textView = [[PointTextView alloc]init];
+        _textView.backgroundColor = [UIColor clearColor];
+        [self addSubview:_textView];
+        
         
        
        
@@ -84,8 +91,9 @@
     unitH = _unitY / _MaxY * self.coordinateH;
     [self drawCoordinate];
     
-    pointView.frame = self.bounds;
+    _textView.frame = self.bounds;
     _circularLayer.frame = self.layer.bounds;
+    _squareLayer.frame = self.layer.bounds;
 }
 -(CGFloat)coordinateW{
     return self.bounds.size.width - 2*LEFT_PANNDINT - ARROW_SIZE;
@@ -123,7 +131,7 @@
         [_path moveToPoint:point];
         
         if(i % _countX == 0){
-            NSString* value = [NSString stringWithFormat:@"%d",(int)(i / _countX * _unitX)];
+            NSString* value = [NSString stringWithFormat:@"%d",(int)(i * _unitX)];
             CGSize size = [value sizeWithAttributes:nil];
             NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width * 0.5, point.y + 2)];
             [textDic setObject:value forKey:key];
@@ -134,7 +142,7 @@
         [_path addLineToPoint:point];
     }
     
-    [pointView addTextWithDic:textDic];
+    [_textView addTextWithDic:textDic];
 }
 - (void)drawYCoordinate {
     NSMutableDictionary* textDic = [[NSMutableDictionary alloc]init];
@@ -165,7 +173,7 @@
         [_path moveToPoint:point];
         
         if(i % _countY == 0){
-            NSString* value = [NSString stringWithFormat:@"%d",(int)(i / _countY * _unitY)];
+            NSString* value = [NSString stringWithFormat:@"%d",(int)(i * _unitY)];
             CGSize size = [value sizeWithAttributes:nil];
             NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width -2, point.y - size.height*0.5)];
             [textDic setObject:value forKey:key];
@@ -178,7 +186,7 @@
         
     }
     
-    [pointView addTextWithDic:textDic];
+    [_textView addTextWithDic:textDic];
 
 }
 - (void)drawCoordinate {
@@ -195,11 +203,18 @@
     [_path addLineToPoint:point];
     [_circularLayer addCircularToPoint:point];
 
-        CABasicAnimation* anima = [CABasicAnimation animationWithKeyPath:@"path"];
-//    anima.duration = _speed * timeLenth;
+    CABasicAnimation* anima = [CABasicAnimation animationWithKeyPath:@"path"];
+
+    [_shaperLayer addAnimation:anima forKey:nil];
+    _shaperLayer.path = _path.CGPath;
     
-        [_shaperLayer addAnimation:anima forKey:nil];
-        _shaperLayer.path = _path.CGPath;
+    
+    NSString* str = [NSString stringWithFormat:@"%d",(int)value.y];
+    CGSize size = [str sizeWithAttributes: _textView.font ? @{NSFontAttributeName:_textView.font}:nil];
+    point.y -= size.height + 2;
+    point.x -= size.width * 0.5;
+    NSDictionary* dic = @{[NSValue valueWithCGPoint:point]:str};
+    [_textView addTextWithDic:dic];
     
    
 //    [_path addLineToPoint:[self getPointWithValue:value]];
@@ -209,6 +224,19 @@
 //    }];
 }
 
+
+-(void)addSquareWithValueRect:(CGRect)valueRect color:(UIColor *)color style:(UIEdgeInsets)style{
+    valueRect.origin.x = [self getXWithValue:valueRect.origin.x];
+    valueRect.origin.y = [self getYWithValue:valueRect.origin.y];
+    valueRect.size.width *= (unitW / _unitX);
+    valueRect.size.height *= -(unitH / _unitY);
+    
+    ///坐标系转换
+    CGFloat top = style.top;
+    style.top = style.bottom;
+    style.bottom = top;
+    [_squareLayer addSquareWithRect:valueRect color:color style:style];
+}
 -(void)beginWithValue:(CGPoint)value{
     CGPoint point = [self getPointWithValue:value];
     [_circularLayer addCircularToPoint:point];
@@ -216,13 +244,36 @@
 
 
 -(CGPoint)getPointWithValue:(CGPoint)value{
-    if(_unitX == 0 || _unitY == 0){
-        return CGPointZero;
-    }
-    value.x = value.x / _unitX * unitW + LEFT_PANNDINT;
-    value.y = value.y / _unitY * unitH;
-    value.y = _shaperLayer.frame.size.height - BOTTOM_PANNDING - value.y;
+    
+    value.x = [self getXWithValue:value.x];
+    value.y = [self getYWithValue:value.y];
     return value;
+}
+-(CGFloat)getXWithValue:(int)value{
+    if(_unitX == 0 ){
+        return 0;
+    }
+    value = value / _unitX * unitW + LEFT_PANNDINT;
+    return value;
+}
+-(CGFloat)getYWithValue:(int)value{
+    if(_unitY == 0 ){
+        return 0;
+    }
+    value = value / _unitY * unitH;
+    value = _shaperLayer.frame.size.height - BOTTOM_PANNDING - value;
+    return value;
+}
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    //////测试
+    CGFloat x= arc4random()%100;
+    CGFloat y = arc4random() %100;
+    [self addValue:CGPointMake(x, y)];
+    
+    //    CGFloat width = fabsf(arc4random()%100 - x);
+    //    CGFloat height =fabsf(arc4random()%100 - y);
+    //    [view addSquareWithValueRect:CGRectMake(-10, 10, 200, 0) color:[UIColor colorWithRed:0 green:1 blue:0 alpha:0.5] style:UIEdgeInsetsMake(SquareLayerDash, SquareLayerNone, SquareLayerSolid, SquareLayerNone)];
 }
 
 

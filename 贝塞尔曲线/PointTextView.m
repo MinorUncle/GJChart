@@ -24,7 +24,14 @@
     _textDic = textDic;
 }
 -(void)drawText{
-    NSDictionary *font=@{NSFontAttributeName: [UIFont systemFontOfSize:12.f]};
+//    NSDictionary *font=@{NSFontAttributeName: [UIFont systemFontOfSize:12.f],NSForegroundColorAttributeName:[UIColor yellowColor]};
+    NSMutableDictionary* font = [[NSMutableDictionary alloc]init];
+    if (_font != nil) {
+        [font setObject:_font forKey:NSFontAttributeName];
+    }
+    if (_fontColor != nil) {
+        [font setObject:_fontColor forKey:NSForegroundColorAttributeName];
+    }
     for (NSValue* value in self.textDic.allKeys) {
         CGPoint point = [value CGPointValue];
         NSString* str = self.textDic[value];

@@ -10,5 +10,8 @@
 #import <UIKit/UIKit.h>
 
 @interface PointCircularLayer : CALayer
+@property(nonatomic,retain)UIColor* insideColor;   
+@property(nonatomic,retain)UIColor* outsideColor;
+
 -(void)addCircularToPoint:(CGPoint)point;
 @end
