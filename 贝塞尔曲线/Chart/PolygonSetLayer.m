@@ -6,14 +6,14 @@
 //  Copyright © 2016年 tongguan. All rights reserved.
 //
 
-#import "PolygonLayer.h"
-@interface PolygonLayer ()
+#import "PolygonSetLayer.h"
+@interface PolygonSetLayer ()
 {
     NSMutableArray< NSArray<NSValue*>*>* _polygons;
     NSMutableArray<UIColor*>* _colors;
 }
 @end
-@implementation PolygonLayer
+@implementation PolygonSetLayer
 - (instancetype)init
 {
     self = [super init];

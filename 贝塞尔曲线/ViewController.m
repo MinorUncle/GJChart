@@ -1,65 +1,102 @@
 //
-//  ViewController.m
-//  贝塞尔曲线
+//  ChartViewController.m
+//  TVBAINIAN
 //
-//  Created by tongguan on 16/1/5.
-//  Copyright © 2016年 tongguan. All rights reserved.
+//  Created by tongguan on 16/1/21.
+//  Copyright © 2016年 tongguantech. All rights reserved.
 //
 
 #import "ViewController.h"
 #import "CoordinateView.h"
-#import "PolygonLayer.h"
 
-@interface ViewController ()
+
+@interface ViewController ()<CoordinateViewDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
 {
-    CoordinateView* view;
+    CoordinateView* _coordinateView;
     UIScrollView* _scrollView;
+    UIDatePicker* _picker;
 }
-
 @end
 
 @implementation ViewController
-//-(void)loadView{
-//    [super loadView];
-//    self.view = [[CustomView alloc]init];
-//    self.view.backgroundColor = [UIColor whiteColor];
-//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    view = [[CoordinateView alloc]init];
-    view.backgroundColor = [UIColor redColor];
-    view.MaxY = 100;
-    view.MaxX = 900;
-    view.unitX = 20;
-    view.unitY = 10;
-    view.countX = 5;
-    view.countY = 5;
-   
-    _scrollView = [[UIScrollView alloc]initWithFrame:self.view.bounds];
+    [self buildUI];
+    // Do any additional setup after loading the view.
+}
+-(void)buildUI{
+    CGRect rect = self.view.bounds;
+    self.view.backgroundColor = [UIColor whiteColor];
+
+    rect.size.height *= 0.5;
+    
+    
+    _scrollView = [[UIScrollView alloc]initWithFrame:rect];
+    _scrollView.backgroundColor = [UIColor whiteColor];
+    
+    _coordinateView = [[CoordinateView alloc]initWithFrame:_scrollView.bounds];
+    _coordinateView.backgroundColor = [UIColor greenColor];
+    _coordinateView.lineLayer.color = [UIColor yellowColor];
+    _coordinateView.color = [UIColor yellowColor];
+    _coordinateView.delegate = self;
     [self.view addSubview:_scrollView];
-    [_scrollView addSubview:view];
-    view.frame = CGRectMake(60, 60, 900, 300);
-    _scrollView.contentSize = view.bounds.size;
+    [_scrollView addSubview:_coordinateView];
+    [self drawTenMin];
+}
+-(void)valueChange:(UIDatePicker* )picker{
+    NSDateFormatter* formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString* str = [formatter stringFromDate:_picker.date];
+    NSLog(@"%@",str);
     
-    PolygonLayer* polygonLayer = [[PolygonLayer alloc]init];
-    polygonLayer.frame = view.bounds;
-    [view.layer addSublayer:polygonLayer];
-    NSMutableArray* arry = [[NSMutableArray alloc]init];
-    for (int i = 2; i < 800; i = i+30) {
-        CGPoint point = CGPointMake(i, arc4random() % 100);
-        [arry addObject:[NSValue valueWithCGPoint:point]];
-    }
     
-    [polygonLayer addAreaWithPoints:arry color:[UIColor greenColor]];
-    // Do any additional setup after loading the view, typically from a nib.
+}
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
+    return 2;
+}
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
+    return 4;
 }
 
 
+-(void)drawTenMin{
+    _coordinateView.MaxX = 1440;
+    _coordinateView.unitX = 2;
+    _coordinateView.countX = 5;
+    CGRect rect = _coordinateView.frame;
+    rect.size.width = 6880;
+    _coordinateView.frame = rect;
+    _scrollView.contentSize = rect.size;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+-(NSString *)CoordinateView:(CoordinateView *)view titleWithXValue:(CGFloat)value{
+    int hour = (int)value / 60;
+    int min = (int)value % 60;
+    NSString* title = [NSString stringWithFormat:@"%02d:%02d",hour,min];
+    return title;
+}
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    NSLog(@"touch");
+}
+//-(NSString *)CoordinateView:(CoordinateView *)view titleWithYValue:(CGFloat)value{
+//    NSString* title;
+//    return title;
+//}
+
+/*
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

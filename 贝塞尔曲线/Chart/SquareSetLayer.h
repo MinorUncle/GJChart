@@ -6,6 +6,11 @@
 //  Copyright © 2016年 tongguan. All rights reserved.
 //
 
+
+/**
+ /矩形集合
+ 
+ */
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 typedef enum SquareLayerStyle{
@@ -13,9 +18,6 @@ typedef enum SquareLayerStyle{
     SquareLayerDash,        ///虚线
     SquareLayerSolid        ///实线
 }SquareLayerStyle;
-@interface SquareLayer : CALayer
+@interface SquareSetLayer : CALayer
 -(void)addSquareWithRect:(CGRect)rect color:(UIColor*)color style:(UIEdgeInsets)style;
--(void)addLineWithFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint color:(UIColor*)color style:(SquareLayerStyle)style;
-
-
 @end

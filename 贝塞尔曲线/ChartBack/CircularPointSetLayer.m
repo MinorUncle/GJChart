@@ -6,18 +6,17 @@
 //  Copyright © 2016年 tongguan. All rights reserved.
 //
 
-#import "PointCircularLayer.h"
-#define SMALL_RADIUS 2
-#define BIG_RADIUS 3
+#import "CircularPointSetLayer.h"
 
-@interface PointCircularLayer()
+
+@interface CircularPointSetLayer()
 {
     NSMutableArray<NSValue*>* _pointArry;////圆心
     
 }
 @end
 
-@implementation PointCircularLayer
+@implementation CircularPointSetLayer
 - (instancetype)init
 {
     self = [super init];
@@ -25,6 +24,8 @@
         _pointArry = [[NSMutableArray alloc]init];
         _insideColor = [UIColor greenColor];
         _outsideColor = [UIColor blueColor];
+        _bigRadius = 3;
+        _smallRadius = 2;
     }
     return self;
 }
@@ -42,16 +43,17 @@
     [self setNeedsDisplay];
 }
 
+
 -(void)drawCirularWithContext:(CGContextRef)ctx{
     for (NSValue* value in _pointArry) {
         CGContextSetFillColorWithColor(ctx, _outsideColor.CGColor);
         CGPoint point = [value CGPointValue];
-        CGRect rect = CGRectMake(point.x - BIG_RADIUS, point.y - BIG_RADIUS, 2*BIG_RADIUS, 2*BIG_RADIUS);
+        CGRect rect = CGRectMake(point.x - _bigRadius, point.y - _bigRadius, 2*_bigRadius, 2*_bigRadius);
         CGContextAddEllipseInRect(ctx, rect);
         CGContextDrawPath(ctx, kCGPathFill);
         
         CGContextSetFillColorWithColor(ctx, _insideColor.CGColor);
-        rect = CGRectMake(point.x - SMALL_RADIUS, point.y - SMALL_RADIUS, 2*SMALL_RADIUS, 2*SMALL_RADIUS);
+        rect = CGRectMake(point.x - _smallRadius, point.y - _smallRadius, 2*_smallRadius, 2*_smallRadius);
         CGContextAddEllipseInRect(ctx, rect);
         CGContextDrawPath(ctx, kCGPathFill);
     }

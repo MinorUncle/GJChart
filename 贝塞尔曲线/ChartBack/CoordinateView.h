@@ -6,12 +6,19 @@
 //  Copyright © 2016年 tongguan. All rights reserved.
 //
 
+//坐标轴
 #import <UIKit/UIKit.h>
-#import "SquareLayer.h"
-#import "PointTextView.h"
-#import "PointCircularLayer.h"
+#import "SquareSetLayer.h"
+#import "TextSetView.h"
+#import "CircularPointSetLayer.h"
+#import "LineSetLayer.h"
+@class CoordinateView;
+@protocol CoordinateViewDelegate <NSObject>
+@optional
+-(NSString*) CoordinateView:(CoordinateView*)view titleWithXValue:(CGFloat)value;  ///自定义x轴名称
+-(NSString*) CoordinateView:(CoordinateView*)view titleWithYValue:(CGFloat)value;  ///自定义y轴名称
 
-
+@end
 
 @interface CoordinateView : UIView
 @property(nonatomic,assign)CGFloat MaxY; ///最大Y
@@ -27,17 +34,22 @@
 @property(nonatomic,assign)CGPoint beginValue;
 @property(nonatomic,assign)float speed;   //动画速度 ///未使用
 
-@property(nonatomic,retain,readonly)PointTextView* textView;
-@property(nonatomic,retain,readonly)PointCircularLayer* circularLayer;
-@property(nonatomic,retain,readonly)SquareLayer* squareLayer;
+@property(nonatomic,retain,readonly)TextSetView* textView;
+@property(nonatomic,retain,readonly)CircularPointSetLayer* circularLayer;
+@property(nonatomic,retain,readonly)SquareSetLayer* squareLayer;
+@property(nonatomic,retain,readonly)LineSetLayer* lineLayer;
+@property(nonatomic,weak) id<CoordinateViewDelegate> delegate;
 
 
+
+-(CGFloat)getYWithValue:(int)value;
+-(CGFloat)getXWithValue:(int)value;
 
 
 ////折线
 -(void)addValue:(CGPoint)value;
 -(void)beginWithValue:(CGPoint)value;
-
+-(void)addValues:(NSArray<NSValue*>*)values;
 
 //////背景方块
 -(void)addSquareWithValueRect:(CGRect)valueRect color:(UIColor *)color style:(UIEdgeInsets)style;

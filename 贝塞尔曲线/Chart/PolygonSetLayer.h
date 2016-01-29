@@ -4,11 +4,18 @@
 //
 //  Created by tongguan on 16/1/20.
 //  Copyright © 2016年 tongguan. All rights reserved.
+
+
+/**
+ *  <#Description#>
+ *
+ *  @return <#return value description#>
+ */
 //多边形
 
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
-@interface PolygonLayer : CALayer
+@interface PolygonSetLayer : CALayer
 -(void)addAreaWithPoints:(NSArray<NSValue*>*)points  color:(UIColor*)color;
 @end

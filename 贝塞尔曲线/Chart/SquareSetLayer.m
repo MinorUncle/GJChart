@@ -6,8 +6,8 @@
 //  Copyright © 2016年 tongguan. All rights reserved.
 //
 
-#import "SquareLayer.h"
-@interface SquareLayer()
+#import "SquareSetLayer.h"
+@interface SquareSetLayer()
 {
     /////矩形数据
     NSMutableArray<NSValue*>* rangeArry;///位置数组
@@ -15,7 +15,7 @@
     NSMutableArray<NSValue*>* styleArry;  ///样式数组
 }
 @end
-@implementation SquareLayer
+@implementation SquareSetLayer
 - (instancetype)init
 {
     self = [super init];
