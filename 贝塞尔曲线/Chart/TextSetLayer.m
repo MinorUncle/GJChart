@@ -6,20 +6,24 @@
 //  Copyright © 2016年 tongguan. All rights reserved.
 //
 
-#import "TextSetView.h"
+#import "TextSetLayer.h"
+#import <UIKit/UIGraphics.h>
 
-@implementation TextSetView
+@implementation TextSetLayer
 - (instancetype)init
 {
     self = [super init];
     if (self) {
         self.textDic = [[NSMutableDictionary alloc]init];
-        _textAlignmentMargin = 2;
+        _textAlignmentMargin = 4;
     }
     return self;
 }
--(void)drawRect:(CGRect)rect{
+-(void)drawInContext:(CGContextRef)ctx{
+    UIGraphicsPushContext(ctx);
     [self drawText];
+    UIGraphicsPopContext();
+
 }
 -(void)setTextDic:(NSMutableDictionary *)textDic{
     _textDic = textDic;
@@ -33,7 +37,7 @@
     if (_fontColor != nil) {
         [font setObject:_fontColor forKey:NSForegroundColorAttributeName];
     }
-    
+
     for (NSValue* value in self.textDic.allKeys) {
         CGPoint point = [value CGPointValue];
         NSString* str = self.textDic[value];
@@ -48,7 +52,6 @@
 }
 -(void)setFrame:(CGRect)frame{
     [super setFrame:frame];
-    [self setNeedsDisplay];
 }
 -(CGPoint)transformPoint:(CGPoint)point WithTextAlignment:(TextAlignment)alignment text:(NSString*)str{
     CGSize size = [str sizeWithAttributes: _font == nil ? nil : @{NSFontAttributeName:_font}];
@@ -117,6 +120,7 @@
     for (NSValue* key in dic.allKeys) {
         [self.textDic setObject:dic[key] forKey:key];
     }
+
     [self setNeedsDisplay];
 }
 -(void)clear{  ///清除所有数据

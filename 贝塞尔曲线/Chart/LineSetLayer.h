@@ -8,6 +8,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
+#import "CircularPointSetLayer.h"
 typedef enum _LineType{
     LineTypeNone,
     LineTypeDash,
@@ -17,10 +18,10 @@ typedef enum _LineType{
 @interface LineSetLayer : CAShapeLayer
 @property(nonatomic,retain)UIColor* color;////只能设置统一线条颜色       ///填充颜色请调用fillColor
 @property(nonatomic,assign)LineType capType;////线条类型
-
+@property(nonatomic,retain)CircularPointSetLayer* circularLayer;////
 -(void)addLineFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint;
--(void)addLinesWithPoints:(NSArray<NSValue*>*)points;
--(void)addLineToPoint:(CGPoint)toPoint;    ///起点为当前点
+-(void)addLinesWithPoints:(NSArray<NSValue*>*)points; //第一个为起点
+-(void)addLineToPoint:(CGPoint)toPoint;
 -(void)beginWithPoint:(CGPoint)point;  ///设置当前点
 
 -(void)clear;   ////只删除数据，不更新画面，

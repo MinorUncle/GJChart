@@ -19,5 +19,19 @@ typedef enum SquareLayerStyle{
     SquareLayerSolid        ///实线
 }SquareLayerStyle;
 @interface SquareSetLayer : CALayer
--(void)addSquareWithRect:(CGRect)rect color:(UIColor*)color style:(UIEdgeInsets)style;
+@property(retain,nonatomic)UIColor* fillColor;
+@property(retain,nonatomic)UIColor* strokeColor;
+@property(assign,nonatomic)UIEdgeInsets lineStyle;
+
+/**
+ *  画方块
+ *
+ *  @param rect  位置
+ *  @param color 颜色
+ *  @param style 边框样式
+ */
+-(void)addSquareWithRect:(CGRect)rect;
+
+-(void)addSquareWithRects:(NSArray<NSValue*>*)rects;
+
 @end

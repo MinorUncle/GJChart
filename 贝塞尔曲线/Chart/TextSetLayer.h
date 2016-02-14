@@ -10,6 +10,7 @@
 #import <UIKit/UIView.h>
 #import <UIKit/NSStringDrawing.h>
 #import <CoreText/CoreText.h>
+#import <QuartzCore/QuartzCore.h>
 
 typedef enum _TextAlignment{
     TextAlignmentNone = 0,
@@ -23,7 +24,7 @@ typedef enum _TextAlignment{
     TextAlignmentBottonLeft,
     TextAlignmentBottonRight,
 }TextAlignment;
-@interface TextSetView : UIView
+@interface TextSetLayer : CALayer
 @property(nonatomic,retain,readonly)NSMutableDictionary* textDic;////[nsstring,cgpoint]
 @property(nonatomic,retain)UIFont* font;////
 @property(nonatomic,retain)UIColor* fontColor;////

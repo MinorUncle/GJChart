@@ -13,6 +13,8 @@
 @interface CircularPointSetLayer : CAShapeLayer
 @property(nonatomic,retain)UIColor* insideColor;   
 @property(nonatomic,retain)UIColor* outsideColor;
+@property(nonatomic,assign)CGFloat outsideRadius;
+@property(nonatomic,assign)CGFloat insideRadius;
 
 -(void)addCircularToPoint:(CGPoint)point;
 -(void)addCircularWithPoints:(NSArray<NSValue*>*)points;

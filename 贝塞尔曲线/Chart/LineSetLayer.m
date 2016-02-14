@@ -17,13 +17,19 @@
 {
     self = [super init];
     if (self) {
+        self.fillColor = [UIColor clearColor].CGColor;
         path = [[UIBezierPath alloc]init];
-        
+        _circularLayer = [[CircularPointSetLayer alloc]init];
+        [self addSublayer:_circularLayer];
         
 //        [self setLineDashPattern:@[@3,@3]];
         [self setStrokeColor:[UIColor yellowColor].CGColor];
     }
     return self;
+}
+-(void)setFrame:(CGRect)frame{
+    [super setFrame:frame];
+    _circularLayer.frame = self.bounds;
 }
 -(void)setCapType:(LineType)capType{
     switch (capType) {
@@ -55,30 +61,36 @@
 -(void)addLineFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint{
     [path moveToPoint:fromPoint];
     [path addLineToPoint:toPoint];
+    [_circularLayer addCircularToPoint:toPoint];
     self.path = path.CGPath;
 }
+
 -(void)addLinesWithPoints:(NSArray<NSValue*>*)points{
     if (points.count <2) {return;}
     CGPoint point = [points[0] CGPointValue];
     [path moveToPoint:point];
+    [_circularLayer addCircularToPoint:point];
     for (int i = 1; i<points.count; i++) {
         [path addLineToPoint:[points[i] CGPointValue]];
+        [_circularLayer addCircularToPoint:[points[i] CGPointValue]];
+
     }
     self.path = path.CGPath;
 }
 -(void)clear{
     [path removeAllPoints];
+    [_circularLayer clear];
 }
 -(void)reload{  ///更新画面
     self.path = path.CGPath;
 }
 -(void)beginWithPoint:(CGPoint)point{  ///设置当前点
     [path moveToPoint:point];
+    [_circularLayer addCircularToPoint:point];
 }
 -(void)addLineToPoint:(CGPoint)toPoint{    ///起点为当前点
- 
-    [path moveToPoint:path.currentPoint];
     [path addLineToPoint:toPoint];
+    [_circularLayer addCircularToPoint:toPoint];
     self.path = path.CGPath;
 }
 @end

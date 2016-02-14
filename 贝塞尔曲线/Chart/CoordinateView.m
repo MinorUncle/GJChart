@@ -6,275 +6,202 @@
 //  Copyright © 2016年 tongguan. All rights reserved.
 //
 
-#define BIG_LINE_HEIGHT 10      //大标尺的高度
-#define SMALL_LINE_HEIGHT 5   //小标尺高度
-#define LEFT_PANNDINT 20      ////左边距
-#define BOTTOM_PANNDING 60    ////下边距
-#define ARROW_SIZE 5    ///箭头大小
-#define POINT_SIZE 5    //点大小
+
 #import "CoordinateView.h"
 
 
 @interface CoordinateView()
 {
-    CAShapeLayer* _coordinateLayer;
-    UIBezierPath* _path;
-
-    CGFloat unitW ;
-    CGFloat unitH ;
+    NSMutableArray* _sectionLayerArry;
 }
-@property(nonatomic,assign,readonly)CGFloat coordinateW;   ///坐标轴可用宽度，，
-@property(nonatomic,assign,readonly)CGFloat coordinateH;
 
 @end
 @implementation CoordinateView
++(Class)layerClass{
+    return [CoordinateSystemLayer class];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-//        _MaxX = 100;
-//        _MaxY = 100;
-//        _unitX = 5;
-//        _unitY = 5;
-//        _countX = 5;
-//        _countY = 5;
-        _speed = 0.01;
-       
-        _showYCoordinate = YES;
-        
-        ////背景方块条
-        _squareLayer = [[SquareSetLayer alloc]init];
-        [self.layer addSublayer:_squareLayer];
-
-        ////坐标轴，
-        _coordinateLayer = [CAShapeLayer layer];
-        [self.layer addSublayer:_coordinateLayer];
-        [self initShaperLayer];
-        
-        //圆点
-        _circularLayer = [[CircularPointSetLayer alloc]init];
-        [self.layer addSublayer:_circularLayer];
-        //线条
-        _lineLayer = [[LineSetLayer alloc]init];
-        [self.layer addSublayer:_lineLayer];
-        /////文字
-        _textView = [[TextSetView alloc]init];
-        _textView.backgroundColor = [UIColor clearColor];
-        [self addSubview:_textView];
-        
-        [self setFrame:self.frame];
-        
-        [_lineLayer beginWithPoint:[self getPointWithValue:CGPointZero]];
-
-       
+        _sectionLayerArry = [[NSMutableArray alloc]init];
+        _squareWRate = 0.3;
+        [self buildUI];
     }
     return self;
 }
--(void)initShaperLayer{
-    _coordinateLayer.strokeColor = [UIColor colorWithRed:138/256.0 green:138/256.0 blue:138/256.0 alpha:1].CGColor;
+-(void)buildUI{
+    _speed = 0.01;
+    
+    ////背景方块条
+    
+    
+    _squareLayer = [[SquareSetLayer alloc]init];
+    [self.layer addSublayer:_squareLayer];
+    
+    ////坐标轴，
+    _coordinateLayer = (CoordinateSystemLayer*)self.layer;
+    _coordinateLayer.showYCoordinate = YES;
+    _coordinateLayer.showXCoordinate = YES;
+    
+    
+    //圆点
+    _circularLayer = [[CircularPointSetLayer alloc]init];
+    [self.layer addSublayer:_circularLayer];
+    //线条
+    _lineLayer = [[LineSetLayer alloc]init];
+    [self.layer addSublayer:_lineLayer];
+    /////文字
+    _textLayer = [[TextSetLayer alloc]init];
+    _textLayer.backgroundColor = [UIColor clearColor].CGColor;
+    [self.layer addSublayer:_textLayer];
+    
+    [self setFrame:self.frame];
+    
+    [_lineLayer beginWithPoint:[self.coordinateLayer getPointWithValue:CGPointZero]];
+}
 
-    _coordinateLayer.fillColor = [UIColor clearColor].CGColor;
-    _coordinateLayer.lineWidth = 1;
-    _path = [UIBezierPath bezierPath];
-    _coordinateLayer.path = _path.CGPath;
-}
--(void)setMaxY:(CGFloat)MaxY{
-    if (_MaxY == MaxY) {  ///防止重绘
+-(void)buildSection{
+    if (self.dataDelegate == nil || CGRectEqualToRect(self.bounds, CGRectZero)){
         return;
     }
-    _MaxY = MaxY;
-    if (_MaxY == 0) {return;}
-    unitH = _unitY / _MaxY * self.coordinateH;
-    [self clear];
-    [self drawCoordinate];
-}
--(void)setMaxX:(CGFloat)MaxX{
-    if (_MaxX == MaxX) {  ///防止重绘
-        return;
+    [_sectionLayerArry makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
+    
+    NSInteger capacity = 1;
+    if ([self.dataDelegate respondsToSelector:@selector(numberOfSectionsInCoordinateView:)]) {
+        capacity = [self.dataDelegate numberOfSectionsInCoordinateView:self];
     }
     
-    _MaxX = MaxX;
-    if (_MaxX == 0) {return;}
-    unitW = _unitX / _MaxX * self.coordinateW;
-    [self clear];
-    [self drawCoordinate];
-}
+    for (int i = 0; i < capacity; i++) {
+        NSArray<NSValue*>* values = [self.dataDelegate CoordinateView:self dataForSection:i];
+        
+        CoordinateViewSectionType type = CoordinateViewSectionTypeLine;
+        if ([self.dataDelegate respondsToSelector:@selector(CoordinateView:typeWithSection:)]) {
+            type = [self.delegate CoordinateView:self typeWithSection:i];
+        }
+        
+        /**
+         *  字符内容layer
+         */
+        TextSetLayer* textSet = [[TextSetLayer alloc]init];
+        textSet.frame = [self bounds];
+        
+        
+        
+        /**
+         *  section Layer
+         */
+        CALayer* sectionLayer;
+        switch (type) {
+            case CoordinateViewSectionTypeLine:
+            {
+                LineSetLayer* lineSet = [[LineSetLayer alloc]init];
+                if ([self.delegate respondsToSelector:@selector(CoordinateView:customTextLayerStlye:customSectionLayerStyle:inSection:)]) {
+                    [self.delegate CoordinateView:self customTextLayerStlye:textSet customSectionLayerStyle:lineSet inSection:i];
+                }
+                
+                [self setLineLayer:lineSet WithValues:values];
 
--(void)setUnitX:(CGFloat)unitX{
-    if (_unitX == unitX) {  ///防止重绘
-        return;
+                
+                sectionLayer = lineSet;
+                break;
+            }
+            case CoordinateViewSectionTypeBar:{
+                SquareSetLayer* squareLayer = [[SquareSetLayer alloc]init];
+                if ([self.delegate respondsToSelector:@selector(CoordinateView:customTextLayerStlye:customSectionLayerStyle:inSection:)]) {
+                    [self.delegate CoordinateView:self customTextLayerStlye:textSet customSectionLayerStyle:squareLayer inSection:i];
+                }
+                [self setSquareLayer:squareLayer WithValues:values];
+                
+                sectionLayer = squareLayer;
+                break;
+            }
+                
+            default:
+                break;
+        }
+        sectionLayer.frame = self.bounds;
+        [self.layer addSublayer:sectionLayer];
+        [_sectionLayerArry addObject:sectionLayer];
+        
+        
+        [self.layer addSublayer:textSet];
+        [_sectionLayerArry addObject:textSet];
+        
+        if ([self.delegate respondsToSelector:@selector(CoordinateView:titleWithValue:)]) {
+            for (NSValue* value in values) {
+                NSString* titleName = [self.delegate CoordinateView:self titleWithValue:[value CGPointValue]];
+                CGPoint point = [_coordinateLayer getPointWithValue:[value CGPointValue]];
+                [textSet addTextWithPoint:point text:titleName textAlignment:TextAlignmentBotton];
+            }
+        }else{
+            for (NSValue* value in values) {
+                
+                NSString* titleName = [NSString stringWithFormat:@"%d",(int)[value CGPointValue].y];
+                CGPoint point = [_coordinateLayer getPointWithValue:[value CGPointValue]];
+                [textSet addTextWithPoint:point text:titleName textAlignment:TextAlignmentBotton];            }
+        }
+        
+        
     }
-    
-    _unitX = unitX;
-    if (_MaxX == 0) {return;}
-    unitW = _unitX / _MaxX * self.coordinateW;
-    [self clear];
-    [self drawCoordinate];
 }
--(void)setUnitY:(CGFloat)unitY{
-    if (_unitY == unitY) {  ///防止重绘
-        return;
+-(void)setLineLayer:(LineSetLayer*)lineSet WithValues:(NSArray<NSValue*>*)values{
+    
+    NSMutableArray* pointArry = [[NSMutableArray alloc]initWithCapacity:values.count];
+    for (NSValue* value in values) {
+        CGPoint point =[_coordinateLayer getPointWithValue:[value CGPointValue]];
+        [pointArry addObject:[NSValue valueWithCGPoint:point]];
     }
-    
-    _unitY = unitY;
-    if (_MaxY == 0) {return;}
-    unitH = _unitY / _MaxY * self.coordinateH;
-    [self clear];
-    [self drawCoordinate];
+    [lineSet addLinesWithPoints:pointArry];
 }
--(void)clear{
-    [_textView clear];
-    [_lineLayer clear];
-    [_path removeAllPoints];
-    _coordinateLayer.path = _path.CGPath;
+-(void)setSquareLayer:(SquareSetLayer*)squareLayer WithValues:(NSArray<NSValue*>*)values{
+    
+    NSMutableArray* rectArry = [[NSMutableArray alloc]initWithCapacity:values.count];
+    for (NSValue* value in values) {
+        
+        
+        CGRect rect = [self getSquareRectWithValue:[value CGPointValue]];
+        [rectArry addObject:[NSValue valueWithCGRect:rect]];
+    }
+    [squareLayer addSquareWithRects:rectArry];
+}
+-(CGRect)getSquareRectWithValue:(CGPoint)vaule{
+    CGPoint point =[_coordinateLayer getPointWithValue:vaule];
+    CGFloat bottom = [_coordinateLayer getYWithValue:0];
+    CGFloat x = point.x - _coordinateLayer.unitW * _coordinateLayer.countX * _squareWRate * 0.5;
+    CGFloat y = point.y;
+    CGFloat w = _coordinateLayer.unitW * _coordinateLayer.countX * _squareWRate;
+    CGFloat h = bottom - point.y;
+
+    
+    
+    CGRect rect = CGRectMake(x, y, w, h);
+    return rect;
+}
+-(void)setDelegate:(id<CoordinateViewDelegate>)delegate{
+    _delegate = delegate;
+    _coordinateLayer.delegate = delegate;
+    [self buildSection];
+}
+-(void)setDataDelegate:(id<CoordinateViewDataSourceDelegate>)dataDelegate{
+    _dataDelegate = dataDelegate;
+    [self buildSection];
 }
 -(void)setFrame:(CGRect)frame{
     [super setFrame:frame];
-    _coordinateLayer.frame = self.bounds;
-    unitW = _unitX / _MaxX * self.coordinateW;
-    unitH = _unitY / _MaxY * self.coordinateH;
-    [_path removeAllPoints];
-    [_textView clear];
-    [self drawCoordinate];
+    [_textLayer clear];
+    _textLayer.frame = self.bounds;
+    _circularLayer.frame = self.bounds;
+    _squareLayer.frame = self.bounds;
+    _lineLayer.frame = self.bounds;
+    [self buildSection];
     
-    _textView.frame = self.bounds;
-    _circularLayer.frame = self.layer.bounds;
-    _squareLayer.frame = self.layer.bounds;
-    _lineLayer.frame = self.layer.bounds;
-}
--(CGFloat)coordinateW{
-    return self.bounds.size.width - 2*LEFT_PANNDINT - ARROW_SIZE;
-}
--(CGFloat)coordinateH{
-    return self.bounds.size.height - 2*BOTTOM_PANNDING - ARROW_SIZE;
-}
-- (void)drawXCoordinate {
-    if (!_unitX || !_MaxX || !_countX || !unitW) {
-        return;
-    }
-    
-    NSMutableDictionary* textDic = [[NSMutableDictionary alloc]init];
-    CGPoint temPoint;
-    CGSize size = _coordinateLayer.bounds.size;
-    [_path setLineWidth:50];
-    ///x坐标
-    CGPoint point = CGPointMake(LEFT_PANNDINT,size.height - BOTTOM_PANNDING);
-    [_path moveToPoint:point];
-    point.x = size.width - LEFT_PANNDINT;
-    [_path addLineToPoint:point];
-    
-    temPoint = point;
-    point.x -= ARROW_SIZE;
-    point.y -= ARROW_SIZE;
-    [_path addLineToPoint:point];
-    point = temPoint;
-    [_path moveToPoint:point];
-    
-    point.x -= ARROW_SIZE;
-    point.y += ARROW_SIZE;
-    [_path addLineToPoint:point];
-    
-   
-    ///画x坐标尺
-    for (int i=1; i * _unitX <= _MaxX; i++) {
-        point.x = LEFT_PANNDINT + unitW * i;
-        point.y = size.height - BOTTOM_PANNDING;
-        [_path moveToPoint:point];
-        
-        if(i % _countX == 0){
-            NSString* value;
-            if ([self.delegate respondsToSelector:@selector(CoordinateView:titleWithXValue:)]){
-                value = [self.delegate CoordinateView:self titleWithXValue:(i * _unitX)];
-            }else{
-                value = [NSString stringWithFormat:@"%d",(int)(i * _unitX)];
-            }
-            CGSize size = [value sizeWithAttributes: _textView.font == nil ? nil : @{NSFontAttributeName:_textView.font}];
-            NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width * 0.5, point.y + 2)];
-            [textDic setObject:value forKey:key];
-            point.y -= BIG_LINE_HEIGHT;
-        }else{
-            point.y -= SMALL_LINE_HEIGHT;
-        }
-        [_path addLineToPoint:point];
-    }
-    
-    [_textView addTextWithDic:textDic];
-}
-- (void)drawYCoordinate {
-    if (!_unitY || !_MaxY || !_countY  || !unitH) {
-        return;
-    }
-    NSMutableDictionary* textDic = [[NSMutableDictionary alloc]init];
-    CGPoint temPoint;
-    CGSize size = _coordinateLayer.bounds.size;
-    [_path setLineWidth:50];
-    ///Y坐标
-    CGPoint point = CGPointMake(LEFT_PANNDINT,size.height - BOTTOM_PANNDING);
-    [_path moveToPoint:point];
-    point.y = BOTTOM_PANNDING;
-    [_path addLineToPoint:point];
-    
-    temPoint = point;
-    point.x -= ARROW_SIZE;
-    point.y += ARROW_SIZE;
-    [_path addLineToPoint:point];
-    [_path moveToPoint: temPoint];
-    
-    point = temPoint;
-    point.x += ARROW_SIZE;
-    point.y += ARROW_SIZE;
-    [_path addLineToPoint:point];
-    
-    //画y坐标
-    for (int i=1; i * _unitY <= _MaxY; i++) {
-        point.x = LEFT_PANNDINT;
-        point.y = size.height - BOTTOM_PANNDING - unitH * i;
-        [_path moveToPoint:point];
-        
-        if(i % _countY == 0){
-            NSString* value;
-            if ([self.delegate respondsToSelector:@selector(CoordinateView:titleWithYValue:)]){
-                value = [self.delegate CoordinateView:self titleWithYValue:(i * _unitY)];
-            }else{
-                value = [NSString stringWithFormat:@"%d",(int)(i * _unitY)];
-            }
-            CGSize size = [value sizeWithAttributes: _textView.font == nil ? nil : @{NSFontAttributeName:_textView.font}];
-            NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width -2, point.y - size.height*0.5)];
-            [textDic setObject:value forKey:key];
-            
-            point.x += BIG_LINE_HEIGHT;
-        }else{
-            point.x += SMALL_LINE_HEIGHT;
-        }
-        [_path addLineToPoint:point];
-        
-    }
-    
-    [_textView addTextWithDic:textDic];
-
-}
-- (void)drawCoordinate {
-    CGPoint zeroPoint = [self getPointWithValue:CGPointZero];
-    NSString* value;
-    if ([self.delegate respondsToSelector:@selector(CoordinateView:titleWithXValue:)]){
-        value = [self.delegate CoordinateView:self titleWithXValue:(0)];
-    }else{
-        value = @"0";
-    }
-    [_textView addTextWithPoint:zeroPoint text:value textAlignment:TextAlignmentTop];
-    [self drawXCoordinate];
-    
-    if (_showYCoordinate) {
-        [self drawYCoordinate];
-    }
-    [_path moveToPoint:[self getPointWithValue:CGPointZero]];
-    _coordinateLayer.path = _path.CGPath;
-   
+  
 }
 -(void)addValue:(CGPoint)value{
     
-    CGPoint point =[self getPointWithValue:value];
+    CGPoint point =[self.coordinateLayer getPointWithValue:value];
 
     ///关闭动画
 //    CABasicAnimation* anima = [CABasicAnimation animationWithKeyPath:@"path"];
@@ -283,12 +210,11 @@
     
     NSString* str;
     if([self.delegate respondsToSelector:@selector(CoordinateView:titleWithValue:)]){
-        [self.delegate CoordinateView:self titleWithValue:value];
+        str = [self.delegate CoordinateView:self titleWithValue:value];
     }else{
         str = [NSString stringWithFormat:@"%d",(int)value.y];
     }
-    [_textView addTextWithPoint:point text:str textAlignment:TextAlignmentBotton];
-    [_circularLayer addCircularToPoint:point];
+    [_textLayer addTextWithPoint:point text:str textAlignment:TextAlignmentBotton];
 
    
 //    [_path addLineToPoint:[self getPointWithValue:value]];
@@ -300,19 +226,19 @@
 
 
 -(void)addSquareWithValueRect:(CGRect)valueRect color:(UIColor *)color style:(UIEdgeInsets)style{
-    valueRect.origin.x = [self getXWithValue:valueRect.origin.x];
-    valueRect.origin.y = [self getYWithValue:valueRect.origin.y];
-    valueRect.size.width *= (unitW / _unitX);
-    valueRect.size.height *= -(unitH / _unitY);
+    valueRect.origin.x = [self.coordinateLayer getXWithValue:valueRect.origin.x];
+    valueRect.origin.y = [self.coordinateLayer getYWithValue:valueRect.origin.y];
+    valueRect.size.width = valueRect.size.width/ self.coordinateLayer.MaxX * self.coordinateLayer.coordinateW;
+    valueRect.size.height = -(valueRect.size.height/ self.coordinateLayer.MaxY * self.coordinateLayer.coordinateH);
     
     ///坐标系转换
     CGFloat top = style.top;
     style.top = style.bottom;
     style.bottom = top;
-    [_squareLayer addSquareWithRect:valueRect color:color style:style];
+   // [_squareLayer addSquareWithRect:valueRect color:color style:style];
 }
 -(void)beginWithValue:(CGPoint)value{
-    CGPoint point = [self getPointWithValue:value];
+    CGPoint point = [self.coordinateLayer getPointWithValue:value];
     [_circularLayer addCircularToPoint:point];
     [_lineLayer beginWithPoint:point];
 }
@@ -328,32 +254,9 @@
     }
 }
 
--(CGPoint)getPointWithValue:(CGPoint)value{
-    
-    value.x = [self getXWithValue:value.x];
-    value.y = [self getYWithValue:value.y];
-    return value;
-}
--(CGFloat)getXWithValue:(int)value{
-    if(_unitX == 0 ){
-        return 0;
-    }
-    value = (value / _unitX) * unitW + LEFT_PANNDINT;
-    return value;
-}
--(CGFloat)getYWithValue:(int)value{
-    if(_unitY == 0 ){
-        return 0;
-    }
-    value = value / _unitY * unitH;
-    value = _coordinateLayer.frame.size.height - BOTTOM_PANNDING - value;
-    return value;
-}
--(CGFloat)getValueWithY:(CGFloat)Y{
-    return (_coordinateLayer.frame.size.height - BOTTOM_PANNDING - Y) / unitH * _unitY;
-}
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     //////测试
+    NSLog(@"VIEW TOUCH");
     static CGFloat x = 0;
     x += arc4random()%50;
     CGFloat y = arc4random() %100;

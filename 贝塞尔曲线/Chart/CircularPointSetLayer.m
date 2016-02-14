@@ -7,8 +7,6 @@
 //
 
 #import "CircularPointSetLayer.h"
-#define SMALL_RADIUS 2
-#define BIG_RADIUS 3
 
 @interface CircularPointSetLayer()
 {
@@ -25,10 +23,12 @@
 {
     self = [super init];
     if (self) {
-        _insideColor = [UIColor greenColor];
-        _outsideColor = [UIColor blueColor];
+        _insideColor = [UIColor yellowColor];
+        _outsideColor = [UIColor redColor];
         _smallPath = CGPathCreateMutable();
         _bigPath = CGPathCreateMutable();
+        _outsideRadius = 3;
+        _insideRadius = 2;
     }
     return self;
 }
@@ -41,10 +41,10 @@
     [self setNeedsDisplay];
 }
 -(void)addCircularToPoint:(CGPoint)point{
-    CGRect rect = CGRectMake(point.x - BIG_RADIUS, point.y - BIG_RADIUS, 2*BIG_RADIUS, 2*BIG_RADIUS);
+    CGRect rect = CGRectMake(point.x - _outsideRadius, point.y - _outsideRadius, 2*_outsideRadius, 2*_outsideRadius);
     CGPathAddEllipseInRect(_bigPath, nil, rect);
     
-    rect = CGRectMake(point.x - SMALL_RADIUS, point.y - SMALL_RADIUS, 2*SMALL_RADIUS, 2*SMALL_RADIUS);
+    rect = CGRectMake(point.x - _insideRadius, point.y - _insideRadius, 2*_insideRadius, 2*_insideRadius);
     CGPathAddEllipseInRect(_smallPath, nil, rect);
     [self setNeedsDisplay];
 }
@@ -71,6 +71,8 @@
 //    }
     CGContextSetFillColorWithColor(ctx, _outsideColor.CGColor);
     CGContextAddPath(ctx, _bigPath);
+    CGContextFillPath(ctx);
+    
     CGContextSetFillColorWithColor(ctx, _insideColor.CGColor);
     CGContextAddPath(ctx, _smallPath);
     CGContextFillPath(ctx);

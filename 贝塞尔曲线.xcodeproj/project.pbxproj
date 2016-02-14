@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE1A61D41C6B7CED00A940F1 /* CoordinateSystemLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = AE1A61D31C6B7CED00A940F1 /* CoordinateSystemLayer.m */; };
 		C559E1AE1C3B6F380001D68A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C559E1AD1C3B6F380001D68A /* main.m */; };
 		C559E1B11C3B6F380001D68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C559E1B01C3B6F380001D68A /* AppDelegate.m */; };
 		C559E1B41C3B6F380001D68A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C559E1B31C3B6F380001D68A /* ViewController.m */; };
@@ -19,10 +20,12 @@
 		C5DF40D81C50B76800FB9C73 /* LineSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DF40CD1C50B76800FB9C73 /* LineSetLayer.m */; };
 		C5DF40D91C50B76800FB9C73 /* PolygonSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DF40CF1C50B76800FB9C73 /* PolygonSetLayer.m */; };
 		C5DF40DA1C50B76800FB9C73 /* SquareSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DF40D11C50B76800FB9C73 /* SquareSetLayer.m */; };
-		C5DF40DB1C50B76800FB9C73 /* TextSetView.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DF40D31C50B76800FB9C73 /* TextSetView.m */; };
+		C5DF40DB1C50B76800FB9C73 /* TextSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DF40D31C50B76800FB9C73 /* TextSetLayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AE1A61D21C6B7CED00A940F1 /* CoordinateSystemLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoordinateSystemLayer.h; sourceTree = "<group>"; };
+		AE1A61D31C6B7CED00A940F1 /* CoordinateSystemLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoordinateSystemLayer.m; sourceTree = "<group>"; };
 		C559E1A91C3B6F380001D68A /* 贝塞尔曲线.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "贝塞尔曲线.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C559E1AD1C3B6F380001D68A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C559E1AF1C3B6F380001D68A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -45,8 +48,8 @@
 		C5DF40CF1C50B76800FB9C73 /* PolygonSetLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PolygonSetLayer.m; sourceTree = "<group>"; };
 		C5DF40D01C50B76800FB9C73 /* SquareSetLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquareSetLayer.h; sourceTree = "<group>"; };
 		C5DF40D11C50B76800FB9C73 /* SquareSetLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquareSetLayer.m; sourceTree = "<group>"; };
-		C5DF40D21C50B76800FB9C73 /* TextSetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSetView.h; sourceTree = "<group>"; };
-		C5DF40D31C50B76800FB9C73 /* TextSetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextSetView.m; sourceTree = "<group>"; };
+		C5DF40D21C50B76800FB9C73 /* TextSetLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSetLayer.h; sourceTree = "<group>"; };
+		C5DF40D31C50B76800FB9C73 /* TextSetLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextSetLayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,16 +111,18 @@
 			children = (
 				C5DF40C81C50B76800FB9C73 /* CircularPointSetLayer.h */,
 				C5DF40C91C50B76800FB9C73 /* CircularPointSetLayer.m */,
-				C5DF40CA1C50B76800FB9C73 /* CoordinateView.h */,
-				C5DF40CB1C50B76800FB9C73 /* CoordinateView.m */,
 				C5DF40CC1C50B76800FB9C73 /* LineSetLayer.h */,
 				C5DF40CD1C50B76800FB9C73 /* LineSetLayer.m */,
 				C5DF40CE1C50B76800FB9C73 /* PolygonSetLayer.h */,
 				C5DF40CF1C50B76800FB9C73 /* PolygonSetLayer.m */,
 				C5DF40D01C50B76800FB9C73 /* SquareSetLayer.h */,
 				C5DF40D11C50B76800FB9C73 /* SquareSetLayer.m */,
-				C5DF40D21C50B76800FB9C73 /* TextSetView.h */,
-				C5DF40D31C50B76800FB9C73 /* TextSetView.m */,
+				C5DF40D21C50B76800FB9C73 /* TextSetLayer.h */,
+				C5DF40D31C50B76800FB9C73 /* TextSetLayer.m */,
+				AE1A61D21C6B7CED00A940F1 /* CoordinateSystemLayer.h */,
+				AE1A61D31C6B7CED00A940F1 /* CoordinateSystemLayer.m */,
+				C5DF40CA1C50B76800FB9C73 /* CoordinateView.h */,
+				C5DF40CB1C50B76800FB9C73 /* CoordinateView.m */,
 			);
 			path = Chart;
 			sourceTree = "<group>";
@@ -192,12 +197,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5DF40DB1C50B76800FB9C73 /* TextSetView.m in Sources */,
+				C5DF40DB1C50B76800FB9C73 /* TextSetLayer.m in Sources */,
 				C559E1B41C3B6F380001D68A /* ViewController.m in Sources */,
 				C5DF40D61C50B76800FB9C73 /* CircularPointSetLayer.m in Sources */,
 				C559E1C51C3B705E0001D68A /* CustomView.m in Sources */,
 				C5DF40D91C50B76800FB9C73 /* PolygonSetLayer.m in Sources */,
 				C559E1B11C3B6F380001D68A /* AppDelegate.m in Sources */,
+				AE1A61D41C6B7CED00A940F1 /* CoordinateSystemLayer.m in Sources */,
 				C5DF40D71C50B76800FB9C73 /* CoordinateView.m in Sources */,
 				C5DF40DA1C50B76800FB9C73 /* SquareSetLayer.m in Sources */,
 				C559E1AE1C3B6F380001D68A /* main.m in Sources */,

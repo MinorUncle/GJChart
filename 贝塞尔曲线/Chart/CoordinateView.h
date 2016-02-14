@@ -9,47 +9,68 @@
 //坐标轴
 #import <UIKit/UIKit.h>
 #import "SquareSetLayer.h"
-#import "TextSetView.h"
+#import "TextSetLayer.h"
 #import "CircularPointSetLayer.h"
 #import "LineSetLayer.h"
+#import "CoordinateSystemLayer.h"
+
+typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
+    CoordinateViewSectionTypeLine,
+    CoordinateViewSectionTypeBar,
+    CoordinateViewSectionTypePie
+
+};
 @class CoordinateView;
-@protocol CoordinateViewDelegate <NSObject>
+@protocol CoordinateViewDelegate <NSObject,CoordinateSystemLayerDelegate>
 @optional
--(NSString*) CoordinateView:(CoordinateView*)view titleWithXValue:(CGFloat)value;  ///自定义x轴名称
--(NSString*) CoordinateView:(CoordinateView*)view titleWithYValue:(CGFloat)value;  ///自定义y轴名称
--(NSString*) CoordinateView:(CoordinateView*)view titleWithValue:(CGPoint)point;  ///自定义点的名称
+ ///自定义点的名称
+-(NSString*) CoordinateView:(CoordinateView*)view titleWithValue:(CGPoint)point;
+-(CoordinateViewSectionType) CoordinateView:(CoordinateView*)view typeWithSection:(NSInteger)section;  ///自定义组类型
+-(void)CoordinateView:(CoordinateView*)view customTextLayerStlye:(TextSetLayer*)textLayer customSectionLayerStyle:(CALayer*)sectionLayer inSection:(NSInteger)section;
+@end
+
+@protocol CoordinateViewDataSourceDelegate <NSObject>
+/**
+ *  数据代理
+ *
+ *  @param view    坐标视图
+ *  @param section section
+ *
+ *  @return CGPoint的NSValue数组
+ */
+-(NSArray<NSValue*>*) CoordinateView:(CoordinateView*)view dataForSection:(NSInteger)section;
+@optional
+- (NSInteger)numberOfSectionsInCoordinateView:(CoordinateView *)coordinateView;              // Default is 1 if not implemented
+-(CGFloat) CoordinateView:(CoordinateView*)view valueWithIndexPath:(NSIndexPath*)indexPath;
 
 
 @end
 
-@interface CoordinateView : UIView
-@property(nonatomic,assign)CGFloat MaxY; ///最大Y
-@property(nonatomic,assign)CGFloat MaxX;
-@property(nonatomic,assign)NSInteger countY;  ////y的一个大单元包含小单元的数量
-@property(nonatomic,assign)NSInteger countX;
-@property(nonatomic,assign)CGFloat unitY;  ////一个小Y的单位
-@property(nonatomic,assign)CGFloat unitX;
-@property(nonatomic,retain)UIColor* color;
 
-@property(nonatomic,assign)BOOL showYCoordinate;
+@interface CoordinateView : UIView
+
 
 
 
 
 @property(nonatomic,assign)CGPoint beginValue;
 @property(nonatomic,assign)float speed;   //动画速度 ///未使用
+/**
+ *  条状图的宽与大单元格的比例
+ */
+@property(nonatomic,assign)CGFloat squareWRate;
 
-@property(nonatomic,retain,readonly)TextSetView* textView;
+@property(nonatomic,retain,readonly)TextSetLayer* textLayer;
 @property(nonatomic,retain,readonly)CircularPointSetLayer* circularLayer;
 @property(nonatomic,retain,readonly)SquareSetLayer* squareLayer;
 @property(nonatomic,retain,readonly)LineSetLayer* lineLayer;
+@property(nonatomic,retain,readonly)CoordinateSystemLayer* coordinateLayer;
+
 @property(nonatomic,weak) id<CoordinateViewDelegate> delegate;
+@property(nonatomic,weak) id<CoordinateViewDataSourceDelegate> dataDelegate;
 
 
 
--(CGFloat)getYWithValue:(int)value;
--(CGFloat)getXWithValue:(int)value;
--(CGFloat)getValueWithY:(CGFloat)Y;
 
 
 ////折线
