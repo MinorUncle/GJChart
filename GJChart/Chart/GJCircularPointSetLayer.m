@@ -1,24 +1,22 @@
 //
-//  PointCircularLayer.m
+//  GJCircularPointSetLayer.m
 //  贝塞尔曲线
 //
 //  Created by tongguan on 16/1/19.
 //  Copyright © 2016年 tongguan. All rights reserved.
 //
 
-#import "CircularPointSetLayer.h"
+#import "GJCircularPointSetLayer.h"
 
-@interface CircularPointSetLayer()
+@interface GJCircularPointSetLayer()
 {
     NSMutableArray<NSValue*>* _pointArry;////圆心
     CGMutablePathRef _bigPath; //大圆路径
     CGMutablePathRef _smallPath;//小圆路径
-    
-    
 }
 @end
 
-@implementation CircularPointSetLayer
+@implementation GJCircularPointSetLayer
 - (instancetype)init
 {
     self = [super init];

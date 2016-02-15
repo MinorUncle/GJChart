@@ -24,7 +24,7 @@ typedef enum _TextAlignment{
     TextAlignmentBottonLeft,
     TextAlignmentBottonRight,
 }TextAlignment;
-@interface TextSetLayer : CALayer
+@interface GJTextSetLayer : CALayer
 @property(nonatomic,retain,readonly)NSMutableDictionary* textDic;////[nsstring,cgpoint]
 @property(nonatomic,retain)UIFont* font;////
 @property(nonatomic,retain)UIColor* fontColor;////

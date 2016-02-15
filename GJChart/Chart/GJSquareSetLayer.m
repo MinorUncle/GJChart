@@ -6,14 +6,14 @@
 //  Copyright © 2016年 tongguan. All rights reserved.
 //
 
-#import "SquareSetLayer.h"
-@interface SquareSetLayer ()
+#import "GJSquareSetLayer.h"
+@interface GJSquareSetLayer ()
 {
     /////矩形数据
     NSMutableArray<NSValue*>* rangeArry;///位置数组
 }
 @end
-@implementation SquareSetLayer
+@implementation GJSquareSetLayer
 - (instancetype)init
 {
     self = [super init];

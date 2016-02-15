@@ -7,12 +7,12 @@
 //
 
 #import "ViewController.h"
-#import "CoordinateView.h"
+#import "GJChartView.h"
 
 
 @interface ViewController ()<CoordinateViewDelegate,CoordinateViewDataSourceDelegate>
 {
-    CoordinateView* _coordinateView;
+    GJChartView* _coordinateView;
     UIScrollView* _scrollView;
     NSMutableArray* _data;
 }
@@ -48,7 +48,7 @@
     _scrollView = [[UIScrollView alloc]initWithFrame:rect];
     _scrollView.backgroundColor = [UIColor whiteColor];
     
-    _coordinateView = [[CoordinateView alloc]initWithFrame:_scrollView.bounds];
+    _coordinateView = [[GJChartView alloc]initWithFrame:_scrollView.bounds];
     _coordinateView.lineLayer.color = [UIColor yellowColor];
     _coordinateView.coordinateLayer.color = [UIColor yellowColor];
     _coordinateView.delegate = self;
@@ -80,41 +80,41 @@
 
 #pragma mark DELEGATE
 
--(NSString *)CoordinateSystemLayer:(CoordinateSystemLayer *)view titleWithXValue:(CGFloat)value
+-(NSString *)GJCoordinateLayer:(GJCoordinateLayer *)view titleWithXValue:(CGFloat)value
 {
     int hour = (int)value / 60;
     int min = (int)value % 60;
     NSString* title = [NSString stringWithFormat:@"%02d:%02d",hour,min];
     return title;
 }
--(NSString *)CoordinateSystemLayer:(CoordinateSystemLayer *)view titleWithYValue:(CGFloat)value{
+-(NSString *)GJCoordinateLayer:(GJCoordinateLayer *)view titleWithYValue:(CGFloat)value{
     return [NSString stringWithFormat:@"%.1f",value];
 
 }
--(NSString *)CoordinateView:(CoordinateView *)view titleWithValue:(CGPoint)point{
+-(NSString *)GJChartView:(GJChartView *)view titleWithValue:(CGPoint)point{
     return [NSString stringWithFormat:@"%0.1f元",point.y];
 }
 
--(NSInteger)numberOfSectionsInCoordinateView:(CoordinateView *)coordinateView{
+-(NSInteger)numberOfSectionsInCoordinateView:(GJChartView *)coordinateView{
     return _data.count;
 }
--(CoordinateViewSectionType)CoordinateView:(CoordinateView *)view typeWithSection:(NSInteger)section{
+-(CoordinateViewSectionType)GJChartView:(GJChartView *)view typeWithSection:(NSInteger)section{
     if (section == 1 ) {
         return CoordinateViewSectionTypeBar;
     }
     return CoordinateViewSectionTypeLine;
 }
 
--(NSArray<NSValue *> *)CoordinateView:(CoordinateView *)view dataForSection:(NSInteger)section{
+-(NSArray<NSValue *> *)GJChartView:(GJChartView *)view dataForSection:(NSInteger)section{
     return _data[section];
 }
--(void)CoordinateView:(CoordinateView *)view customTextLayerStlye:(TextSetLayer *)textLayer customSectionLayerStyle:(CALayer *)sectionLayer inSection:(NSInteger)section{
+-(void)GJChartView:(GJChartView *)view customTextLayerStlye:(GJTextSetLayer *)textLayer customSectionLayerStyle:(CALayer *)sectionLayer inSection:(NSInteger)section{
     if (section == 0) {
         textLayer.fontColor = [UIColor redColor];
-        ((LineSetLayer*)sectionLayer).capType = LineTypeDash;
+        ((GJLineSetLayer*)sectionLayer).capType = LineTypeDash;
     }else if (section == 1){
         textLayer.fontColor = [UIColor yellowColor];
-//        ((SquareSetLayer*)sectionLayer).capType = LineTypeDash;
+//        ((GJSquareSetLayer*)sectionLayer).capType = LineTypeDash;
     }
 
 }
@@ -124,7 +124,7 @@
     x += arc4random()%50;
     CGFloat y = arc4random() %100;
     [_coordinateView addValue:CGPointMake(x, y)];}
-//-(NSString *)CoordinateView:(CoordinateView *)view titleWithYValue:(CGFloat)value{
+//-(NSString *)GJChartView:(GJChartView *)view titleWithYValue:(CGFloat)value{
 //    NSString* title;
 //    return title;
 //}

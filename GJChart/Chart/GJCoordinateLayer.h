@@ -9,15 +9,15 @@
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIColor.h>
 
-@class CoordinateSystemLayer;
+@class GJCoordinateLayer;
 @protocol CoordinateSystemLayerDelegate <NSObject>
 @optional
  ///自定义x轴名称
--(NSString*) CoordinateSystemLayer:(CoordinateSystemLayer*)view titleWithXValue:(CGFloat)value;
+-(NSString*) GJCoordinateLayer:(GJCoordinateLayer*)view titleWithXValue:(CGFloat)value;
 ///自定义y轴名称
--(NSString*) CoordinateSystemLayer:(CoordinateSystemLayer*)view titleWithYValue:(CGFloat)value;
+-(NSString*) GJCoordinateLayer:(GJCoordinateLayer*)view titleWithYValue:(CGFloat)value;
 @end
-@interface CoordinateSystemLayer : CAShapeLayer
+@interface GJCoordinateLayer : CAShapeLayer
 ///最大Y
 @property(nonatomic,assign)CGFloat MaxY;
 @property(nonatomic,assign)CGFloat MaxX;

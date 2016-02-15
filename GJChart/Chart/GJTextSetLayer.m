@@ -6,10 +6,10 @@
 //  Copyright © 2016年 tongguan. All rights reserved.
 //
 
-#import "TextSetLayer.h"
+#import "GJTextSetLayer.h"
 #import <UIKit/UIGraphics.h>
 
-@implementation TextSetLayer
+@implementation GJTextSetLayer
 - (instancetype)init
 {
     self = [super init];

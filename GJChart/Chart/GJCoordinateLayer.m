@@ -14,15 +14,15 @@
 #define POINT_SIZE 5    //点大小
 
 
-#import "CoordinateSystemLayer.h"
+#import "GJCoordinateLayer.h"
 #import <UIKit/UIBezierPath.h>
 #import <UIKit/UIColor.h>
-#import "TextSetLayer.h"
-@interface CoordinateSystemLayer()
+#import "GJTextSetLayer.h"
+@interface GJCoordinateLayer()
 {
   
     
-    TextSetLayer* _textSetLayer;
+    GJTextSetLayer* _textSetLayer;
     UIBezierPath* _path;
     UIBezierPath* _xPath;
     UIBezierPath* _yPath;
@@ -30,7 +30,7 @@
 }
 
 @end
-@implementation CoordinateSystemLayer
+@implementation GJCoordinateLayer
 - (instancetype)init
 {
     self = [super init];
@@ -45,7 +45,7 @@
         self.fillColor = [UIColor clearColor].CGColor;
         self.lineWidth = 1;
         
-        _textSetLayer = [[TextSetLayer alloc]init];
+        _textSetLayer = [[GJTextSetLayer alloc]init];
         [self addSublayer:_textSetLayer];
         
 
@@ -168,8 +168,8 @@
         
         if(i % _countX == 0){
             NSString* value;
-            if ([self.delegate respondsToSelector:@selector(CoordinateSystemLayer:titleWithXValue:)]){
-                value = [self.delegate CoordinateSystemLayer:self titleWithXValue:(i * _unitX)];
+            if ([self.delegate respondsToSelector:@selector(GJCoordinateLayer:titleWithXValue:)]){
+                value = [self.delegate GJCoordinateLayer:self titleWithXValue:(i * _unitX)];
             }else{
                 value = [NSString stringWithFormat:@"%d",(int)(i * _unitX)];
             }
@@ -221,8 +221,8 @@
         
         if(i % _countY == 0){
             NSString* value;
-            if ([self.delegate respondsToSelector:@selector(CoordinateSystemLayer:titleWithYValue:)]){
-                value = [self.delegate CoordinateSystemLayer:self titleWithYValue:(i * _unitY)];
+            if ([self.delegate respondsToSelector:@selector(GJCoordinateLayer:titleWithYValue:)]){
+                value = [self.delegate GJCoordinateLayer:self titleWithYValue:(i * _unitY)];
             }else{
                 value = [NSString stringWithFormat:@"%d",(int)(i * _unitY)];
             }

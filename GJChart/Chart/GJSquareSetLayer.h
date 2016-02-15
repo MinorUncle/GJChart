@@ -18,7 +18,7 @@ typedef enum SquareLayerStyle{
     SquareLayerDash,        ///虚线
     SquareLayerSolid        ///实线
 }SquareLayerStyle;
-@interface SquareSetLayer : CALayer
+@interface GJSquareSetLayer : CALayer
 @property(retain,nonatomic)UIColor* fillColor;
 @property(retain,nonatomic)UIColor* strokeColor;
 @property(assign,nonatomic)UIEdgeInsets lineStyle;

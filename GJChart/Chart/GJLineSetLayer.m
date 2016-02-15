@@ -1,25 +1,25 @@
 //
-//  LineSetLayer.m
+//  GJLineSetLayer.m
 //  贝塞尔曲线
 //
 //  Created by tongguan on 16/1/21.
 //  Copyright © 2016年 tongguan. All rights reserved.
 //
 
-#import "LineSetLayer.h"
-@interface LineSetLayer()
+#import "GJLineSetLayer.h"
+@interface GJLineSetLayer()
 {
     UIBezierPath* path;
 }
 @end
-@implementation LineSetLayer
+@implementation GJLineSetLayer
 - (instancetype)init
 {
     self = [super init];
     if (self) {
         self.fillColor = [UIColor clearColor].CGColor;
         path = [[UIBezierPath alloc]init];
-        _circularLayer = [[CircularPointSetLayer alloc]init];
+        _circularLayer = [[GJCircularPointSetLayer alloc]init];
         [self addSublayer:_circularLayer];
         
 //        [self setLineDashPattern:@[@3,@3]];

@@ -1,5 +1,5 @@
 //
-//  PointCircularLayer.h
+//  GJCircularPointSetLayer.h
 //  贝塞尔曲线
 //
 //  Created by tongguan on 16/1/19.
@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
-@interface CircularPointSetLayer : CAShapeLayer
+@interface GJCircularPointSetLayer : CAShapeLayer
 @property(nonatomic,retain)UIColor* insideColor;   
 @property(nonatomic,retain)UIColor* outsideColor;
 @property(nonatomic,assign)CGFloat outsideRadius;

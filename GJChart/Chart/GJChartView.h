@@ -1,5 +1,5 @@
 //
-//  CoordinateView.h
+//  GJChartView.h
 //  贝塞尔曲线
 //
 //  Created by tongguan on 16/1/5.
@@ -8,11 +8,11 @@
 
 //坐标轴
 #import <UIKit/UIKit.h>
-#import "SquareSetLayer.h"
-#import "TextSetLayer.h"
-#import "CircularPointSetLayer.h"
-#import "LineSetLayer.h"
-#import "CoordinateSystemLayer.h"
+#import "GJSquareSetLayer.h"
+#import "GJTextSetLayer.h"
+#import "GJCircularPointSetLayer.h"
+#import "GJLineSetLayer.h"
+#import "GJCoordinateLayer.h"
 
 typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
     CoordinateViewSectionTypeLine,
@@ -20,13 +20,13 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
     CoordinateViewSectionTypePie
 
 };
-@class CoordinateView;
+@class GJChartView;
 @protocol CoordinateViewDelegate <NSObject,CoordinateSystemLayerDelegate>
 @optional
  ///自定义点的名称
--(NSString*) CoordinateView:(CoordinateView*)view titleWithValue:(CGPoint)point;
--(CoordinateViewSectionType) CoordinateView:(CoordinateView*)view typeWithSection:(NSInteger)section;  ///自定义组类型
--(void)CoordinateView:(CoordinateView*)view customTextLayerStlye:(TextSetLayer*)textLayer customSectionLayerStyle:(CALayer*)sectionLayer inSection:(NSInteger)section;
+-(NSString*) GJChartView:(GJChartView*)view titleWithValue:(CGPoint)point;
+-(CoordinateViewSectionType) GJChartView:(GJChartView*)view typeWithSection:(NSInteger)section;  ///自定义组类型
+-(void)GJChartView:(GJChartView*)view customTextLayerStlye:(GJTextSetLayer*)textLayer customSectionLayerStyle:(CALayer*)sectionLayer inSection:(NSInteger)section;
 @end
 
 @protocol CoordinateViewDataSourceDelegate <NSObject>
@@ -38,16 +38,16 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
  *
  *  @return CGPoint的NSValue数组
  */
--(NSArray<NSValue*>*) CoordinateView:(CoordinateView*)view dataForSection:(NSInteger)section;
+-(NSArray<NSValue*>*) GJChartView:(GJChartView*)view dataForSection:(NSInteger)section;
 @optional
-- (NSInteger)numberOfSectionsInCoordinateView:(CoordinateView *)coordinateView;              // Default is 1 if not implemented
--(CGFloat) CoordinateView:(CoordinateView*)view valueWithIndexPath:(NSIndexPath*)indexPath;
+- (NSInteger)numberOfSectionsInCoordinateView:(GJChartView *)coordinateView;              // Default is 1 if not implemented
+-(CGFloat) GJChartView:(GJChartView*)view valueWithIndexPath:(NSIndexPath*)indexPath;
 
 
 @end
 
 
-@interface CoordinateView : UIView
+@interface GJChartView : UIView
 
 
 
@@ -60,11 +60,11 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
  */
 @property(nonatomic,assign)CGFloat squareWRate;
 
-@property(nonatomic,retain,readonly)TextSetLayer* textLayer;
-@property(nonatomic,retain,readonly)CircularPointSetLayer* circularLayer;
-@property(nonatomic,retain,readonly)SquareSetLayer* squareLayer;
-@property(nonatomic,retain,readonly)LineSetLayer* lineLayer;
-@property(nonatomic,retain,readonly)CoordinateSystemLayer* coordinateLayer;
+@property(nonatomic,retain,readonly)GJTextSetLayer* textLayer;
+@property(nonatomic,retain,readonly)GJCircularPointSetLayer* circularLayer;
+@property(nonatomic,retain,readonly)GJSquareSetLayer* squareLayer;
+@property(nonatomic,retain,readonly)GJLineSetLayer* lineLayer;
+@property(nonatomic,retain,readonly)GJCoordinateLayer* coordinateLayer;
 
 @property(nonatomic,weak) id<CoordinateViewDelegate> delegate;
 @property(nonatomic,weak) id<CoordinateViewDataSourceDelegate> dataDelegate;

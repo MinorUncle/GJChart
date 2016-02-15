@@ -11,13 +11,13 @@
 		C54422201C71663200C66311 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C54421F61C71663200C66311 /* Assets.xcassets */; };
 		C54422211C71663200C66311 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C54421F71C71663200C66311 /* LaunchScreen.storyboard */; };
 		C54422221C71663200C66311 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C54421F91C71663200C66311 /* Main.storyboard */; };
-		C54422241C71663200C66311 /* CircularPointSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C54421FF1C71663200C66311 /* CircularPointSetLayer.m */; };
-		C54422251C71663200C66311 /* CoordinateSystemLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C54422011C71663200C66311 /* CoordinateSystemLayer.m */; };
-		C54422261C71663200C66311 /* CoordinateView.m in Sources */ = {isa = PBXBuildFile; fileRef = C54422031C71663200C66311 /* CoordinateView.m */; };
-		C54422271C71663200C66311 /* LineSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C54422051C71663200C66311 /* LineSetLayer.m */; };
-		C54422281C71663200C66311 /* PolygonSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C54422071C71663200C66311 /* PolygonSetLayer.m */; };
-		C54422291C71663200C66311 /* SquareSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C54422091C71663200C66311 /* SquareSetLayer.m */; };
-		C544222A1C71663200C66311 /* TextSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C544220B1C71663200C66311 /* TextSetLayer.m */; };
+		C54422241C71663200C66311 /* GJCircularPointSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C54421FF1C71663200C66311 /* GJCircularPointSetLayer.m */; };
+		C54422251C71663200C66311 /* GJCoordinateLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C54422011C71663200C66311 /* GJCoordinateLayer.m */; };
+		C54422261C71663200C66311 /* GJChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = C54422031C71663200C66311 /* GJChartView.m */; };
+		C54422271C71663200C66311 /* GJLineSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C54422051C71663200C66311 /* GJLineSetLayer.m */; };
+		C54422281C71663200C66311 /* GJPolygonSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C54422071C71663200C66311 /* GJPolygonSetLayer.m */; };
+		C54422291C71663200C66311 /* GJSquareSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C54422091C71663200C66311 /* GJSquareSetLayer.m */; };
+		C544222A1C71663200C66311 /* GJTextSetLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C544220B1C71663200C66311 /* GJTextSetLayer.m */; };
 		C54422311C71663200C66311 /* CustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = C544221A1C71663200C66311 /* CustomView.m */; };
 		C54422331C71663200C66311 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C544221C1C71663200C66311 /* main.m */; };
 		C54422341C71663200C66311 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C544221E1C71663200C66311 /* ViewController.m */; };
@@ -29,26 +29,27 @@
 		C54421F61C71663200C66311 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C54421F81C71663200C66311 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C54421FA1C71663200C66311 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		C54421FE1C71663200C66311 /* CircularPointSetLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularPointSetLayer.h; sourceTree = "<group>"; };
-		C54421FF1C71663200C66311 /* CircularPointSetLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularPointSetLayer.m; sourceTree = "<group>"; };
-		C54422001C71663200C66311 /* CoordinateSystemLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoordinateSystemLayer.h; sourceTree = "<group>"; };
-		C54422011C71663200C66311 /* CoordinateSystemLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoordinateSystemLayer.m; sourceTree = "<group>"; };
-		C54422021C71663200C66311 /* CoordinateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoordinateView.h; sourceTree = "<group>"; };
-		C54422031C71663200C66311 /* CoordinateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoordinateView.m; sourceTree = "<group>"; };
-		C54422041C71663200C66311 /* LineSetLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineSetLayer.h; sourceTree = "<group>"; };
-		C54422051C71663200C66311 /* LineSetLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineSetLayer.m; sourceTree = "<group>"; };
-		C54422061C71663200C66311 /* PolygonSetLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolygonSetLayer.h; sourceTree = "<group>"; };
-		C54422071C71663200C66311 /* PolygonSetLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PolygonSetLayer.m; sourceTree = "<group>"; };
-		C54422081C71663200C66311 /* SquareSetLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquareSetLayer.h; sourceTree = "<group>"; };
-		C54422091C71663200C66311 /* SquareSetLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquareSetLayer.m; sourceTree = "<group>"; };
-		C544220A1C71663200C66311 /* TextSetLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSetLayer.h; sourceTree = "<group>"; };
-		C544220B1C71663200C66311 /* TextSetLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextSetLayer.m; sourceTree = "<group>"; };
+		C54421FE1C71663200C66311 /* GJCircularPointSetLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJCircularPointSetLayer.h; sourceTree = "<group>"; };
+		C54421FF1C71663200C66311 /* GJCircularPointSetLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GJCircularPointSetLayer.m; sourceTree = "<group>"; };
+		C54422001C71663200C66311 /* GJCoordinateLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJCoordinateLayer.h; sourceTree = "<group>"; };
+		C54422011C71663200C66311 /* GJCoordinateLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GJCoordinateLayer.m; sourceTree = "<group>"; };
+		C54422021C71663200C66311 /* GJChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJChartView.h; sourceTree = "<group>"; };
+		C54422031C71663200C66311 /* GJChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GJChartView.m; sourceTree = "<group>"; };
+		C54422041C71663200C66311 /* GJLineSetLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJLineSetLayer.h; sourceTree = "<group>"; };
+		C54422051C71663200C66311 /* GJLineSetLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GJLineSetLayer.m; sourceTree = "<group>"; };
+		C54422061C71663200C66311 /* GJPolygonSetLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJPolygonSetLayer.h; sourceTree = "<group>"; };
+		C54422071C71663200C66311 /* GJPolygonSetLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GJPolygonSetLayer.m; sourceTree = "<group>"; };
+		C54422081C71663200C66311 /* GJSquareSetLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJSquareSetLayer.h; sourceTree = "<group>"; };
+		C54422091C71663200C66311 /* GJSquareSetLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GJSquareSetLayer.m; sourceTree = "<group>"; };
+		C544220A1C71663200C66311 /* GJTextSetLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJTextSetLayer.h; sourceTree = "<group>"; };
+		C544220B1C71663200C66311 /* GJTextSetLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GJTextSetLayer.m; sourceTree = "<group>"; };
 		C54422191C71663200C66311 /* CustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomView.h; sourceTree = "<group>"; };
 		C544221A1C71663200C66311 /* CustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomView.m; sourceTree = "<group>"; };
 		C544221B1C71663200C66311 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C544221C1C71663200C66311 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C544221D1C71663200C66311 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		C544221E1C71663200C66311 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		C54422351C7171BB00C66311 /* GJChart.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GJChart.h; sourceTree = "<group>"; };
 		C559E1A91C3B6F380001D68A /* GJChart.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GJChart.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -85,20 +86,21 @@
 		C54421FB1C71663200C66311 /* Chart */ = {
 			isa = PBXGroup;
 			children = (
-				C54421FE1C71663200C66311 /* CircularPointSetLayer.h */,
-				C54421FF1C71663200C66311 /* CircularPointSetLayer.m */,
-				C54422001C71663200C66311 /* CoordinateSystemLayer.h */,
-				C54422011C71663200C66311 /* CoordinateSystemLayer.m */,
-				C54422021C71663200C66311 /* CoordinateView.h */,
-				C54422031C71663200C66311 /* CoordinateView.m */,
-				C54422041C71663200C66311 /* LineSetLayer.h */,
-				C54422051C71663200C66311 /* LineSetLayer.m */,
-				C54422061C71663200C66311 /* PolygonSetLayer.h */,
-				C54422071C71663200C66311 /* PolygonSetLayer.m */,
-				C54422081C71663200C66311 /* SquareSetLayer.h */,
-				C54422091C71663200C66311 /* SquareSetLayer.m */,
-				C544220A1C71663200C66311 /* TextSetLayer.h */,
-				C544220B1C71663200C66311 /* TextSetLayer.m */,
+				C54421FE1C71663200C66311 /* GJCircularPointSetLayer.h */,
+				C54421FF1C71663200C66311 /* GJCircularPointSetLayer.m */,
+				C54422001C71663200C66311 /* GJCoordinateLayer.h */,
+				C54422011C71663200C66311 /* GJCoordinateLayer.m */,
+				C54422021C71663200C66311 /* GJChartView.h */,
+				C54422031C71663200C66311 /* GJChartView.m */,
+				C54422041C71663200C66311 /* GJLineSetLayer.h */,
+				C54422051C71663200C66311 /* GJLineSetLayer.m */,
+				C54422061C71663200C66311 /* GJPolygonSetLayer.h */,
+				C54422071C71663200C66311 /* GJPolygonSetLayer.m */,
+				C54422081C71663200C66311 /* GJSquareSetLayer.h */,
+				C54422091C71663200C66311 /* GJSquareSetLayer.m */,
+				C544220A1C71663200C66311 /* GJTextSetLayer.h */,
+				C544220B1C71663200C66311 /* GJTextSetLayer.m */,
+				C54422351C7171BB00C66311 /* GJChart.h */,
 			);
 			path = Chart;
 			sourceTree = "<group>";
@@ -190,16 +192,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				C54422341C71663200C66311 /* ViewController.m in Sources */,
-				C544222A1C71663200C66311 /* TextSetLayer.m in Sources */,
-				C54422261C71663200C66311 /* CoordinateView.m in Sources */,
-				C54422251C71663200C66311 /* CoordinateSystemLayer.m in Sources */,
-				C54422271C71663200C66311 /* LineSetLayer.m in Sources */,
-				C54422241C71663200C66311 /* CircularPointSetLayer.m in Sources */,
+				C544222A1C71663200C66311 /* GJTextSetLayer.m in Sources */,
+				C54422261C71663200C66311 /* GJChartView.m in Sources */,
+				C54422251C71663200C66311 /* GJCoordinateLayer.m in Sources */,
+				C54422271C71663200C66311 /* GJLineSetLayer.m in Sources */,
+				C54422241C71663200C66311 /* GJCircularPointSetLayer.m in Sources */,
 				C544221F1C71663200C66311 /* AppDelegate.m in Sources */,
 				C54422331C71663200C66311 /* main.m in Sources */,
-				C54422291C71663200C66311 /* SquareSetLayer.m in Sources */,
+				C54422291C71663200C66311 /* GJSquareSetLayer.m in Sources */,
 				C54422311C71663200C66311 /* CustomView.m in Sources */,
-				C54422281C71663200C66311 /* PolygonSetLayer.m in Sources */,
+				C54422281C71663200C66311 /* GJPolygonSetLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

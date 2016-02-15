@@ -1,5 +1,5 @@
 //
-//  PolygonLayer.h
+//  GJPolygonLayer.h
 //  贝塞尔曲线
 //
 //  Created by tongguan on 16/1/20.
@@ -16,6 +16,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
-@interface PolygonSetLayer : CALayer
+@interface GJPolygonSetLayer : CALayer
 -(void)addAreaWithPoints:(NSArray<NSValue*>*)points  color:(UIColor*)color;
 @end

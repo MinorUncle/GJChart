@@ -1,5 +1,5 @@
  //
-//  CoordinateView.m
+//  GJChartView.m
 //  贝塞尔曲线
 //
 //  Created by tongguan on 16/1/5.
@@ -7,18 +7,18 @@
 //
 
 
-#import "CoordinateView.h"
+#import "GJChartView.h"
 
 
-@interface CoordinateView()
+@interface GJChartView()
 {
     NSMutableArray* _sectionLayerArry;
 }
 
 @end
-@implementation CoordinateView
+@implementation GJChartView
 +(Class)layerClass{
-    return [CoordinateSystemLayer class];
+    return [GJCoordinateLayer class];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -37,23 +37,23 @@
     ////背景方块条
     
     
-    _squareLayer = [[SquareSetLayer alloc]init];
+    _squareLayer = [[GJSquareSetLayer alloc]init];
     [self.layer addSublayer:_squareLayer];
     
     ////坐标轴，
-    _coordinateLayer = (CoordinateSystemLayer*)self.layer;
+    _coordinateLayer = (GJCoordinateLayer*)self.layer;
     _coordinateLayer.showYCoordinate = YES;
     _coordinateLayer.showXCoordinate = YES;
     
     
     //圆点
-    _circularLayer = [[CircularPointSetLayer alloc]init];
+    _circularLayer = [[GJCircularPointSetLayer alloc]init];
     [self.layer addSublayer:_circularLayer];
     //线条
-    _lineLayer = [[LineSetLayer alloc]init];
+    _lineLayer = [[GJLineSetLayer alloc]init];
     [self.layer addSublayer:_lineLayer];
     /////文字
-    _textLayer = [[TextSetLayer alloc]init];
+    _textLayer = [[GJTextSetLayer alloc]init];
     _textLayer.backgroundColor = [UIColor clearColor].CGColor;
     [self.layer addSublayer:_textLayer];
     
@@ -74,17 +74,17 @@
     }
     
     for (int i = 0; i < capacity; i++) {
-        NSArray<NSValue*>* values = [self.dataDelegate CoordinateView:self dataForSection:i];
+        NSArray<NSValue*>* values = [self.dataDelegate GJChartView:self dataForSection:i];
         
         CoordinateViewSectionType type = CoordinateViewSectionTypeLine;
-        if ([self.dataDelegate respondsToSelector:@selector(CoordinateView:typeWithSection:)]) {
-            type = [self.delegate CoordinateView:self typeWithSection:i];
+        if ([self.dataDelegate respondsToSelector:@selector(GJChartView:typeWithSection:)]) {
+            type = [self.delegate GJChartView:self typeWithSection:i];
         }
         
         /**
          *  字符内容layer
          */
-        TextSetLayer* textSet = [[TextSetLayer alloc]init];
+        GJTextSetLayer* textSet = [[GJTextSetLayer alloc]init];
         textSet.frame = [self bounds];
         
         
@@ -96,9 +96,9 @@
         switch (type) {
             case CoordinateViewSectionTypeLine:
             {
-                LineSetLayer* lineSet = [[LineSetLayer alloc]init];
-                if ([self.delegate respondsToSelector:@selector(CoordinateView:customTextLayerStlye:customSectionLayerStyle:inSection:)]) {
-                    [self.delegate CoordinateView:self customTextLayerStlye:textSet customSectionLayerStyle:lineSet inSection:i];
+                GJLineSetLayer* lineSet = [[GJLineSetLayer alloc]init];
+                if ([self.delegate respondsToSelector:@selector(GJChartView:customTextLayerStlye:customSectionLayerStyle:inSection:)]) {
+                    [self.delegate GJChartView:self customTextLayerStlye:textSet customSectionLayerStyle:lineSet inSection:i];
                 }
                 
                 [self setLineLayer:lineSet WithValues:values];
@@ -108,9 +108,9 @@
                 break;
             }
             case CoordinateViewSectionTypeBar:{
-                SquareSetLayer* squareLayer = [[SquareSetLayer alloc]init];
-                if ([self.delegate respondsToSelector:@selector(CoordinateView:customTextLayerStlye:customSectionLayerStyle:inSection:)]) {
-                    [self.delegate CoordinateView:self customTextLayerStlye:textSet customSectionLayerStyle:squareLayer inSection:i];
+                GJSquareSetLayer* squareLayer = [[GJSquareSetLayer alloc]init];
+                if ([self.delegate respondsToSelector:@selector(GJChartView:customTextLayerStlye:customSectionLayerStyle:inSection:)]) {
+                    [self.delegate GJChartView:self customTextLayerStlye:textSet customSectionLayerStyle:squareLayer inSection:i];
                 }
                 [self setSquareLayer:squareLayer WithValues:values];
                 
@@ -129,9 +129,9 @@
         [self.layer addSublayer:textSet];
         [_sectionLayerArry addObject:textSet];
         
-        if ([self.delegate respondsToSelector:@selector(CoordinateView:titleWithValue:)]) {
+        if ([self.delegate respondsToSelector:@selector(GJChartView:titleWithValue:)]) {
             for (NSValue* value in values) {
-                NSString* titleName = [self.delegate CoordinateView:self titleWithValue:[value CGPointValue]];
+                NSString* titleName = [self.delegate GJChartView:self titleWithValue:[value CGPointValue]];
                 CGPoint point = [_coordinateLayer getPointWithValue:[value CGPointValue]];
                 [textSet addTextWithPoint:point text:titleName textAlignment:TextAlignmentBotton];
             }
@@ -146,7 +146,7 @@
         
     }
 }
--(void)setLineLayer:(LineSetLayer*)lineSet WithValues:(NSArray<NSValue*>*)values{
+-(void)setLineLayer:(GJLineSetLayer*)lineSet WithValues:(NSArray<NSValue*>*)values{
     
     NSMutableArray* pointArry = [[NSMutableArray alloc]initWithCapacity:values.count];
     for (NSValue* value in values) {
@@ -155,7 +155,7 @@
     }
     [lineSet addLinesWithPoints:pointArry];
 }
--(void)setSquareLayer:(SquareSetLayer*)squareLayer WithValues:(NSArray<NSValue*>*)values{
+-(void)setSquareLayer:(GJSquareSetLayer*)squareLayer WithValues:(NSArray<NSValue*>*)values{
     
     NSMutableArray* rectArry = [[NSMutableArray alloc]initWithCapacity:values.count];
     for (NSValue* value in values) {
@@ -209,8 +209,8 @@
     [_lineLayer addLineToPoint:point];
     
     NSString* str;
-    if([self.delegate respondsToSelector:@selector(CoordinateView:titleWithValue:)]){
-        str = [self.delegate CoordinateView:self titleWithValue:value];
+    if([self.delegate respondsToSelector:@selector(GJChartView:titleWithValue:)]){
+        str = [self.delegate GJChartView:self titleWithValue:value];
     }else{
         str = [NSString stringWithFormat:@"%d",(int)value.y];
     }
