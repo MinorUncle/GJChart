@@ -21,7 +21,7 @@
         rangeArry = [[NSMutableArray alloc]init];
         _fillColor = [UIColor redColor];
         _strokeColor = [UIColor blackColor];
-        _lineStyle = UIEdgeInsetsMake(SquareLayerSolid, SquareLayerSolid, SquareLayerSolid, SquareLayerSolid);
+        _lineStyle = UIEdgeInsetsMake(SquareLayerNone, SquareLayerNone, SquareLayerNone, SquareLayerNone);
         
     }
     return self;

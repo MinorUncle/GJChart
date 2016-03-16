@@ -46,20 +46,8 @@
     _coordinateLayer.showXCoordinate = YES;
     
     
-    //圆点
-    _circularLayer = [[GJCircularPointSetLayer alloc]init];
-    [self.layer addSublayer:_circularLayer];
-    //线条
-    _lineLayer = [[GJLineSetLayer alloc]init];
-    [self.layer addSublayer:_lineLayer];
-    /////文字
-    _textLayer = [[GJTextSetLayer alloc]init];
-    _textLayer.backgroundColor = [UIColor clearColor].CGColor;
-    [self.layer addSublayer:_textLayer];
+      [self setFrame:self.frame];
     
-    [self setFrame:self.frame];
-    
-    [_lineLayer beginWithPoint:[self.coordinateLayer getPointWithValue:CGPointZero]];
 }
 
 -(void)buildSection{
@@ -190,39 +178,12 @@
 }
 -(void)setFrame:(CGRect)frame{
     [super setFrame:frame];
-    [_textLayer clear];
-    _textLayer.frame = self.bounds;
-    _circularLayer.frame = self.bounds;
-    _squareLayer.frame = self.bounds;
-    _lineLayer.frame = self.bounds;
+      _squareLayer.frame = self.bounds;
     [self buildSection];
     
   
 }
--(void)addValue:(CGPoint)value{
-    
-    CGPoint point =[self.coordinateLayer getPointWithValue:value];
 
-    ///关闭动画
-//    CABasicAnimation* anima = [CABasicAnimation animationWithKeyPath:@"path"];
-//    [_lineLayer addAnimation:anima forKey:nil];
-    [_lineLayer addLineToPoint:point];
-    
-    NSString* str;
-    if([self.delegate respondsToSelector:@selector(GJChartView:titleWithValue:)]){
-        str = [self.delegate GJChartView:self titleWithValue:value];
-    }else{
-        str = [NSString stringWithFormat:@"%d",(int)value.y];
-    }
-    [_textLayer addTextWithPoint:point text:str textAlignment:TextAlignmentBotton];
-
-   
-//    [_path addLineToPoint:[self getPointWithValue:value]];
-//    [UIView animateWithDuration:1 animations:^(void){
-//        _coordinateLayer.path = _path.CGPath;
-//
-//    }];
-}
 
 
 -(void)addSquareWithValueRect:(CGRect)valueRect color:(UIColor *)color style:(UIEdgeInsets)style{
@@ -237,35 +198,8 @@
     style.bottom = top;
    // [_squareLayer addSquareWithRect:valueRect color:color style:style];
 }
--(void)beginWithValue:(CGPoint)value{
-    CGPoint point = [self.coordinateLayer getPointWithValue:value];
-    [_circularLayer addCircularToPoint:point];
-    [_lineLayer beginWithPoint:point];
-}
 
--(void)addValues:(NSArray<NSValue*>*)values{
-    if (values.count < 1) {return;}
-    
-    CGPoint point = [values[0] CGPointValue];
-    [self beginWithValue:point];
-    for (int i = 1; i < values.count; i++) {
-        point = [values[i] CGPointValue];
-        [self addValue:point];
-    }
-}
 
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    //////测试
-    NSLog(@"VIEW TOUCH");
-    static CGFloat x = 0;
-    x += arc4random()%50;
-    CGFloat y = arc4random() %100;
-    [self addValue:CGPointMake(x, y)];
-    
-    //    CGFloat width = fabsf(arc4random()%100 - x);
-    //    CGFloat height =fabsf(arc4random()%100 - y);
-    //    [view addSquareWithValueRect:CGRectMake(-10, 10, 200, 0) color:[UIColor colorWithRed:0 green:1 blue:0 alpha:0.5] style:UIEdgeInsetsMake(SquareLayerDash, SquareLayerNone, SquareLayerSolid, SquareLayerNone)];
-}
 
 
 @end

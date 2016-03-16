@@ -49,7 +49,6 @@
     _scrollView.backgroundColor = [UIColor whiteColor];
     
     _coordinateView = [[GJChartView alloc]initWithFrame:_scrollView.bounds];
-    _coordinateView.lineLayer.color = [UIColor yellowColor];
     _coordinateView.coordinateLayer.color = [UIColor yellowColor];
     _coordinateView.delegate = self;
     _coordinateView.dataDelegate = self;
@@ -118,25 +117,6 @@
     }
 
 }
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    NSLog(@"VIEW TOUCH");
-    static CGFloat x = 0;
-    x += arc4random()%50;
-    CGFloat y = arc4random() %100;
-    [_coordinateView addValue:CGPointMake(x, y)];}
-//-(NSString *)GJChartView:(GJChartView *)view titleWithYValue:(CGFloat)value{
-//    NSString* title;
-//    return title;
-//}
 
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end

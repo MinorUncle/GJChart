@@ -60,10 +60,7 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
  */
 @property(nonatomic,assign)CGFloat squareWRate;
 
-@property(nonatomic,retain,readonly)GJTextSetLayer* textLayer;
-@property(nonatomic,retain,readonly)GJCircularPointSetLayer* circularLayer;
 @property(nonatomic,retain,readonly)GJSquareSetLayer* squareLayer;
-@property(nonatomic,retain,readonly)GJLineSetLayer* lineLayer;
 @property(nonatomic,retain,readonly)GJCoordinateLayer* coordinateLayer;
 
 @property(nonatomic,weak) id<CoordinateViewDelegate> delegate;
@@ -73,10 +70,6 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
 
 
 
-////折线
--(void)addValue:(CGPoint)value;
--(void)beginWithValue:(CGPoint)value;
--(void)addValues:(NSArray<NSValue*>*)values;
 
 //////背景方块
 -(void)addSquareWithValueRect:(CGRect)valueRect color:(UIColor *)color style:(UIEdgeInsets)style;
