@@ -21,9 +21,11 @@
 ///最大Y
 @property(nonatomic,assign)CGFloat MaxY;
 @property(nonatomic,assign)CGFloat MaxX;
+@property(nonatomic,assign)CGFloat MinY;
+@property(nonatomic,assign)CGFloat MinX;
 ////y的一个大单元包含小单元的数量
-@property(nonatomic,assign)NSInteger countY;
-@property(nonatomic,assign)NSInteger countX;
+@property(nonatomic,assign)uint countY;
+@property(nonatomic,assign)uint countX;
  ////一个小Y的单位
 @property(nonatomic,assign)CGFloat unitY;
 @property(nonatomic,assign)CGFloat unitX;

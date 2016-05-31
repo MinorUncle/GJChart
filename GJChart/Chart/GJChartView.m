@@ -32,18 +32,15 @@
     return self;
 }
 -(void)buildUI{
-    _speed = 0.01;
+   // _speed = 0.01;
     
     ////背景方块条
-    
-    
     _squareLayer = [[GJSquareSetLayer alloc]init];
     [self.layer addSublayer:_squareLayer];
     
     ////坐标轴，
     _coordinateLayer = (GJCoordinateLayer*)self.layer;
-    _coordinateLayer.showYCoordinate = YES;
-    _coordinateLayer.showXCoordinate = YES;
+
     
     
       [self setFrame:self.frame];
@@ -56,7 +53,7 @@
     }
     [_sectionLayerArry makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     
-    NSInteger capacity = 1;
+    NSInteger capacity = 0;
     if ([self.dataDelegate respondsToSelector:@selector(numberOfSectionsInCoordinateView:)]) {
         capacity = [self.dataDelegate numberOfSectionsInCoordinateView:self];
     }
@@ -90,8 +87,6 @@
                 }
                 
                 [self setLineLayer:lineSet WithValues:values];
-
-                
                 sectionLayer = lineSet;
                 break;
             }

@@ -54,7 +54,7 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
 
 
 @property(nonatomic,assign)CGPoint beginValue;
-@property(nonatomic,assign)float speed;   //动画速度 ///未使用
+//@property(nonatomic,assign)float speed;   //动画速度 ///未使用
 /**
  *  条状图的宽与大单元格的比例
  */
