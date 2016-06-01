@@ -26,7 +26,7 @@
 ////y的一个大单元包含小单元的数量
 @property(nonatomic,assign)uint countY;
 @property(nonatomic,assign)uint countX;
- ////一个小Y的单位
+ ////一个小Y的单位绝对值
 @property(nonatomic,assign)CGFloat unitY;
 @property(nonatomic,assign)CGFloat unitX;
 @property(nonatomic,retain)UIColor* color;

@@ -50,8 +50,8 @@
     
     _coordinateView = [[GJChartView alloc]initWithFrame:_scrollView.bounds];
     _coordinateView.coordinateLayer.color = [UIColor yellowColor];
-    _coordinateView.coordinateLayer.MinY = -130;
-    _coordinateView.coordinateLayer.MinX = -130;
+    _coordinateView.coordinateLayer.MinY = 130;
+    _coordinateView.coordinateLayer.MinX = 130;
 
 
     _coordinateView.delegate = self;
@@ -63,10 +63,10 @@
 }
 
 -(void)drawTenMin{
-    _coordinateView.coordinateLayer.MaxX = 440;
+    _coordinateView.coordinateLayer.MaxX = -440;
     _coordinateView.coordinateLayer.unitX = 2;
     _coordinateView.coordinateLayer.countX = 5;
-    _coordinateView.coordinateLayer.MaxY = 140;
+    _coordinateView.coordinateLayer.MaxY = -140;
     _coordinateView.coordinateLayer.unitY = 10;
     _coordinateView.coordinateLayer.countY = 2;
     CGRect rect = _coordinateView.frame;
@@ -88,7 +88,9 @@
 {
     int hour = (int)value / 60;
     int min = (int)value % 60;
-    NSString* title = [NSString stringWithFormat:@"%02d:%02d",hour,min];
+//    NSString* title = [NSString stringWithFormat:@"%02d:%02d",hour,min];
+    NSString* title = [NSString stringWithFormat:@"%0.0f",value];
+
     return title;
 }
 

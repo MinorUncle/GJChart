@@ -110,6 +110,7 @@
         return;
     }
     
+    
     _unitX = unitX;
     if (_MaxX == 0) {return;}
     [self clear];
@@ -180,30 +181,54 @@
     point.x = size.width - LEFT_PANNDINT;
     [_xPath addLineToPoint:point];
     
-    temPoint = point;
-    point.x -= ARROW_SIZE;
-    point.y -= ARROW_SIZE;
-    [_xPath addLineToPoint:point];
-    point = temPoint;
-    [_xPath moveToPoint:point];
+   
     
-    point.x -= ARROW_SIZE;
-    point.y += ARROW_SIZE;
-    [_xPath addLineToPoint:point];
+    CGFloat sigUnitX ,upMax;
+    if (_MaxX > _MinX) {
+        sigUnitX = fabs( _unitX);
+        upMax = _MaxX;
+        
+        temPoint = point;
+        point.x -= ARROW_SIZE;
+        point.y -= ARROW_SIZE;
+        [_xPath addLineToPoint:point];
+        point = temPoint;
+        [_xPath moveToPoint:point];
+        
+        point.x -= ARROW_SIZE;
+        point.y += ARROW_SIZE;
+        [_xPath addLineToPoint:point];
+    }else{
+        sigUnitX = -fabs( _unitX);
+        upMax = _MinX + (_MinX - _MaxX);
+        
+        point = CGPointMake([self getXWithValue:_MinX],[self getYWithValue:0]);
+        [_xPath moveToPoint:point];
+        temPoint = point;
+        point.x += ARROW_SIZE;
+        point.y -= ARROW_SIZE;
+        [_xPath addLineToPoint:point];
+        point = temPoint;
+        [_xPath moveToPoint:point];
+        
+        point.x += ARROW_SIZE;
+        point.y += ARROW_SIZE;
+        [_xPath addLineToPoint:point];
+    }
     
-    
+    CGFloat zY = [self getYWithValue:0];
     ///画x坐标尺
-    for (int i=0; i * _unitX + _MinX<= _MaxX; i++) {
-        point.x = LEFT_PANNDINT + _unitW * i;
-        point.y = [self getYWithValue:0];
+    for (int i=0; i * _unitX + _MinX<= upMax; i++) {
+        point.x = [self getXWithValue:i * sigUnitX + _MinX];
+        point.y = zY;
         [_xPath moveToPoint:point];
         
         if(i % _countX == 0){
             NSString* value;
             if ([self.delegate respondsToSelector:@selector(GJCoordinateLayer:titleWithXValue:)]){
-                value = [self.delegate GJCoordinateLayer:self titleWithXValue:(i * _unitX +_MinX)];
+                value = [self.delegate GJCoordinateLayer:self titleWithXValue:(i * sigUnitX +_MinX)];
             }else{
-                value = [NSString stringWithFormat:@"%d",(int)(i * _unitX +_MinX)];
+                value = [NSString stringWithFormat:@"%d",(int)(i * sigUnitX +_MinX)];
             }
             CGSize size = [value sizeWithAttributes: _textSetLayer.font == nil ? nil : @{NSFontAttributeName:_textSetLayer.font}];
             NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width * 0.5, point.y + 2)];
@@ -227,7 +252,6 @@
     [_yPath removeAllPoints];
     NSMutableDictionary* textDic = [[NSMutableDictionary alloc]init];
     CGPoint temPoint;
-    CGSize size = self.bounds.size;
     [_yPath setLineWidth:50];
     ///Y坐标
     CGPoint point = CGPointMake([self getXWithValue:0],[self getYWithValue:_MinY]);
@@ -235,28 +259,51 @@
     point.y = [self getYWithValue:_MaxY];
     [_yPath addLineToPoint:point];
     
-    temPoint = point;
-    point.x -= ARROW_SIZE;
-    point.y += ARROW_SIZE;
-    [_yPath addLineToPoint:point];
-    [_yPath moveToPoint: temPoint];
-    
-    point = temPoint;
-    point.x += ARROW_SIZE;
-    point.y += ARROW_SIZE;
-    [_yPath addLineToPoint:point];
+    CGFloat sigUnitY ,upMax;
+    if (_MaxY > _MinY) {
+        sigUnitY = fabs( _unitY);
+        upMax = _MaxY;
+        
+        temPoint = point;
+        point.x -= ARROW_SIZE;
+        point.y += ARROW_SIZE;
+        [_yPath addLineToPoint:point];
+        [_yPath moveToPoint: temPoint];
+        
+        point = temPoint;
+        point.x += ARROW_SIZE;
+        point.y += ARROW_SIZE;
+        [_yPath addLineToPoint:point];
+    }else{
+        sigUnitY = -fabs( _unitY);
+        upMax = _MinY + (_MinY - _MaxY);
+        
+        point = CGPointMake([self getXWithValue:0],[self getYWithValue:_MinY]);
+        [_yPath moveToPoint:point];
+        temPoint = point;
+        point.x -= ARROW_SIZE;
+        point.y -= ARROW_SIZE;
+        [_yPath addLineToPoint:point];
+        [_yPath moveToPoint: temPoint];
+        
+        point = temPoint;
+        point.x += ARROW_SIZE;
+        point.y -= ARROW_SIZE;
+        [_yPath addLineToPoint:point];
+    }
     
     //画y坐标
-    for (int i=1; i * _unitY + _MinY <= _MaxY; i++) {
-        point.x = [self getXWithValue:0];
-        point.y = size.height - BOTTOM_PANNDING - _unitH * i;
+    CGFloat zX =  [self getXWithValue:0];
+    for (int i=1; i * _unitY + _MinY <= upMax; i++) {
+        point.x = zX;
+        point.y = [self getYWithValue:i * sigUnitY + _MinY];
         [_yPath moveToPoint:point];
         if(i % _countY == 0){
             NSString* value;
             if ([self.delegate respondsToSelector:@selector(GJCoordinateLayer:titleWithYValue:)]){
-                value = [self.delegate GJCoordinateLayer:self titleWithYValue:(i * _unitY + _MinY)];
+                value = [self.delegate GJCoordinateLayer:self titleWithYValue:(i * sigUnitY + _MinY)];
             }else{
-                value = [NSString stringWithFormat:@"%d",(int)(i * _unitY + _MinY)];
+                value = [NSString stringWithFormat:@"%d",(int)(i * sigUnitY + _MinY)];
             }
             CGSize size = [value sizeWithAttributes: _textSetLayer.font == nil ? nil : @{NSFontAttributeName:_textSetLayer.font}];
             NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width -2, point.y - size.height*0.5)];
