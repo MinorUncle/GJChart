@@ -50,30 +50,28 @@
     
     _coordinateView = [[GJChartView alloc]initWithFrame:_scrollView.bounds];
     _coordinateView.coordinateLayer.color = [UIColor yellowColor];
-    _coordinateView.coordinateLayer.MinY = 130;
-    _coordinateView.coordinateLayer.MinX = 130;
+
 
 
     _coordinateView.delegate = self;
     _coordinateView.dataDelegate = self;
-    
+
     [self.view addSubview:_scrollView];
     [_scrollView addSubview:_coordinateView];
     [self drawTenMin];
 }
 
 -(void)drawTenMin{
-    _coordinateView.coordinateLayer.MaxX = -440;
-    _coordinateView.coordinateLayer.unitX = 2;
+    _coordinateView.coordinateLayer.MaxX = 440;
+    _coordinateView.coordinateLayer.unitX = 5;
     _coordinateView.coordinateLayer.countX = 5;
-    _coordinateView.coordinateLayer.MaxY = -140;
+    _coordinateView.coordinateLayer.MaxY = 140;
     _coordinateView.coordinateLayer.unitY = 10;
     _coordinateView.coordinateLayer.countY = 2;
     CGRect rect = _coordinateView.frame;
     rect.size.width = 1880;
     _coordinateView.frame = rect;
     _scrollView.contentSize = rect.size;
-
 
 }
 
@@ -88,13 +86,14 @@
 {
     int hour = (int)value / 60;
     int min = (int)value % 60;
-//    NSString* title = [NSString stringWithFormat:@"%02d:%02d",hour,min];
-    NSString* title = [NSString stringWithFormat:@"%0.0f",value];
+    NSString* title = [NSString stringWithFormat:@"%02d:%02d",hour,min];
+//    NSString* title = [NSString stringWithFormat:@"%0.0f",value];
 
     return title;
 }
 
 -(NSString *)GJCoordinateLayer:(GJCoordinateLayer *)view titleWithYValue:(CGFloat)value{
+    if(value < 0.00001 && value >-0.00001)return nil;
     return [NSString stringWithFormat:@"%.1f",value];
 
 }
@@ -103,7 +102,7 @@
 }
 
 -(NSInteger)numberOfSectionsInCoordinateView:(GJChartView *)coordinateView{
-    return 0;
+    return _data.count;
 }
 -(CoordinateViewSectionType)GJChartView:(GJChartView *)view typeWithSection:(NSInteger)section{
     if (section == 1 ) {

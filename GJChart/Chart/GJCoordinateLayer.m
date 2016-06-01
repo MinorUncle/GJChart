@@ -11,7 +11,6 @@
 #define LEFT_PANNDINT 40      ////左边距
 #define BOTTOM_PANNDING 20    ////下边距
 #define ARROW_SIZE 5    ///箭头大小
-#define POINT_SIZE 5    //点大小
 
 
 #import "GJCoordinateLayer.h"
@@ -36,6 +35,7 @@
 {
     self = [super init];
     if (self) {
+        _contentInsets = UIEdgeInsetsMake(0, LEFT_PANNDINT, BOTTOM_PANNDING, 0);
         _path = [[UIBezierPath alloc]init];
         _xPath = [[UIBezierPath alloc]init];
         _yPath = [[UIBezierPath alloc]init];
@@ -160,10 +160,10 @@
 }
 
 -(CGFloat)coordinateW{
-    return self.bounds.size.width - 2*LEFT_PANNDINT - ARROW_SIZE;
+    return self.bounds.size.width - _contentInsets.left - _contentInsets.right - ARROW_SIZE;
 }
 -(CGFloat)coordinateH{
-    return self.bounds.size.height - 2*BOTTOM_PANNDING - ARROW_SIZE;
+    return self.bounds.size.height - _contentInsets.top - _contentInsets.bottom - ARROW_SIZE;
 }
 - (void)updateXCoordinate {
     if (!_unitX || !_countX || !self.unitW) {
@@ -173,12 +173,11 @@
     [_xPath removeAllPoints];
     NSMutableDictionary* textDic = [[NSMutableDictionary alloc]init];
     CGPoint temPoint;
-    CGSize size = self.bounds.size;
     [_xPath setLineWidth:50];
     ///x坐标
     CGPoint point = CGPointMake([self getXWithValue:_MinX],[self getYWithValue:0]);
     [_xPath moveToPoint:point];
-    point.x = size.width - LEFT_PANNDINT;
+    point.x = [self getXWithValue:_MaxX];
     [_xPath addLineToPoint:point];
     
    
@@ -222,7 +221,7 @@
         point.x = [self getXWithValue:i * sigUnitX + _MinX];
         point.y = zY;
         [_xPath moveToPoint:point];
-        
+
         if(i % _countX == 0){
             NSString* value;
             if ([self.delegate respondsToSelector:@selector(GJCoordinateLayer:titleWithXValue:)]){
@@ -232,7 +231,9 @@
             }
             CGSize size = [value sizeWithAttributes: _textSetLayer.font == nil ? nil : @{NSFontAttributeName:_textSetLayer.font}];
             NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width * 0.5, point.y + 2)];
-            [textDic setObject:value forKey:key];
+            if(value != nil){
+                [textDic setObject:value forKey:key];
+            }
             point.y -= BIG_LINE_HEIGHT;
         }else{
             point.y -= SMALL_LINE_HEIGHT;
@@ -294,7 +295,7 @@
     
     //画y坐标
     CGFloat zX =  [self getXWithValue:0];
-    for (int i=1; i * _unitY + _MinY <= upMax; i++) {
+    for (int i=0; i * _unitY + _MinY <= upMax; i++) {
         point.x = zX;
         point.y = [self getYWithValue:i * sigUnitY + _MinY];
         [_yPath moveToPoint:point];
@@ -307,7 +308,9 @@
             }
             CGSize size = [value sizeWithAttributes: _textSetLayer.font == nil ? nil : @{NSFontAttributeName:_textSetLayer.font}];
             NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width -2, point.y - size.height*0.5)];
-            [textDic setObject:value forKey:key];
+            if (value != nil) {
+                [textDic setObject:value forKey:key];
+            }
             
             point.x += BIG_LINE_HEIGHT;
         }else{
@@ -315,7 +318,6 @@
         }
         [_yPath addLineToPoint:point];
     }
-    
     [_textSetLayer addTextWithDic:textDic];
     NSLog(@"REDRAW YCOORDINATE IN FRAME:%@",[NSValue valueWithCGRect:self.frame]);
 
@@ -339,8 +341,7 @@
     if(_unitX == 0 ){
         return 0;
     }
-    value = ((value - _MinX)  / _unitX) * self.unitW + LEFT_PANNDINT;
-    NSLog(@"o vaule:%d",value);
+    value = ((value - _MinX)  / _unitX) * self.unitW + _contentInsets.left;
     return value;
 }
 -(CGFloat)getYWithValue:(int)value{
@@ -348,14 +349,14 @@
         return 0;
     }
     value = (value - _MinY) / _unitY * self.unitH;
-    value = self.frame.size.height - BOTTOM_PANNDING - value;
+    value = self.frame.size.height - _contentInsets.bottom - value;
     return value;
 }
 -(CGFloat)getValueWithY:(CGFloat)Y{
-    return (self.frame.size.height - BOTTOM_PANNDING - Y) / self.unitH * _unitY;
+    return (self.frame.size.height - _contentInsets.bottom - Y) / self.unitH * _unitY + _MinY;
 }
 -(CGFloat)getValueWithX:(CGFloat)X{
-    return (self.frame.size.width - LEFT_PANNDINT - X) / self.unitW * _unitX;
+    return (X-_contentInsets.left) / self.unitW * _unitX + _MinX;
 }
 
 -(CGPoint)getPointWithValue:(CGPoint)value{

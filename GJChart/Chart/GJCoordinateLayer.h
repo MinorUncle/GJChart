@@ -8,7 +8,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIColor.h>
-
+#import <UIKit/UIGeometry.h>
 @class GJCoordinateLayer;
 @protocol CoordinateSystemLayerDelegate <NSObject>
 @optional
@@ -22,11 +22,11 @@
 @property(nonatomic,assign)CGFloat MaxY;
 @property(nonatomic,assign)CGFloat MaxX;
 @property(nonatomic,assign)CGFloat MinY;
-@property(nonatomic,assign)CGFloat MinX;
+@property(nonatomic,assign)CGFloat MinX;  ///当max小于min时，相应坐标箭头调换
 ////y的一个大单元包含小单元的数量
 @property(nonatomic,assign)uint countY;
 @property(nonatomic,assign)uint countX;
- ////一个小Y的单位绝对值
+ ////一个小Y的单位绝对值，正数
 @property(nonatomic,assign)CGFloat unitY;
 @property(nonatomic,assign)CGFloat unitX;
 @property(nonatomic,retain)UIColor* color;
@@ -39,6 +39,8 @@
 
 @property(nonatomic,assign,readonly)CGFloat unitW;
 @property(nonatomic,assign,readonly)CGFloat unitH;
+@property(nonatomic,assign)UIEdgeInsets contentInsets;
+
 
 -(CGFloat)getYWithValue:(int)value;
 -(CGFloat)getXWithValue:(int)value;
