@@ -22,7 +22,8 @@ typedef enum _LineType{
 -(void)addLineFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint;
 -(void)addLinesWithPoints:(NSArray<NSValue*>*)points; //第一个为起点
 -(void)addLineToPoint:(CGPoint)toPoint;
--(void)beginWithPoint:(CGPoint)point;  ///设置当前点
+-(void)beginWithPoint:(CGPoint)point;  ///设置当前点,不画点
+-(void)endWithPoint:(CGPoint)point;  ///设置结束点 不画点
 
 -(void)clear;   ////只删除数据，不更新画面，
 -(void)reload;    ///更新画面

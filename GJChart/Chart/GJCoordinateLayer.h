@@ -40,6 +40,9 @@
 @property(nonatomic,assign,readonly)CGFloat unitW;
 @property(nonatomic,assign,readonly)CGFloat unitH;
 @property(nonatomic,assign)UIEdgeInsets contentInsets;
+@property(nonatomic,assign)CGFloat arrowSize;//箭头大小
+@property(nonatomic,assign)CGFloat bigLineH;//小标尺大小
+@property(nonatomic,assign)CGFloat smallLineH;//大标尺大小
 
 
 -(CGFloat)getYWithValue:(int)value;

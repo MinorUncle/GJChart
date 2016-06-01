@@ -35,6 +35,9 @@
 {
     self = [super init];
     if (self) {
+        _arrowSize = ARROW_SIZE;
+        _bigLineH = BIG_LINE_HEIGHT;
+        _smallLineH = SMALL_LINE_HEIGHT;
         _contentInsets = UIEdgeInsetsMake(0, LEFT_PANNDINT, BOTTOM_PANNDING, 0);
         _path = [[UIBezierPath alloc]init];
         _xPath = [[UIBezierPath alloc]init];
@@ -66,8 +69,6 @@
     [self clear];
     [self updateXCoordinate];
     [self updateYCoordinate];
-
-    
 }
 -(void)setMaxY:(CGFloat)MaxY{
     if (_MaxY == MaxY || MaxY == 0) {  ///防止重绘
@@ -159,11 +160,22 @@
     [self updateYCoordinate];
 }
 
+-(void)setBigLineH:(CGFloat)bigLineH{
+    _bigLineH = bigLineH;
+    
+}
+-(void)setSmallLineH:(CGFloat)smallLineH{
+    _smallLineH = smallLineH;
+}
+-(void)setArrowSize:(CGFloat)arrowSize{
+    _arrowSize = arrowSize;
+}
+
 -(CGFloat)coordinateW{
-    return self.bounds.size.width - _contentInsets.left - _contentInsets.right - ARROW_SIZE;
+    return self.bounds.size.width - _contentInsets.left - _contentInsets.right - _arrowSize;
 }
 -(CGFloat)coordinateH{
-    return self.bounds.size.height - _contentInsets.top - _contentInsets.bottom - ARROW_SIZE;
+    return self.bounds.size.height - _contentInsets.top - _contentInsets.bottom - _arrowSize;
 }
 - (void)updateXCoordinate {
     if (!_unitX || !_countX || !self.unitW) {
@@ -188,14 +200,14 @@
         upMax = _MaxX;
         
         temPoint = point;
-        point.x -= ARROW_SIZE;
-        point.y -= ARROW_SIZE;
+        point.x -= _arrowSize;
+        point.y -= _arrowSize;
         [_xPath addLineToPoint:point];
         point = temPoint;
         [_xPath moveToPoint:point];
         
-        point.x -= ARROW_SIZE;
-        point.y += ARROW_SIZE;
+        point.x -= _arrowSize;
+        point.y += _arrowSize;
         [_xPath addLineToPoint:point];
     }else{
         sigUnitX = -fabs( _unitX);
@@ -204,14 +216,14 @@
         point = CGPointMake([self getXWithValue:_MinX],[self getYWithValue:0]);
         [_xPath moveToPoint:point];
         temPoint = point;
-        point.x += ARROW_SIZE;
-        point.y -= ARROW_SIZE;
+        point.x += _arrowSize;
+        point.y -= _arrowSize;
         [_xPath addLineToPoint:point];
         point = temPoint;
         [_xPath moveToPoint:point];
         
-        point.x += ARROW_SIZE;
-        point.y += ARROW_SIZE;
+        point.x += _arrowSize;
+        point.y += _arrowSize;
         [_xPath addLineToPoint:point];
     }
     
@@ -234,9 +246,9 @@
             if(value != nil){
                 [textDic setObject:value forKey:key];
             }
-            point.y -= BIG_LINE_HEIGHT;
+            point.y -= _bigLineH;
         }else{
-            point.y -= SMALL_LINE_HEIGHT;
+            point.y -= _smallLineH;
         }
         [_xPath addLineToPoint:point];
     }
@@ -266,14 +278,14 @@
         upMax = _MaxY;
         
         temPoint = point;
-        point.x -= ARROW_SIZE;
-        point.y += ARROW_SIZE;
+        point.x -= _arrowSize;
+        point.y += _arrowSize;
         [_yPath addLineToPoint:point];
         [_yPath moveToPoint: temPoint];
         
         point = temPoint;
-        point.x += ARROW_SIZE;
-        point.y += ARROW_SIZE;
+        point.x += _arrowSize;
+        point.y += _arrowSize;
         [_yPath addLineToPoint:point];
     }else{
         sigUnitY = -fabs( _unitY);
@@ -282,14 +294,14 @@
         point = CGPointMake([self getXWithValue:0],[self getYWithValue:_MinY]);
         [_yPath moveToPoint:point];
         temPoint = point;
-        point.x -= ARROW_SIZE;
-        point.y -= ARROW_SIZE;
+        point.x -= _arrowSize;
+        point.y -= _arrowSize;
         [_yPath addLineToPoint:point];
         [_yPath moveToPoint: temPoint];
         
         point = temPoint;
-        point.x += ARROW_SIZE;
-        point.y -= ARROW_SIZE;
+        point.x += _arrowSize;
+        point.y -= _arrowSize;
         [_yPath addLineToPoint:point];
     }
     
@@ -312,9 +324,9 @@
                 [textDic setObject:value forKey:key];
             }
             
-            point.x += BIG_LINE_HEIGHT;
+            point.x += _bigLineH;
         }else{
-            point.x += SMALL_LINE_HEIGHT;
+            point.x += _smallLineH;
         }
         [_yPath addLineToPoint:point];
     }

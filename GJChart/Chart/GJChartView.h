@@ -15,16 +15,16 @@
 #import "GJCoordinateLayer.h"
 
 typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
-    CoordinateViewSectionTypeLine,
-    CoordinateViewSectionTypeBar,
-    CoordinateViewSectionTypePie
+    CoordinateViewSectionTypeLine, ///  线，
+    CoordinateViewSectionTypeBar
+  //  CoordinateViewSectionTypePie
 
 };
 @class GJChartView;
 @protocol CoordinateViewDelegate <NSObject,CoordinateSystemLayerDelegate>
 @optional
  ///自定义点的名称
--(NSString*) GJChartView:(GJChartView*)view titleWithValue:(CGPoint)point;
+-(NSString*) GJChartView:(GJChartView*)view titleWithValue:(CGPoint)point inSection:(NSInteger)section;
 -(CoordinateViewSectionType) GJChartView:(GJChartView*)view typeWithSection:(NSInteger)section;  ///自定义组类型
 -(void)GJChartView:(GJChartView*)view customTextLayerStlye:(GJTextSetLayer*)textLayer customSectionLayerStyle:(CALayer*)sectionLayer inSection:(NSInteger)section;
 @end
@@ -40,10 +40,9 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
  */
 -(NSArray<NSValue*>*) GJChartView:(GJChartView*)view dataForSection:(NSInteger)section;
 @optional
-- (NSInteger)numberOfSectionsInCoordinateView:(GJChartView *)coordinateView;              // Default is 1 if not implemented
+- (NSInteger)numberOfSectionsInCoordinateView:(GJChartView *)coordinateView;              // Default is 0 if not implemented
 -(CGFloat) GJChartView:(GJChartView*)view valueWithIndexPath:(NSIndexPath*)indexPath;
-
-
+-(NSString *)GJChartView:(GJChartView *)view tipTitleForSection:(NSInteger)section;
 @end
 
 
@@ -66,7 +65,8 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
 @property(nonatomic,weak) id<CoordinateViewDelegate> delegate;
 @property(nonatomic,weak) id<CoordinateViewDataSourceDelegate> dataDelegate;
 
-
+@property(nonatomic,assign)CGFloat tipViewWidth;
+@property(nonatomic,assign)CGFloat tipViewHeight;
 
 
 

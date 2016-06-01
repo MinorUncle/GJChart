@@ -88,7 +88,6 @@
     int min = (int)value % 60;
     NSString* title = [NSString stringWithFormat:@"%02d:%02d",hour,min];
 //    NSString* title = [NSString stringWithFormat:@"%0.0f",value];
-
     return title;
 }
 
@@ -97,7 +96,10 @@
     return [NSString stringWithFormat:@"%.1f",value];
 
 }
--(NSString *)GJChartView:(GJChartView *)view titleWithValue:(CGPoint)point{
+-(NSString *)GJChartView:(GJChartView *)view titleWithValue:(CGPoint)point inSection:(NSInteger)section{
+    if (section == 0) {
+        return [NSString stringWithFormat:@"%0.1f个",point.y];
+    }
     return [NSString stringWithFormat:@"%0.1f元",point.y];
 }
 
@@ -114,15 +116,13 @@
 -(NSArray<NSValue *> *)GJChartView:(GJChartView *)view dataForSection:(NSInteger)section{
     return _data[section];
 }
+-(NSString *)GJChartView:(GJChartView *)view tipTitleForSection:(NSInteger)section{
+    return [NSString stringWithFormat:@"%ld",section];
+}
 -(void)GJChartView:(GJChartView *)view customTextLayerStlye:(GJTextSetLayer *)textLayer customSectionLayerStyle:(CALayer *)sectionLayer inSection:(NSInteger)section{
-    if (section == 0) {
-        textLayer.fontColor = [UIColor redColor];
-        ((GJLineSetLayer*)sectionLayer).capType = LineTypeDash;
-    }else if (section == 1){
+     if (section == 1){
         textLayer.fontColor = [UIColor yellowColor];
 //        ((GJSquareSetLayer*)sectionLayer).capType = LineTypeDash;
     }
 }
-
-
 @end

@@ -84,9 +84,12 @@
 -(void)reload{  ///更新画面
     self.path = path.CGPath;
 }
--(void)beginWithPoint:(CGPoint)point{  ///设置当前点
+-(void)beginWithPoint:(CGPoint)point{  ///设置当前点 不画点
     [path moveToPoint:point];
-    [_circularLayer addCircularToPoint:point];
+}
+-(void)endWithPoint:(CGPoint)point{  ///设置结束点 不画点
+    [path addLineToPoint:point];
+    self.path = path.CGPath;
 }
 -(void)addLineToPoint:(CGPoint)toPoint{    ///起点为当前点
     [path addLineToPoint:toPoint];

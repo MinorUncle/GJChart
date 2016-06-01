@@ -21,8 +21,8 @@
 {
     self = [super init];
     if (self) {
-        _insideColor = [UIColor yellowColor];
-        _outsideColor = [UIColor redColor];
+        _insideColor = [UIColor greenColor];
+        _outsideColor = [UIColor blackColor];
         _smallPath = CGPathCreateMutable();
         _bigPath = CGPathCreateMutable();
         _outsideRadius = 3;
