@@ -21,7 +21,7 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
 
 };
 @class GJChartView;
-@protocol CoordinateViewDelegate <NSObject,CoordinateSystemLayerDelegate>
+@protocol GJChartViewDelegate <NSObject,CoordinateSystemLayerDelegate>
 @optional
  ///自定义点的名称
 -(NSString*) GJChartView:(GJChartView*)view titleWithValue:(CGPoint)point inSection:(NSInteger)section;
@@ -29,7 +29,7 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
 -(void)GJChartView:(GJChartView*)view customTextLayerStlye:(GJTextSetLayer*)textLayer customSectionLayerStyle:(CALayer*)sectionLayer inSection:(NSInteger)section;
 @end
 
-@protocol CoordinateViewDataSourceDelegate <NSObject>
+@protocol GJChartViewDataSourceDelegate <NSObject>
 /**
  *  数据代理
  *
@@ -46,7 +46,7 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
 @end
 
 
-@interface GJChartView : UIView
+@interface GJChartView : UIScrollView
 
 
 
@@ -58,19 +58,22 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
  *  条状图的宽与大单元格的比例
  */
 @property(nonatomic,assign)CGFloat squareWRate;
+@property(nonatomic,assign)BOOL autoResizeMax;
+@property(nonatomic,assign)BOOL autoResizeUnit;
+@property(nonatomic,assign)BOOL showBackgroundLine;
 
 @property(nonatomic,retain,readonly)GJSquareSetLayer* squareLayer;
 @property(nonatomic,retain,readonly)GJCoordinateLayer* coordinateLayer;
 
-@property(nonatomic,weak) id<CoordinateViewDelegate> delegate;
-@property(nonatomic,weak) id<CoordinateViewDataSourceDelegate> dataDelegate;
+@property(nonatomic,weak) id<GJChartViewDelegate> charDelegate;
+@property(nonatomic,weak) id<GJChartViewDataSourceDelegate> charDataDelegate;
 
 @property(nonatomic,assign)CGFloat tipViewWidth;
 @property(nonatomic,assign)CGFloat tipViewHeight;
 
 
 
-
+-(void)reloadData;
 //////背景方块
 -(void)addSquareWithValueRect:(CGRect)valueRect color:(UIColor *)color style:(UIEdgeInsets)style;
 

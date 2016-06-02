@@ -10,7 +10,7 @@
 #import "GJChartView.h"
 
 
-@interface ViewController ()<CoordinateViewDelegate,CoordinateViewDataSourceDelegate>
+@interface ViewController ()<GJChartViewDelegate,GJChartViewDataSourceDelegate>
 {
     GJChartView* _coordinateView;
     UIScrollView* _scrollView;
@@ -29,10 +29,12 @@
 -(void)buildData{
     _data = [[NSMutableArray alloc]init];
     for (int i = 0; i<4; i++) {
+        int x = 0;
+
         NSMutableArray* arry = [[NSMutableArray alloc]init];
         for (int j = 0; j<15; j++) {
-            int x = j*20;
-            CGFloat y = arc4random() %100;
+            x += 115;
+            CGFloat y = arc4random() %200;
             [arry addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
         }
         [_data addObject:arry];
@@ -46,15 +48,12 @@
     
     
     _scrollView = [[UIScrollView alloc]initWithFrame:rect];
-    _scrollView.backgroundColor = [UIColor whiteColor];
-    
     _coordinateView = [[GJChartView alloc]initWithFrame:_scrollView.bounds];
-    _coordinateView.coordinateLayer.color = [UIColor yellowColor];
 
 
 
-    _coordinateView.delegate = self;
-    _coordinateView.dataDelegate = self;
+    _coordinateView.charDelegate = self;
+    _coordinateView.charDataDelegate = self;
 
     [self.view addSubview:_scrollView];
     [_scrollView addSubview:_coordinateView];
@@ -62,14 +61,8 @@
 }
 
 -(void)drawTenMin{
-    _coordinateView.coordinateLayer.MaxX = 440;
-    _coordinateView.coordinateLayer.unitX = 5;
-    _coordinateView.coordinateLayer.countX = 5;
-    _coordinateView.coordinateLayer.MaxY = 140;
-    _coordinateView.coordinateLayer.unitY = 10;
-    _coordinateView.coordinateLayer.countY = 2;
     CGRect rect = _coordinateView.frame;
-    rect.size.width = 1880;
+    rect.size.width = self.view.bounds.size.width*3;
     _coordinateView.frame = rect;
     _scrollView.contentSize = rect.size;
 
@@ -82,14 +75,14 @@
 
 #pragma mark DELEGATE
 
--(NSString *)GJCoordinateLayer:(GJCoordinateLayer *)view titleWithXValue:(CGFloat)value
-{
-    int hour = (int)value / 60;
-    int min = (int)value % 60;
-    NSString* title = [NSString stringWithFormat:@"%02d:%02d",hour,min];
-//    NSString* title = [NSString stringWithFormat:@"%0.0f",value];
-    return title;
-}
+//-(NSString *)GJCoordinateLayer:(GJCoordinateLayer *)view titleWithXValue:(CGFloat)value
+//{
+//    int hour = (int)value / 60;
+//    int min = (int)value % 60;
+//    NSString* title = [NSString stringWithFormat:@"%02d:%02d",hour,min];
+////    NSString* title = [NSString stringWithFormat:@"%0.0f",value];
+//    return title;
+//}
 
 -(NSString *)GJCoordinateLayer:(GJCoordinateLayer *)view titleWithYValue:(CGFloat)value{
     if(value < 0.00001 && value >-0.00001)return nil;
@@ -106,23 +99,15 @@
 -(NSInteger)numberOfSectionsInCoordinateView:(GJChartView *)coordinateView{
     return _data.count;
 }
--(CoordinateViewSectionType)GJChartView:(GJChartView *)view typeWithSection:(NSInteger)section{
-    if (section == 1 ) {
-        return CoordinateViewSectionTypeBar;
-    }
-    return CoordinateViewSectionTypeLine;
-}
 
 -(NSArray<NSValue *> *)GJChartView:(GJChartView *)view dataForSection:(NSInteger)section{
     return _data[section];
 }
 -(NSString *)GJChartView:(GJChartView *)view tipTitleForSection:(NSInteger)section{
-    return [NSString stringWithFormat:@"%ld",section];
+    return [NSString stringWithFormat:@"%ld",(long)section];
 }
--(void)GJChartView:(GJChartView *)view customTextLayerStlye:(GJTextSetLayer *)textLayer customSectionLayerStyle:(CALayer *)sectionLayer inSection:(NSInteger)section{
-     if (section == 1){
-        textLayer.fontColor = [UIColor yellowColor];
-//        ((GJSquareSetLayer*)sectionLayer).capType = LineTypeDash;
-    }
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [self buildData];
+    [_coordinateView reloadData];
 }
 @end

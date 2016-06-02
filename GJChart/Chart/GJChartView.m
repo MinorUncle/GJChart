@@ -29,6 +29,9 @@
         _squareWRate = 0.2;
         _tipViewWidth = 50;
         _tipViewHeight = 12;
+        _autoResizeMax = YES;
+        _autoResizeUnit = YES;
+        _showBackgroundLine = YES;
         [self buildUI];
     }
     return self;
@@ -48,22 +51,25 @@
 }
 
 -(void)buildSection{
-    if (self.dataDelegate == nil || CGRectEqualToRect(self.bounds, CGRectZero)){
+    if (self.charDataDelegate == nil || CGRectEqualToRect(self.bounds, CGRectZero)){
         return;
     }
+    if (self.autoResizeMax || self.autoResizeUnit) {
+        [self analysisCoordinate];
+    }
     [_sectionLayerArry makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
-    
+    [_sectionLayerArry removeAllObjects];
     NSInteger capacity = 0;
-    if ([self.dataDelegate respondsToSelector:@selector(numberOfSectionsInCoordinateView:)]) {
-        capacity = [self.dataDelegate numberOfSectionsInCoordinateView:self];
+    if ([self.charDataDelegate respondsToSelector:@selector(numberOfSectionsInCoordinateView:)]) {
+        capacity = [self.charDataDelegate numberOfSectionsInCoordinateView:self];
     }
     
+
     for (int i = 0; i < capacity; i++) {
-        NSArray<NSValue*>* values = [self.dataDelegate GJChartView:self dataForSection:i];
-        
+        NSArray<NSValue*>* values = [self.charDataDelegate GJChartView:self dataForSection:i];
         CoordinateViewSectionType type = CoordinateViewSectionTypeLine;
-        if ([self.dataDelegate respondsToSelector:@selector(GJChartView:typeWithSection:)]) {
-            type = [self.delegate GJChartView:self typeWithSection:i];
+        if ([self.charDelegate respondsToSelector:@selector(GJChartView:typeWithSection:)]) {
+            type = [self.charDelegate GJChartView:self typeWithSection:i];
         }
         
         /**
@@ -82,15 +88,15 @@
             case CoordinateViewSectionTypeLine:
             {
                 GJLineSetLayer* lineSet = [[GJLineSetLayer alloc]init];
-                if ([self.delegate respondsToSelector:@selector(GJChartView:customTextLayerStlye:customSectionLayerStyle:inSection:)]) {
-                    [self.delegate GJChartView:self customTextLayerStlye:textSet customSectionLayerStyle:lineSet inSection:i];
+                if ([self.charDelegate respondsToSelector:@selector(GJChartView:customTextLayerStlye:customSectionLayerStyle:inSection:)]) {
+                    [self.charDelegate GJChartView:self customTextLayerStlye:textSet customSectionLayerStyle:lineSet inSection:i];
                 }
                 
                 [self setLineLayer:lineSet WithValues:values];
                 
                 //tip
-                if ([self.dataDelegate respondsToSelector:@selector(GJChartView:tipTitleForSection:)]) {
-                    NSString* title = [self.dataDelegate GJChartView:self tipTitleForSection:i];
+                if ([self.charDataDelegate respondsToSelector:@selector(GJChartView:tipTitleForSection:)]) {
+                    NSString* title = [self.charDataDelegate GJChartView:self tipTitleForSection:i];
                     CGPoint point = CGPointMake([_coordinateLayer getXWithValue:0]+MAX(_coordinateLayer.bigLineH, _coordinateLayer.arrowSize)+10, [_coordinateLayer getYWithValue:_coordinateLayer.MaxY] + self.tipViewHeight*(i+0.5));
                     [lineSet beginWithPoint:point];
                     point.x += self.tipViewWidth*0.5;
@@ -105,12 +111,13 @@
             }
             case CoordinateViewSectionTypeBar:{
                 GJSquareSetLayer* squareLayer = [[GJSquareSetLayer alloc]init];
-                if ([self.delegate respondsToSelector:@selector(GJChartView:customTextLayerStlye:customSectionLayerStyle:inSection:)]) {
-                    [self.delegate GJChartView:self customTextLayerStlye:textSet customSectionLayerStyle:squareLayer inSection:i];
+                if ([self.charDelegate respondsToSelector:@selector(GJChartView:customTextLayerStlye:customSectionLayerStyle:inSection:)]) {
+                    [self.charDelegate GJChartView:self customTextLayerStlye:textSet customSectionLayerStyle:squareLayer inSection:i];
                 }
                 [self setSquareLayer:squareLayer WithValues:values];
-                if ([self.dataDelegate respondsToSelector:@selector(GJChartView:tipTitleForSection:)]) {
-                    NSString* title = [self.dataDelegate GJChartView:self tipTitleForSection:i];
+                
+                if ([self.charDataDelegate respondsToSelector:@selector(GJChartView:tipTitleForSection:)]) {
+                    NSString* title = [self.charDataDelegate GJChartView:self tipTitleForSection:i];
                     CGRect rect = CGRectMake([_coordinateLayer getXWithValue:0]+MAX(_coordinateLayer.bigLineH, _coordinateLayer.arrowSize)+10, [_coordinateLayer getYWithValue:_coordinateLayer.MaxY] + self.tipViewHeight*(i+0.25), self.tipViewWidth, self.tipViewHeight*0.5);
                     [squareLayer addSquareWithRect:rect];
                     
@@ -133,27 +140,70 @@
         [self.layer addSublayer:textSet];
         [_sectionLayerArry addObject:textSet];
         //title
-        if ([self.delegate respondsToSelector:@selector(GJChartView:titleWithValue:inSection:)]){
-            for (NSValue* value in values) {
-                NSString* titleName = [self.delegate GJChartView:self titleWithValue:[value CGPointValue] inSection:i];
-                if (titleName != nil) {
-                    CGPoint point = [_coordinateLayer getPointWithValue:[value CGPointValue]];
-                    [textSet addTextWithPoint:point text:titleName textAlignment:TextAlignmentBotton];
-                }
+        
+        for (NSValue* value in values) {
+            NSString* titleName = [NSString stringWithFormat:@"%d",(int)[value CGPointValue].y];
+            if ([self.charDelegate respondsToSelector:@selector(GJChartView:titleWithValue:inSection:)]) {
+                titleName = [self.charDelegate GJChartView:self titleWithValue:[value CGPointValue] inSection:i];
             }
-        }else{
-            for (NSValue* value in values) {
-                
-                NSString* titleName = [NSString stringWithFormat:@"%d",(int)[value CGPointValue].y];
-                CGPoint point = [_coordinateLayer getPointWithValue:[value CGPointValue]];
-                [textSet addTextWithPoint:point text:titleName textAlignment:TextAlignmentBotton];
+            CGPoint point = [_coordinateLayer getPointWithValue:[value CGPointValue]];
+            [textSet addTextWithPoint:point text:titleName textAlignment:TextAlignmentBotton];
+            
             }
+    }
+}
+-(void)analysisCoordinate{
+    CGFloat maxY = -MAXFLOAT;
+    CGFloat maxX = -MAXFLOAT;
+    CGFloat maxCount = -MAXFLOAT;
+    int capacity = 0;
+    if ([self.charDataDelegate respondsToSelector:@selector(numberOfSectionsInCoordinateView:)]) {
+        capacity = [self.charDataDelegate numberOfSectionsInCoordinateView:self];
+    }
+    for (int i = 0; i < capacity; i++) {
+        NSArray<NSValue*>* values;
+        if ([self.charDataDelegate respondsToSelector:@selector(GJChartView:dataForSection:)]) {
+            values = [self.charDataDelegate GJChartView:self dataForSection:i];
         }
-        
-       
-        
+        maxCount = MAX(maxCount, values.count);
+        for (NSValue* value in values) {
+            maxX = MAX(maxX, [value CGPointValue].x);
+            maxY = MAX(maxY, [value CGPointValue].y);
+
+        }
+    }
+    if (_autoResizeMax) {
+        _coordinateLayer.MaxY = maxY * 1.2;
+        _coordinateLayer.MaxX = maxX*(1.01);
         
     }
+    if (_autoResizeUnit) {
+        if (maxCount != 0) {
+            _coordinateLayer.unitY = maxY / maxCount;
+            if (_coordinateLayer.countX != 0) {
+                _coordinateLayer.unitX = maxX / (_coordinateLayer.countX * maxCount);
+            }
+        }
+    }
+    if (_showBackgroundLine) {
+        if (_coordinateLayer.unitY == 0 || _coordinateLayer.countY == 0) {
+            return;
+        }
+        GJLineSetLayer* lineLayer = [[GJLineSetLayer alloc]init];
+        lineLayer.capType = LineTypeDash;
+        lineLayer.color = [UIColor grayColor];
+        lineLayer.showPoint = NO;
+        lineLayer.frame = _coordinateLayer.bounds;
+        int lineCount = _coordinateLayer.MaxY / _coordinateLayer.unitY / _coordinateLayer.countY;
+        CGFloat height = _coordinateLayer.unitH * _coordinateLayer.countY;
+        for (int j = 1; j<lineCount ; j++) {
+            CGPoint beginPoint = [_coordinateLayer getPointWithValue:CGPointMake(0, height * j)];
+            CGPoint endPoint = [_coordinateLayer getPointWithValue:CGPointMake(maxX, height * j)];
+            [lineLayer addLineFromPoint:beginPoint toPoint:endPoint];
+        }
+        [self.layer addSublayer:lineLayer];
+    }
+
 }
 -(void)setLineLayer:(GJLineSetLayer*)lineSet WithValues:(NSArray<NSValue*>*)values{
     
@@ -174,14 +224,6 @@
     }
     [squareLayer addSquareWithRects:rectArry];
 }
--(void)buildTipView{
-    if ([self.dataDelegate respondsToSelector:@selector(GJChartView:tipTitleForSection:)]) {
-        for (int i =0; i<_sectionLayerArry.count; i++) {
-            NSString* title = [self.dataDelegate GJChartView:self tipTitleForSection:i];
-            
-        }
-    }
-}
 -(CGRect)getSquareRectWithValue:(CGPoint)vaule{
     CGPoint point =[_coordinateLayer getPointWithValue:vaule];
     CGFloat bottom = [_coordinateLayer getYWithValue:0];
@@ -190,19 +232,19 @@
     CGFloat w = _coordinateLayer.unitW * _coordinateLayer.countX * _squareWRate;
     CGFloat h = bottom - point.y;
 
-    
-    
     CGRect rect = CGRectMake(x, y, w, h);
     return rect;
 }
--(void)setDelegate:(id<CoordinateViewDelegate>)delegate{
-    _delegate = delegate;
-    _coordinateLayer.delegate = delegate;
+-(void)setCharDataDelegate:(id<GJChartViewDataSourceDelegate>)charDataDelegate{
+    _charDataDelegate = charDataDelegate;
     [self buildSection];
+
 }
--(void)setDataDelegate:(id<CoordinateViewDataSourceDelegate>)dataDelegate{
-    _dataDelegate = dataDelegate;
+-(void)setCharDelegate:(id<GJChartViewDelegate>)charDelegate{
+    _charDelegate = charDelegate;
+    _coordinateLayer.delegate = charDelegate;
     [self buildSection];
+
 }
 -(void)setFrame:(CGRect)frame{
     [super setFrame:frame];
@@ -210,7 +252,18 @@
     [self buildSection];
   
 }
-
+-(void)setAutoResizeMax:(BOOL)autoResizeMax{
+    _autoResizeMax = autoResizeMax;
+    [self buildSection];
+}
+-(void)setAutoResizeUnit:(BOOL)autoResizeUnit{
+    _autoResizeUnit = autoResizeUnit;
+    [self buildSection];
+}
+-(void)setTipViewHeight:(CGFloat)tipViewHeight{
+    _tipViewHeight = tipViewHeight;
+    [self buildSection];
+}
 
 
 -(void)addSquareWithValueRect:(CGRect)valueRect color:(UIColor *)color style:(UIEdgeInsets)style{
@@ -225,7 +278,10 @@
     style.bottom = top;
    // [_squareLayer addSquareWithRect:valueRect color:color style:style];
 }
-
+-(void)reloadData{
+    
+    [self buildSection];
+}
 
 
 

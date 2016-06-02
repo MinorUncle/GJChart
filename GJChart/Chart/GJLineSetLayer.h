@@ -19,6 +19,8 @@ typedef enum _LineType{
 @property(nonatomic,retain)UIColor* color;////只能设置统一线条颜色       ///填充颜色请调用fillColor
 @property(nonatomic,assign)LineType capType;////线条类型
 @property(nonatomic,retain)GJCircularPointSetLayer* circularLayer;////
+@property(nonatomic,assign)BOOL showPoint;////是否显示点
+
 -(void)addLineFromPoint:(CGPoint)fromPoint toPoint:(CGPoint)toPoint;
 -(void)addLinesWithPoints:(NSArray<NSValue*>*)points; //第一个为起点
 -(void)addLineToPoint:(CGPoint)toPoint;

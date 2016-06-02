@@ -29,7 +29,6 @@
  ////一个小Y的单位绝对值，正数
 @property(nonatomic,assign)CGFloat unitY;
 @property(nonatomic,assign)CGFloat unitX;
-@property(nonatomic,retain)UIColor* color;
 
 @property(nonatomic,assign)BOOL showYCoordinate;
 @property(nonatomic,assign)BOOL showXCoordinate;

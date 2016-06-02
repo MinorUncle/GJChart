@@ -44,6 +44,8 @@
         _yPath = [[UIBezierPath alloc]init];
         _showYCoordinate = YES;
         _showXCoordinate = YES;
+        _countX = 5;
+        _countY = 5;
         self.backgroundColor = [UIColor greenColor].CGColor;
         self.strokeColor = [UIColor colorWithRed:138/256.0 green:138/256.0 blue:138/256.0 alpha:1].CGColor;
         
@@ -57,6 +59,7 @@
     }
     return self;
 }
+
 -(void)setFrame:(CGRect)frame{
     [super setFrame:frame];
     _textSetLayer.frame = self.bounds;
