@@ -156,7 +156,7 @@
     CGFloat maxY = -MAXFLOAT;
     CGFloat maxX = -MAXFLOAT;
     CGFloat maxCount = -MAXFLOAT;
-    int capacity = 0;
+    long capacity = 0;
     if ([self.charDataDelegate respondsToSelector:@selector(numberOfSectionsInCoordinateView:)]) {
         capacity = [self.charDataDelegate numberOfSectionsInCoordinateView:self];
     }
@@ -179,7 +179,8 @@
     }
     if (_autoResizeUnit) {
         if (maxCount != 0) {
-            _coordinateLayer.unitY = maxY / maxCount;
+            _coordinateLayer.unitY = MIN(maxY / maxCount,maxY / _coordinateLayer.countY);
+          
             if (_coordinateLayer.countX != 0) {
                 _coordinateLayer.unitX = maxX / (_coordinateLayer.countX * maxCount);
             }

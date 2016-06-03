@@ -242,7 +242,7 @@
             if ([self.delegate respondsToSelector:@selector(GJCoordinateLayer:titleWithXValue:)]){
                 value = [self.delegate GJCoordinateLayer:self titleWithXValue:(i * sigUnitX +_MinX)];
             }else{
-                value = [NSString stringWithFormat:@"%d",(int)(i * sigUnitX +_MinX)];
+                value = [NSString stringWithFormat:@"%0.2f",(i * sigUnitX +_MinX)];
             }
             CGSize size = [value sizeWithAttributes: _textSetLayer.font == nil ? nil : @{NSFontAttributeName:_textSetLayer.font}];
             NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width * 0.5, point.y + 2)];
@@ -352,14 +352,14 @@
     
 }
 
--(CGFloat)getXWithValue:(int)value{
+-(CGFloat)getXWithValue:(CGFloat)value{
     if(_unitX == 0 ){
         return 0;
     }
     value = ((value - _MinX)  / _unitX) * self.unitW + _contentInsets.left;
     return value;
 }
--(CGFloat)getYWithValue:(int)value{
+-(CGFloat)getYWithValue:(CGFloat)value{
     if(_unitY == 0 ){
         return 0;
     }

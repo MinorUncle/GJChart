@@ -29,12 +29,12 @@
 -(void)buildData{
     _data = [[NSMutableArray alloc]init];
     for (int i = 0; i<4; i++) {
-        int x = 0;
+        float x = 0;
 
         NSMutableArray* arry = [[NSMutableArray alloc]init];
         for (int j = 0; j<15; j++) {
-            x += 115;
-            CGFloat y = arc4random() %200;
+            x += 0.2;
+            CGFloat y = arc4random() %20;
             [arry addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
         }
         [_data addObject:arry];
@@ -84,11 +84,7 @@
 //    return title;
 //}
 
--(NSString *)GJCoordinateLayer:(GJCoordinateLayer *)view titleWithYValue:(CGFloat)value{
-    if(value < 0.00001 && value >-0.00001)return nil;
-    return [NSString stringWithFormat:@"%.1f",value];
 
-}
 -(NSString *)GJChartView:(GJChartView *)view titleWithValue:(CGPoint)point inSection:(NSInteger)section{
     if (section == 0) {
         return [NSString stringWithFormat:@"%0.1f个",point.y];
@@ -106,6 +102,7 @@
 -(NSString *)GJChartView:(GJChartView *)view tipTitleForSection:(NSInteger)section{
     return [NSString stringWithFormat:@"%ld",(long)section];
 }
+
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [self buildData];
     [_coordinateView reloadData];

@@ -44,8 +44,8 @@
 @property(nonatomic,assign)CGFloat smallLineH;//大标尺大小
 
 
--(CGFloat)getYWithValue:(int)value;
--(CGFloat)getXWithValue:(int)value;
+-(CGFloat)getYWithValue:(CGFloat)value;
+-(CGFloat)getXWithValue:(CGFloat)value;
 -(CGFloat)getValueWithY:(CGFloat)Y;
 -(CGPoint)getPointWithValue:(CGPoint)value;
 @end
