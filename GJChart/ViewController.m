@@ -35,6 +35,7 @@
         for (int j = 0; j<15; j++) {
             x += 0.2;
             CGFloat y = arc4random() %20;
+//            y = -y;
             [arry addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
         }
         [_data addObject:arry];

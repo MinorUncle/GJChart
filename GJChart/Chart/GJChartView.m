@@ -155,6 +155,8 @@
 -(void)analysisCoordinate{
     CGFloat maxY = -MAXFLOAT;
     CGFloat maxX = -MAXFLOAT;
+    CGFloat minY = MAXFLOAT;
+    CGFloat minX = MAXFLOAT;
     CGFloat maxCount = -MAXFLOAT;
     
     long capacity = 0;
@@ -173,6 +175,9 @@
         for (NSValue* value in values) {
             maxX = MAX(maxX, [value CGPointValue].x);
             maxY = MAX(maxY, [value CGPointValue].y);
+            
+            minX = MIN(minX, [value CGPointValue].x);
+            minY = MIN(minY, [value CGPointValue].y);
 
         }
     }
@@ -180,16 +185,23 @@
         _coordinateLayer.MaxY = maxY * 1.2;
         _coordinateLayer.MaxX = maxX*(1.01);
         
+        if (minY <0) {
+            _coordinateLayer.MinY = minY * 1.2 ;
+        }
+        if (minX < 0) {
+            _coordinateLayer.MinX = minX * 1.01;
+        }
     }
+    
     if (_autoResizeUnit) {
-        if (maxCount != 0) {
-            _coordinateLayer.unitY = MIN(maxY / maxCount,maxY / _coordinateLayer.countY);
-          
+        if (maxCount != 0 && _coordinateLayer.countY != 0) {
+            _coordinateLayer.unitY =  MIN((maxY - minY) / maxCount,(maxY - minY) / _coordinateLayer.countY);
             if (_coordinateLayer.countX != 0) {
-                _coordinateLayer.unitX = maxX / (_coordinateLayer.countX * maxCount);
+                _coordinateLayer.unitX = (maxX - minX) / (_coordinateLayer.countX * maxCount);
             }
         }
     }
+    
     if (_showBackgroundLine) {
         if (_coordinateLayer.unitY == 0 || _coordinateLayer.countY == 0) {
             return;
