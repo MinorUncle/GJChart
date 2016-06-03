@@ -42,7 +42,7 @@
 @property(nonatomic,assign)CGFloat arrowSize;//箭头大小
 @property(nonatomic,assign)CGFloat bigLineH;//小标尺大小
 @property(nonatomic,assign)CGFloat smallLineH;//大标尺大小
-
+@property(nonatomic,weak)id<CoordinateSystemLayerDelegate> coordinateDeleagte;
 
 -(CGFloat)getYWithValue:(CGFloat)value;
 -(CGFloat)getXWithValue:(CGFloat)value;

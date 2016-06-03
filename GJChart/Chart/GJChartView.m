@@ -156,9 +156,13 @@
     CGFloat maxY = -MAXFLOAT;
     CGFloat maxX = -MAXFLOAT;
     CGFloat maxCount = -MAXFLOAT;
+    
     long capacity = 0;
     if ([self.charDataDelegate respondsToSelector:@selector(numberOfSectionsInCoordinateView:)]) {
         capacity = [self.charDataDelegate numberOfSectionsInCoordinateView:self];
+    }
+    if (capacity == 0) {
+        return;
     }
     for (int i = 0; i < capacity; i++) {
         NSArray<NSValue*>* values;
@@ -243,7 +247,7 @@
 }
 -(void)setCharDelegate:(id<GJChartViewDelegate>)charDelegate{
     _charDelegate = charDelegate;
-    _coordinateLayer.delegate = charDelegate;
+    _coordinateLayer.coordinateDeleagte = charDelegate;
     [self buildSection];
 
 }

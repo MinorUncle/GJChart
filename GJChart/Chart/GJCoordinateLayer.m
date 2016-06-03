@@ -239,8 +239,8 @@
 
         if(i % _countX == 0){
             NSString* value;
-            if ([self.delegate respondsToSelector:@selector(GJCoordinateLayer:titleWithXValue:)]){
-                value = [self.delegate GJCoordinateLayer:self titleWithXValue:(i * sigUnitX +_MinX)];
+            if ([self.coordinateDeleagte respondsToSelector:@selector(GJCoordinateLayer:titleWithXValue:)]){
+                value = [self.coordinateDeleagte GJCoordinateLayer:self titleWithXValue:(i * sigUnitX +_MinX)];
             }else{
                 value = [NSString stringWithFormat:@"%0.2f",(i * sigUnitX +_MinX)];
             }
