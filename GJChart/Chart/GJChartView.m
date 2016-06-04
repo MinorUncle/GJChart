@@ -211,14 +211,15 @@
         lineLayer.color = [UIColor grayColor];
         lineLayer.showPoint = NO;
         lineLayer.frame = _coordinateLayer.bounds;
-        int lineCount = _coordinateLayer.MaxY / _coordinateLayer.unitY / _coordinateLayer.countY;
-        CGFloat height = _coordinateLayer.unitH * _coordinateLayer.countY;
+        int lineCount = fabs(_coordinateLayer.MaxY - _coordinateLayer.MinY) / _coordinateLayer.unitY / _coordinateLayer.countY;
         for (int j = 1; j<lineCount ; j++) {
-            CGPoint beginPoint = [_coordinateLayer getPointWithValue:CGPointMake(0, height * j)];
-            CGPoint endPoint = [_coordinateLayer getPointWithValue:CGPointMake(maxX, height * j)];
+            CGFloat y =  _coordinateLayer.unitY*_coordinateLayer.countY * j;
+            CGPoint beginPoint = [_coordinateLayer getPointWithValue:CGPointMake(0,y)];
+            CGPoint endPoint = [_coordinateLayer getPointWithValue:CGPointMake(maxX, y)];
             [lineLayer addLineFromPoint:beginPoint toPoint:endPoint];
         }
         [self.layer addSublayer:lineLayer];
+        
     }
 
 }
@@ -267,8 +268,8 @@
     [super setFrame:frame];
       _squareLayer.frame = self.bounds;
     [self buildSection];
-  
 }
+
 -(void)setAutoResizeMax:(BOOL)autoResizeMax{
     _autoResizeMax = autoResizeMax;
     [self buildSection];

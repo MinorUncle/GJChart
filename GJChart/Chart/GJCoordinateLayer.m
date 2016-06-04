@@ -64,9 +64,7 @@
     [super setFrame:frame];
     _textSetLayer.frame = self.bounds;
 
-    if (_MaxX == 0 || _MaxY == 0) {
-        return;
-    }
+
     
 
     [self clear];
@@ -74,7 +72,7 @@
     [self updateYCoordinate];
 }
 -(void)setMaxY:(CGFloat)MaxY{
-    if (_MaxY == MaxY || MaxY == 0) {  ///防止重绘
+    if (_MaxY == MaxY) {  ///防止重绘
         return;
     }
     _MaxY = MaxY;
@@ -91,7 +89,7 @@
     [self updateXCoordinate];
 }
 -(void)setMaxX:(CGFloat)MaxX{
-    if (_MaxX == MaxX || MaxX == 0) {  ///防止重绘
+    if (_MaxX == MaxX) {  ///防止重绘
         return;
     }
     
@@ -128,7 +126,6 @@
     }
     
     _unitY = unitY;
-    if (_MaxY == 0) {return;}
     [self clear];
     [self updateXCoordinate];
     [self updateYCoordinate];
@@ -264,6 +261,8 @@
     if (!_unitY || !_countY  || !self.unitH) {
         return;
     }
+    NSLog(@"max:%f,unity:%f,county:%d,unith:%f",_MaxX,_unitX,_countX,_unitW);
+    NSLog(@"maxy:%f,unity:%f,county:%d,unith:%f",_MaxY,_unitY,_countY,_unitH);
 
     [_yPath removeAllPoints];
     NSMutableDictionary* textDic = [[NSMutableDictionary alloc]init];
