@@ -46,6 +46,8 @@
         _showXCoordinate = YES;
         _countX = 5;
         _countY = 5;
+        _bigUnitXCount = 1;
+        _bigUnitYCount = 1;
         self.backgroundColor = [UIColor greenColor].CGColor;
         self.strokeColor = [UIColor colorWithRed:138/256.0 green:138/256.0 blue:138/256.0 alpha:1].CGColor;
         
@@ -63,10 +65,6 @@
 -(void)setFrame:(CGRect)frame{
     [super setFrame:frame];
     _textSetLayer.frame = self.bounds;
-
-
-    
-
     [self clear];
     [self updateXCoordinate];
     [self updateYCoordinate];
@@ -78,7 +76,8 @@
     _MaxY = MaxY;
     [self clear];
     [self updateYCoordinate];
-    [self updateXCoordinate];}
+    [self updateXCoordinate];
+}
 -(void)setMinY:(CGFloat)MinY{
     if (_MinY == MinY) {  ///防止重绘
         return;
@@ -105,31 +104,35 @@
     _MinX = MinX;
     [self clear];
     [self updateYCoordinate];
-    [self updateXCoordinate];}
-
--(void)setUnitX:(CGFloat)unitX{
-    if (_unitX == unitX || unitX == 0) {  ///防止重绘
-        return;
-    }
-    
-    
-    _unitX = unitX;
-    if (_MaxX == 0) {return;}
-    [self clear];
     [self updateXCoordinate];
-    [self updateYCoordinate];
-
 }
--(void)setUnitY:(CGFloat)unitY{
-    if (_unitY == unitY || unitY == 0) {  ///防止重绘
+
+-(void)setBigUnitXCount:(uint)bigUnitXCount{
+    if (_bigUnitXCount == bigUnitXCount || bigUnitXCount == 0) {  ///防止重绘
         return;
     }
-    
-    _unitY = unitY;
+    _bigUnitXCount = bigUnitXCount;
     [self clear];
     [self updateXCoordinate];
     [self updateYCoordinate];
 }
+-(void)setBigUnitYCount:(uint)bigUnitYCount{
+    if (_bigUnitYCount == bigUnitYCount || bigUnitYCount == 0) {  ///防止重绘
+        return;
+    }
+    _bigUnitYCount = bigUnitYCount;
+    [self clear];
+    [self updateXCoordinate];
+    [self updateYCoordinate];
+}
+
+-(CGFloat)unitX{
+    return (_MaxX-_MinX)/_bigUnitXCount/_countX;
+}
+-(CGFloat)unitY{
+    return (_MaxY-_MinY)/_bigUnitYCount/_countY;
+}
+
 -(void)setCountX:(uint)countX{
     if (_countX == countX || countX == 0) {  ///防止重绘
         return;
@@ -141,15 +144,6 @@
 
 }
 
--(CGFloat)unitW{
-    _unitW = _unitX / (_MaxX - _MinX) * self.coordinateW;
-    return _unitW;
-}
--(CGFloat)unitH{
-    _unitH = _unitY / (_MaxY-_MinY) * self.coordinateH;
-    return _unitH;
-}
-
 -(void)setCountY:(uint)countY{
     if (_countY == countY || countY == 0) {  ///防止重绘
         return;
@@ -158,6 +152,15 @@
     [self clear];
     [self updateXCoordinate];
     [self updateYCoordinate];
+}
+
+-(CGFloat)unitW{
+    _unitW =  self.coordinateW/_bigUnitXCount/_countX;
+    return _unitW;
+}
+-(CGFloat)unitH{
+    _unitH = self.coordinateH/_bigUnitYCount/_countY;
+    return _unitH;
 }
 
 -(void)setBigLineH:(CGFloat)bigLineH{
@@ -178,10 +181,11 @@
     return self.bounds.size.height - _contentInsets.top - _contentInsets.bottom - _arrowSize;
 }
 - (void)updateXCoordinate {
-    if (!_unitX || !_countX || !self.unitW) {
+    if (!_bigUnitXCount || !_countX || !self.unitW || _MaxX == _MinX) {
         return;
     }
 
+    CGFloat unitX = self.unitX;
     [_xPath removeAllPoints];
     NSMutableDictionary* textDic = [[NSMutableDictionary alloc]init];
     CGPoint temPoint;
@@ -194,11 +198,11 @@
     
    
     
-    CGFloat sigUnitX ,upMax;
+    CGFloat maxX,minX,uSigUnitX;
     if (_MaxX > _MinX) {
-        sigUnitX = fabs( _unitX);
-        upMax = _MaxX;
-        
+        uSigUnitX = unitX;
+        maxX = _MaxX;
+        minX = _MinX;
         temPoint = point;
         point.x -= _arrowSize;
         point.y -= _arrowSize;
@@ -210,9 +214,9 @@
         point.y += _arrowSize;
         [_xPath addLineToPoint:point];
     }else{
-        sigUnitX = -fabs( _unitX);
-        upMax = _MinX + (_MinX - _MaxX);
-        
+        uSigUnitX = -unitX;
+        maxX = _MinX;
+        minX = _MaxX;
         point = CGPointMake([self getXWithValue:_MinX],[self getYWithValue:0]);
         [_xPath moveToPoint:point];
         temPoint = point;
@@ -229,17 +233,17 @@
     
     CGFloat zY = [self getYWithValue:0];
     ///画x坐标尺
-    for (int i=0; i * _unitX + _MinX<= upMax; i++) {
-        point.x = [self getXWithValue:i * sigUnitX + _MinX];
+    for (int i=0; i * uSigUnitX + minX<= maxX; i++) {
+        point.x = [self getXWithValue:i * uSigUnitX + minX];
         point.y = zY;
         [_xPath moveToPoint:point];
 
         if(i % _countX == 0){
             NSString* value;
             if ([self.coordinateDeleagte respondsToSelector:@selector(GJCoordinateLayer:titleWithXValue:)]){
-                value = [self.coordinateDeleagte GJCoordinateLayer:self titleWithXValue:(i * sigUnitX +_MinX)];
+                value = [self.coordinateDeleagte GJCoordinateLayer:self titleWithXValue:(i * uSigUnitX +minX)];
             }else{
-                value = [NSString stringWithFormat:@"%0.2f",(i * sigUnitX +_MinX)];
+                value = [NSString stringWithFormat:@"%0.2f",(i * uSigUnitX +minX)];
             }
             CGSize size = [value sizeWithAttributes: _textSetLayer.font == nil ? nil : @{NSFontAttributeName:_textSetLayer.font}];
             NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width * 0.5, point.y + 2)];
@@ -258,12 +262,10 @@
     [self drawCoordinate];
 }
 - (void)updateYCoordinate {
-    if (!_unitY || !_countY  || !self.unitH) {
+    if (!_bigUnitYCount || !_countY  || !self.unitH || _MaxY == _MinY) {
         return;
     }
-    NSLog(@"max:%f,unity:%f,county:%d,unith:%f",_MaxX,_unitX,_countX,_unitW);
-    NSLog(@"maxy:%f,unity:%f,county:%d,unith:%f",_MaxY,_unitY,_countY,_unitH);
-
+    CGFloat unitY = self.unitY;
     [_yPath removeAllPoints];
     NSMutableDictionary* textDic = [[NSMutableDictionary alloc]init];
     CGPoint temPoint;
@@ -274,11 +276,11 @@
     point.y = [self getYWithValue:_MaxY];
     [_yPath addLineToPoint:point];
     
-    CGFloat sigUnitY ,upMax;
+    CGFloat maxY,minY,uSigUnitY;
     if (_MaxY > _MinY) {
-        sigUnitY = fabs( _unitY);
-        upMax = _MaxY;
-        
+        uSigUnitY = unitY;
+        maxY = _MaxY;
+        minY = _MinY;
         temPoint = point;
         point.x -= _arrowSize;
         point.y += _arrowSize;
@@ -290,8 +292,9 @@
         point.y += _arrowSize;
         [_yPath addLineToPoint:point];
     }else{
-        sigUnitY = -fabs( _unitY);
-        upMax = _MinY + (_MinY - _MaxY);
+        uSigUnitY = -unitY;
+        maxY = _MinY;
+        minY= _MaxY;
         
         point = CGPointMake([self getXWithValue:0],[self getYWithValue:_MinY]);
         [_yPath moveToPoint:point];
@@ -309,16 +312,16 @@
     
     //画y坐标
     CGFloat zX =  [self getXWithValue:0];
-    for (int i=0; i * _unitY + _MinY <= upMax; i++) {
+    for (int i=0; i * uSigUnitY + minY <= maxY; i++) {
         point.x = zX;
-        point.y = [self getYWithValue:i * sigUnitY + _MinY];
+        point.y = [self getYWithValue:i * uSigUnitY + minY ];
         [_yPath moveToPoint:point];
         if(i % _countY == 0){
             NSString* value;
             if ([self.delegate respondsToSelector:@selector(GJCoordinateLayer:titleWithYValue:)]){
-                value = [self.delegate GJCoordinateLayer:self titleWithYValue:(i * sigUnitY + _MinY)];
+                value = [self.delegate GJCoordinateLayer:self titleWithYValue:(i * uSigUnitY + minY )];
             }else{
-                value = [NSString stringWithFormat:@"%d",(int)(i * sigUnitY + _MinY)];
+                value = [NSString stringWithFormat:@"%d",(int)(i * uSigUnitY + minY )];
             }
             CGSize size = [value sizeWithAttributes: _textSetLayer.font == nil ? nil : @{NSFontAttributeName:_textSetLayer.font}];
             NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width -2, point.y - size.height*0.5)];
@@ -352,25 +355,25 @@
 }
 
 -(CGFloat)getXWithValue:(CGFloat)value{
-    if(_unitX == 0 ){
+    if(self.unitX == 0 ){
         return 0;
     }
-    value = ((value - _MinX)  / _unitX) * self.unitW + _contentInsets.left;
+    value = ((value - _MinX)  / self.unitX) * self.unitW + _contentInsets.left;
     return value;
 }
 -(CGFloat)getYWithValue:(CGFloat)value{
-    if(_unitY == 0 ){
+    if(self.unitY == 0 ){
         return 0;
     }
-    value = (value - _MinY) / _unitY * self.unitH;
+    value = (value - _MinY) / self.unitY * self.unitH;
     value = self.frame.size.height - _contentInsets.bottom - value;
     return value;
 }
 -(CGFloat)getValueWithY:(CGFloat)Y{
-    return (self.frame.size.height - _contentInsets.bottom - Y) / self.unitH * _unitY + _MinY;
+    return (self.frame.size.height - _contentInsets.bottom - Y) / self.unitH * self.unitY + _MinY;
 }
 -(CGFloat)getValueWithX:(CGFloat)X{
-    return (X-_contentInsets.left) / self.unitW * _unitX + _MinX;
+    return (X-_contentInsets.left) / self.unitW * self.unitY + _MinX;
 }
 
 -(CGPoint)getPointWithValue:(CGPoint)value{

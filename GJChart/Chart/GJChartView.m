@@ -195,9 +195,9 @@
     
     if (_autoResizeUnit) {
         if (maxCount != 0 && _coordinateLayer.countY != 0) {
-            _coordinateLayer.unitY =  MIN((maxY - minY) / maxCount,(maxY - minY) / _coordinateLayer.countY);
+            _coordinateLayer.bigUnitYCount =  MAX(maxCount/_coordinateLayer.countY,3);
             if (_coordinateLayer.countX != 0) {
-                _coordinateLayer.unitX = (maxX - minX) / (_coordinateLayer.countX * maxCount);
+                _coordinateLayer.bigUnitXCount =  MAX(maxCount/_coordinateLayer.countX,3);
             }
         }
     }
@@ -219,9 +219,7 @@
             [lineLayer addLineFromPoint:beginPoint toPoint:endPoint];
         }
         [self.layer addSublayer:lineLayer];
-        
     }
-
 }
 -(void)setLineLayer:(GJLineSetLayer*)lineSet WithValues:(NSArray<NSValue*>*)values{
     

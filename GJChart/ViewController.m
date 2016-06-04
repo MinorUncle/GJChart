@@ -35,7 +35,7 @@
         for (int j = 0; j<15; j++) {
             x += 0.2;
             CGFloat y = arc4random() %20;
-            y = -y;
+//            y = -y;
             [arry addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
         }
         [_data addObject:arry];
@@ -53,10 +53,12 @@
 
 
     _coordinateView.autoResizeMax = NO;
-    _coordinateView.coordinateLayer.MaxY = 3;
-    _coordinateView.coordinateLayer.MinY = -23;
+    _coordinateView.coordinateLayer.MaxY = -3;
+    _coordinateView.coordinateLayer.MinY = 23;
 
-    _coordinateView.coordinateLayer.MaxX = 3;
+    _coordinateView.coordinateLayer.MaxX = -1;
+    _coordinateView.coordinateLayer.MinX = 3;
+
     _coordinateView.charDelegate = self;
     _coordinateView.charDataDelegate = self;
 
@@ -99,7 +101,7 @@
 }
 
 -(NSInteger)numberOfSectionsInCoordinateView:(GJChartView *)coordinateView{
-    return _data.count;
+    return 0;
 }
 
 -(NSArray<NSValue *> *)GJChartView:(GJChartView *)view dataForSection:(NSInteger)section{

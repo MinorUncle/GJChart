@@ -18,17 +18,22 @@
 -(NSString*) GJCoordinateLayer:(GJCoordinateLayer*)view titleWithYValue:(CGFloat)value;
 @end
 @interface GJCoordinateLayer : CAShapeLayer
-///最大Y
+////最大Y,当max小于min时，相应坐标箭头调换
 @property(nonatomic,assign)CGFloat MaxY;
 @property(nonatomic,assign)CGFloat MaxX;
 @property(nonatomic,assign)CGFloat MinY;
-@property(nonatomic,assign)CGFloat MinX;  ///当max小于min时，相应坐标箭头调换
+@property(nonatomic,assign)CGFloat MinX;
 ////y的一个大单元包含小单元的数量
 @property(nonatomic,assign)uint countY;
 @property(nonatomic,assign)uint countX;
- ////一个小Y的单位绝对值，正数
-@property(nonatomic,assign)CGFloat unitY;
-@property(nonatomic,assign)CGFloat unitX;
+
+///大单元格的个数，
+@property(nonatomic,assign)uint bigUnitYCount;
+@property(nonatomic,assign)uint bigUnitXCount;
+
+ ////一个小Y的单位值，负数代表递减
+@property(nonatomic,assign,readonly)CGFloat unitY;
+@property(nonatomic,assign,readonly)CGFloat unitX;
 
 @property(nonatomic,assign)BOOL showYCoordinate;
 @property(nonatomic,assign)BOOL showXCoordinate;
