@@ -30,7 +30,7 @@
 
 @end
 @implementation GJCoordinateLayer
-@synthesize unitW = _unitW,unitH=_unitH;
+@synthesize unitW = _unitW,unitH=_unitH,unitX = _unitX,unitY = _unitY,MaxX = _MaxX;
 - (instancetype)init
 {
     self = [super init];
@@ -46,8 +46,8 @@
         _showXCoordinate = YES;
         _countX = 5;
         _countY = 5;
-        _bigUnitXCount = 1;
-        _bigUnitYCount = 1;
+//        _bigUnitXCount = 1;
+//        _bigUnitYCount = 1;
         self.backgroundColor = [UIColor greenColor].CGColor;
         self.strokeColor = [UIColor colorWithRed:138/256.0 green:138/256.0 blue:138/256.0 alpha:1].CGColor;
         
@@ -74,6 +74,9 @@
         return;
     }
     _MaxY = MaxY;
+    if (_bigUnitYCount && _countY) {
+        _unitY = (_MaxY-_MinY)/_bigUnitYCount/_countY;
+    }
     [self clear];
     [self updateYCoordinate];
     [self updateXCoordinate];
@@ -83,6 +86,9 @@
         return;
     }
     _MinY = MinY;
+    if (_bigUnitYCount && _countY) {
+        _unitY = (_MaxY-_MinY)/_bigUnitYCount/_countY;
+    }
     [self clear];
     [self updateYCoordinate];
     [self updateXCoordinate];
@@ -93,6 +99,10 @@
     }
     
     _MaxX = MaxX;
+    if (_countX && _bigUnitXCount) {
+        //大幅减少计算
+        _unitX = (_MaxX-_MinX)/_bigUnitXCount/_countX;
+    }
     [self clear];
     [self updateYCoordinate];
     [self updateXCoordinate];}
@@ -102,6 +112,10 @@
     }
     
     _MinX = MinX;
+    if (_countX && _bigUnitXCount) {
+        //大幅减少计算
+        _unitX = (_MaxX-_MinX)/_bigUnitXCount/_countX;
+    }
     [self clear];
     [self updateYCoordinate];
     [self updateXCoordinate];
@@ -112,6 +126,10 @@
         return;
     }
     _bigUnitXCount = bigUnitXCount;
+    if (_countX) {
+        //大幅减少计算
+       _unitX = (_MaxX-_MinX)/_bigUnitXCount/_countX;
+    }
     [self clear];
     [self updateXCoordinate];
     [self updateYCoordinate];
@@ -121,23 +139,32 @@
         return;
     }
     _bigUnitYCount = bigUnitYCount;
+    if (_countY) {
+        _unitY = (_MaxY-_MinY)/_bigUnitYCount/_countY;
+    }
     [self clear];
     [self updateXCoordinate];
     [self updateYCoordinate];
 }
 
--(CGFloat)unitX{
-    return (_MaxX-_MinX)/_bigUnitXCount/_countX;
-}
--(CGFloat)unitY{
-    return (_MaxY-_MinY)/_bigUnitYCount/_countY;
-}
+//-(CGFloat)unitX{
+//  //  NSLog(@"test3 %f,%f,%f",_MaxX-_MinX,(float)_bigUnitXCount,(float)_countX);
+//
+//    return (_MaxX-_MinX)/_bigUnitXCount/_countX;
+//}
+//-(CGFloat)unitY{
+//    return (_MaxY-_MinY)/_bigUnitYCount/_countY;
+//}
 
 -(void)setCountX:(uint)countX{
     if (_countX == countX || countX == 0) {  ///防止重绘
         return;
     }
     _countX = countX;
+    if (_bigUnitXCount) {
+        //大幅减少计算
+        _unitX = (_MaxX-_MinX)/_bigUnitXCount/_countX;
+    }
     [self clear];
     [self updateXCoordinate];
     [self updateYCoordinate];
@@ -149,16 +176,25 @@
         return;
     }
     _countY = countY;
+    if (_bigUnitYCount) {
+        _unitY = (_MaxY-_MinY)/_bigUnitYCount/_countY;
+    }
     [self clear];
     [self updateXCoordinate];
     [self updateYCoordinate];
 }
 
 -(CGFloat)unitW{
+    if (!_bigUnitXCount || !_countX) {
+        return 0;
+    }
     _unitW =  self.coordinateW/_bigUnitXCount/_countX;
     return _unitW;
 }
 -(CGFloat)unitH{
+    if (!_bigUnitXCount || ! _countY) {
+        return 0;
+    }
     _unitH = self.coordinateH/_bigUnitYCount/_countY;
     return _unitH;
 }
@@ -184,8 +220,9 @@
     if (!_bigUnitXCount || !_countX || !self.unitW || _MaxX == _MinX) {
         return;
     }
-
     CGFloat unitX = self.unitX;
+    NSLog(@"test %f,%f,%f",(float)_bigUnitXCount,fabsf(unitX),(float)_countX);
+    
     [_xPath removeAllPoints];
     NSMutableDictionary* textDic = [[NSMutableDictionary alloc]init];
     CGPoint temPoint;

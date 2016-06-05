@@ -29,12 +29,13 @@
 -(void)buildData{
     _data = [[NSMutableArray alloc]init];
     for (int i = 0; i<4; i++) {
-        float x = 0;
-
+        float x = 10;
+        CGFloat y = -60;
         NSMutableArray* arry = [[NSMutableArray alloc]init];
         for (int j = 0; j<15; j++) {
-            x += 0.2;
-            CGFloat y = arc4random() %20;
+            x -= 5;
+            y +=  20;
+            NSLog(@"x:%f",x);
 //            y = -y;
             [arry addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
         }
@@ -52,12 +53,12 @@
     _coordinateView = [[GJChartView alloc]initWithFrame:_scrollView.bounds];
 
 
-    _coordinateView.autoResizeMax = NO;
-    _coordinateView.coordinateLayer.MaxY = -3;
-    _coordinateView.coordinateLayer.MinY = 23;
-
-    _coordinateView.coordinateLayer.MaxX = -1;
-    _coordinateView.coordinateLayer.MinX = 3;
+//    _coordinateView.autoResizeMax = NO;
+//    _coordinateView.coordinateLayer.MaxY = -3;
+//    _coordinateView.coordinateLayer.MinY = 23;
+//
+//    _coordinateView.coordinateLayer.MaxX = -1;
+//    _coordinateView.coordinateLayer.MinX = 3;
 
     _coordinateView.charDelegate = self;
     _coordinateView.charDataDelegate = self;
@@ -101,7 +102,7 @@
 }
 
 -(NSInteger)numberOfSectionsInCoordinateView:(GJChartView *)coordinateView{
-    return 0;
+    return _data.count;
 }
 
 -(NSArray<NSValue *> *)GJChartView:(GJChartView *)view dataForSection:(NSInteger)section{

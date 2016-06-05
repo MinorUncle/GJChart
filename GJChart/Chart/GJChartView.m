@@ -178,29 +178,60 @@
             
             minX = MIN(minX, [value CGPointValue].x);
             minY = MIN(minY, [value CGPointValue].y);
-
         }
     }
-    if (_autoResizeMax) {
-        _coordinateLayer.MaxY = maxY * 1.2;
-        _coordinateLayer.MaxX = maxX*(1.01);
-        
-        if (minY <0) {
-            _coordinateLayer.MinY = minY * 1.2 ;
-        }
-        if (minX < 0) {
-            _coordinateLayer.MinX = minX * 1.01;
-        }
-    }
-    
     if (_autoResizeUnit) {
         if (maxCount != 0 && _coordinateLayer.countY != 0) {
-            _coordinateLayer.bigUnitYCount =  MAX(maxCount/_coordinateLayer.countY,3);
+            if (_coordinateLayer.MaxY * _coordinateLayer.MinY >= 0) {
+                _coordinateLayer.bigUnitYCount =  MAX(maxCount/_coordinateLayer.countY,3);
+            }else{
+                _coordinateLayer.bigUnitYCount =  MAX(maxCount/_coordinateLayer.countY - 1,3);
+            }
             if (_coordinateLayer.countX != 0) {
-                _coordinateLayer.bigUnitXCount =  MAX(maxCount/_coordinateLayer.countX,3);
+                if (_coordinateLayer.MaxX * _coordinateLayer.MinX >= 0) {
+                    _coordinateLayer.bigUnitXCount =  MAX(maxCount,3);
+                }else{
+                    _coordinateLayer.bigUnitXCount =  MAX(maxCount-1,3);
+                }
             }
         }
     }
+    if (_autoResizeMax) {
+        if(minY >0){
+            minY = 0;
+        }else if(maxY < 0){
+            maxY = 0;
+        }
+        if(minX >0){
+            minX = 0;
+        }else if(maxX < 0){
+            maxX = 0;
+        }
+        _coordinateLayer.MaxY = maxY;
+        _coordinateLayer.MaxX = maxX;
+        _coordinateLayer.MinY = minY  ;
+        _coordinateLayer.MinX = minX ;
+    }
+        //修正0位置，
+    CGFloat max = _coordinateLayer.MaxX;
+    CGFloat min = _coordinateLayer.MinX;
+    uint bigCount = _coordinateLayer.bigUnitXCount;
+    uint count = _coordinateLayer.countX;
+    [self adjustZeorWithMax:&max Min:&min BigCount:&bigCount Count:count];
+    _coordinateLayer.MinX = min;
+    _coordinateLayer.MaxX = max;
+    _coordinateLayer.bigUnitXCount = bigCount;
+    _coordinateLayer.countX = count;
+    
+    max = _coordinateLayer.MaxY;
+    min = _coordinateLayer.MinY;
+    bigCount = _coordinateLayer.bigUnitYCount;
+    count = _coordinateLayer.countY;
+    [self adjustZeorWithMax:&max Min:&min BigCount:&bigCount Count:count];
+    _coordinateLayer.MinY = min;
+    _coordinateLayer.MaxY = max;
+    _coordinateLayer.bigUnitYCount = bigCount;
+    _coordinateLayer.countY = count;
     
     if (_showBackgroundLine) {
         if (_coordinateLayer.unitY == 0 || _coordinateLayer.countY == 0) {
@@ -211,15 +242,54 @@
         lineLayer.color = [UIColor grayColor];
         lineLayer.showPoint = NO;
         lineLayer.frame = _coordinateLayer.bounds;
-        int lineCount = fabs(_coordinateLayer.MaxY - _coordinateLayer.MinY) / _coordinateLayer.unitY / _coordinateLayer.countY;
-        for (int j = 1; j<lineCount ; j++) {
+        int lineCount = _coordinateLayer.bigUnitYCount;
+        for (int j = 1; j<lineCount -1 ; j++) {
             CGFloat y =  _coordinateLayer.unitY*_coordinateLayer.countY * j;
-            CGPoint beginPoint = [_coordinateLayer getPointWithValue:CGPointMake(0,y)];
-            CGPoint endPoint = [_coordinateLayer getPointWithValue:CGPointMake(maxX, y)];
+            CGPoint beginPoint = [_coordinateLayer getPointWithValue:CGPointMake(_coordinateLayer.MinX,y)];
+            CGPoint endPoint = [_coordinateLayer getPointWithValue:CGPointMake(_coordinateLayer.MaxX, y)];
             [lineLayer addLineFromPoint:beginPoint toPoint:endPoint];
         }
         [self.layer addSublayer:lineLayer];
     }
+}
+-(void)adjustZeorWithMax:(CGFloat*)max Min:(CGFloat*)min BigCount:(uint*)bigCount Count:(uint)smallCount{
+    //修正0位置，
+    CGFloat unit =  (*max - *min)/(*bigCount)/smallCount;
+    if (*max * *min < 0) {//调整0位置
+        CGFloat count = fabsf(*min/unit/smallCount);
+        int iCount = count;
+        if (count - iCount > 0.00001 ) {
+            (*bigCount) +=1;
+            if (*min > 0) {
+                *min = (iCount + 1) * fabsf(unit) *smallCount;
+            }else{
+                *min = -(iCount + 1) * fabsf(unit) *smallCount;
+            }
+            if (*max >0) {
+                //                    NSLog(@"test1 %f,%f,%f",(float)_bigUnitXCount - iCount - 1,fabsf(unitX),(float)_countX);
+                *max = (*bigCount - iCount - 1) * fabsf(unit)  *smallCount;
+            }else{
+                //                    NSLog(@"test %f,%f,%f",(float)_bigUnitXCount - iCount - 1,fabsf(unitX),(float)_countX);
+                *max = -((float)(*bigCount) - iCount - 1)*fabsf(unit)  * (float)smallCount;
+            }
+        }else{
+            *bigCount +=2;
+            *max += unit * smallCount;
+            *min -= unit * smallCount;
+        }
+    }else{//正好时在左右添加一个
+//        CGFloat unitX = smallCount;//保存，防止改变；
+        
+        if (*max != 0) {
+            *bigCount +=1;
+            *max += unit *smallCount;
+        }
+        if (*min != 0) {
+            *bigCount +=1;
+            *min -= unit * smallCount;
+        }
+    }
+
 }
 -(void)setLineLayer:(GJLineSetLayer*)lineSet WithValues:(NSArray<NSValue*>*)values{
     
@@ -260,8 +330,8 @@
     _charDelegate = charDelegate;
     _coordinateLayer.coordinateDeleagte = charDelegate;
     [self buildSection];
-
 }
+
 -(void)setFrame:(CGRect)frame{
     [super setFrame:frame];
       _squareLayer.frame = self.bounds;
