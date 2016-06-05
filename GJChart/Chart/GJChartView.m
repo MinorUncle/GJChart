@@ -29,10 +29,14 @@
         _squareWRate = 0.2;
         _tipViewWidth = 50;
         _tipViewHeight = 12;
-        _autoResizeMaxAndMin = YES;
-        _autoResizeUnit = YES;
+        _autoResizeYMaxAndMin = YES;
+        _autoResizeYBigUnitCount = YES;
+        _autoResizeXMaxAndMin = YES;
+        _autoResizeXBigUnitCount = YES;
         _showBackgroundHLine = YES;
         _showBackgroundVLine = YES;
+        _autoAdjustXZeroPoint = YES;
+        _autoAdjustYZeroPoint = YES;
         [self buildUI];
     }
     return self;
@@ -55,9 +59,7 @@
     if (self.charDataDelegate == nil || CGRectEqualToRect(self.bounds, CGRectZero)){
         return;
     }
-    if (self.autoResizeMaxAndMin || self.autoResizeUnit) {
-        [self analysisCoordinate];
-    }
+    [self analysisCoordinate];
     [_sectionLayerArry makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     [_sectionLayerArry removeAllObjects];
     NSInteger capacity = 0;
@@ -181,60 +183,71 @@
             minY = MIN(minY, [value CGPointValue].y);
         }
     }
-    if (_autoResizeUnit) {
+    if (_autoResizeYBigUnitCount) {
         if (maxCount != 0 && _coordinateLayer.countY != 0) {
             if (_coordinateLayer.MaxY * _coordinateLayer.MinY >= 0) {
                 _coordinateLayer.bigUnitYCount =  MAX(maxCount/_coordinateLayer.countY,3);
             }else{
                 _coordinateLayer.bigUnitYCount =  MAX(maxCount/_coordinateLayer.countY - 1,3);
             }
-            if (_coordinateLayer.countX != 0) {
-                if (_coordinateLayer.MaxX * _coordinateLayer.MinX >= 0) {
-                    _coordinateLayer.bigUnitXCount =  MAX(maxCount,3);
-                }else{
-                    _coordinateLayer.bigUnitXCount =  MAX(maxCount-1,3);
-                }
+        }
+    }
+    if (_autoResizeXBigUnitCount) {
+        if (_coordinateLayer.countX != 0 && maxCount != 0) {
+            if (_coordinateLayer.MaxX * _coordinateLayer.MinX >= 0) {
+                _coordinateLayer.bigUnitXCount =  MAX(maxCount,3);
+            }else{
+                _coordinateLayer.bigUnitXCount =  MAX(maxCount-1,3);
             }
         }
     }
-    if (_autoResizeMaxAndMin) {
+    if (_autoResizeYMaxAndMin) {
         if(minY >0){
             minY = 0;
         }else if(maxY < 0){
             maxY = 0;
         }
+        _coordinateLayer.MaxY = maxY;
+        _coordinateLayer.MinY = minY ;
+    }
+    if (_autoResizeXMaxAndMin) {
         if(minX >0){
             minX = 0;
         }else if(maxX < 0){
             maxX = 0;
         }
-        _coordinateLayer.MaxY = maxY;
-        _coordinateLayer.MaxX = maxX;
-        _coordinateLayer.MinY = minY  ;
         _coordinateLayer.MinX = minX ;
+        _coordinateLayer.MaxX = maxX;
     }
         //修正0位置，
-    CGFloat max = _coordinateLayer.MaxX;
-    CGFloat min = _coordinateLayer.MinX;
-    uint bigCount = _coordinateLayer.bigUnitXCount;
-    uint count = _coordinateLayer.countX;
-    [self adjustZeorWithMax:&max Min:&min BigCount:&bigCount Count:count];
-    _coordinateLayer.MinX = min;
-    _coordinateLayer.MaxX = max;
-    _coordinateLayer.bigUnitXCount = bigCount;
-    _coordinateLayer.countX = count;
+    if(_autoAdjustXZeroPoint){
+        
+        CGFloat max = _coordinateLayer.MaxX;
+        CGFloat min = _coordinateLayer.MinX;
+        uint bigCount = _coordinateLayer.bigUnitXCount;
+        uint count = _coordinateLayer.countX;
+        [self adjustZeorWithMax:&max Min:&min BigCount:&bigCount Count:count];
+        _coordinateLayer.MinX = min;
+        _coordinateLayer.MaxX = max;
+        _coordinateLayer.bigUnitXCount = bigCount;
+        _coordinateLayer.countX = count;
+    }
     
-    max = _coordinateLayer.MaxY;
-    min = _coordinateLayer.MinY;
-    bigCount = _coordinateLayer.bigUnitYCount;
-    count = _coordinateLayer.countY;
-    [self adjustZeorWithMax:&max Min:&min BigCount:&bigCount Count:count];
-    _coordinateLayer.MinY = min;
-    _coordinateLayer.MaxY = max;
-    _coordinateLayer.bigUnitYCount = bigCount;
-    _coordinateLayer.countY = count;
+    if (_autoAdjustYZeroPoint) {
+        CGFloat max = _coordinateLayer.MaxY;
+        CGFloat min = _coordinateLayer.MinY;
+        uint bigCount = _coordinateLayer.bigUnitYCount;
+        uint count = _coordinateLayer.countY;
+        [self adjustZeorWithMax:&max Min:&min BigCount:&bigCount Count:count];
+        _coordinateLayer.MinY = min;
+        _coordinateLayer.MaxY = max;
+        _coordinateLayer.bigUnitYCount = bigCount;
+        _coordinateLayer.countY = count;
+        
+
+    }
     
-    if (_showBackgroundHLine) {
+     if (_showBackgroundHLine) {
         if (_coordinateLayer.unitY != 0 && _coordinateLayer.countY != 0) {
             [self.backgroundHLineLayer clear];
             int lineCount = _coordinateLayer.bigUnitYCount;
@@ -375,17 +388,33 @@
       _squareLayer.frame = self.bounds;
     [self buildSection];
 }
-
--(void)setAutoResizeMaxAndMin:(BOOL)autoResizeMaxAndMin{
-    _autoResizeMaxAndMin = autoResizeMaxAndMin;
+-(void)setAutoResizeXMaxAndMin:(BOOL)autoResizeXMaxAndMin{
+    _autoResizeXMaxAndMin = autoResizeXMaxAndMin;
     [self buildSection];
 }
--(void)setAutoResizeUnit:(BOOL)autoResizeUnit{
-    _autoResizeUnit = autoResizeUnit;
+-(void)setAutoResizeYMaxAndMin:(BOOL)autoResizeYMaxAndMin{
+    _autoResizeYMaxAndMin = autoResizeYMaxAndMin;
     [self buildSection];
 }
 -(void)setTipViewHeight:(CGFloat)tipViewHeight{
     _tipViewHeight = tipViewHeight;
+    [self buildSection];
+}
+-(void)setAutoAdjustXZeroPoint:(BOOL)autoAdjustXZeroPoint{
+    _autoAdjustXZeroPoint = autoAdjustXZeroPoint;
+    [self buildSection];
+}
+-(void)setAutoAdjustYZeroPoint:(BOOL)autoAdjustYZeroPoint{
+    _autoAdjustYZeroPoint = autoAdjustYZeroPoint;
+    [self buildSection];
+}
+
+-(void)setAutoResizeYBigUnitCount:(BOOL)autoResizeYBigUnitCount{
+    _autoResizeYBigUnitCount = autoResizeYBigUnitCount;
+    [self buildSection];
+}
+-(void)setAutoResizeXBigUnitCount:(BOOL)autoResizeXBigUnitCount{
+    _autoResizeXBigUnitCount = autoResizeXBigUnitCount;
     [self buildSection];
 }
 

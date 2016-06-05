@@ -358,7 +358,7 @@
             if ([self.delegate respondsToSelector:@selector(GJCoordinateLayer:titleWithYValue:)]){
                 value = [self.delegate GJCoordinateLayer:self titleWithYValue:(i * uSigUnitY + minY )];
             }else{
-                value = [NSString stringWithFormat:@"%d",(int)(i * uSigUnitY + minY )];
+                value = [NSString stringWithFormat:@"%.2f",(i * uSigUnitY + minY )];
             }
             CGSize size = [value sizeWithAttributes: _textSetLayer.font == nil ? nil : @{NSFontAttributeName:_textSetLayer.font}];
             NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width -2, point.y - size.height*0.5)];

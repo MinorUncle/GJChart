@@ -28,14 +28,19 @@
 }
 -(void)buildData{
     _data = [[NSMutableArray alloc]init];
-    for (int i = 0; i<4; i++) {
-        float x = 10;
-        CGFloat y = -60;
+    for (int i = 0; i<2; i++) {
+        float x = -3 * M_PI_2;
+        CGFloat y = -260;
         NSMutableArray* arry = [[NSMutableArray alloc]init];
-        for (int j = 0; j<15; j++) {
-            x -= 5;
-            y +=  20;
-            NSLog(@"x:%f",x);
+        for (int j = 0; j<35; j++) {
+            x += M_PI_2;
+            if (i == 0) {
+                y = sinf(x);
+
+            }else{
+                y = cosf(x);
+
+            }
 //            y = -y;
             [arry addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
         }
@@ -53,7 +58,16 @@
     _coordinateView = [[GJChartView alloc]initWithFrame:_scrollView.bounds];
 
 
-//    _coordinateView.autoResizeMax = NO;
+    _coordinateView.autoResizeYMaxAndMin = NO;
+    _coordinateView.coordinateLayer.MaxY = 1;
+    _coordinateView.coordinateLayer.MinY = -1;
+    _coordinateView.autoAdjustYZeroPoint = NO;
+    
+//    _coordinateView.autoResizeXMaxAndMin = NO;
+//    _coordinateView.autoResizeXUnit = YES;
+    _coordinateView.coordinateLayer.countX = 1;
+//    _coordinateView.coordinateLayer.bigUnitXCount = 34;
+    _coordinateView.autoAdjustXZeroPoint = YES;
 //    _coordinateView.coordinateLayer.MaxY = -3;
 //    _coordinateView.coordinateLayer.MinY = 23;
 //
@@ -71,7 +85,7 @@
 
 -(void)drawTenMin{
     CGRect rect = _coordinateView.frame;
-    rect.size.width = self.view.bounds.size.width*3;
+    rect.size.width = self.view.bounds.size.width*4;
     _coordinateView.frame = rect;
     _scrollView.contentSize = rect.size;
 
