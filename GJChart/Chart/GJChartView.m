@@ -29,9 +29,10 @@
         _squareWRate = 0.2;
         _tipViewWidth = 50;
         _tipViewHeight = 12;
-        _autoResizeMax = YES;
+        _autoResizeMaxAndMin = YES;
         _autoResizeUnit = YES;
-        _showBackgroundLine = YES;
+        _showBackgroundHLine = YES;
+        _showBackgroundVLine = YES;
         [self buildUI];
     }
     return self;
@@ -54,7 +55,7 @@
     if (self.charDataDelegate == nil || CGRectEqualToRect(self.bounds, CGRectZero)){
         return;
     }
-    if (self.autoResizeMax || self.autoResizeUnit) {
+    if (self.autoResizeMaxAndMin || self.autoResizeUnit) {
         [self analysisCoordinate];
     }
     [_sectionLayerArry makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
@@ -196,7 +197,7 @@
             }
         }
     }
-    if (_autoResizeMax) {
+    if (_autoResizeMaxAndMin) {
         if(minY >0){
             minY = 0;
         }else if(maxY < 0){
@@ -233,25 +234,59 @@
     _coordinateLayer.bigUnitYCount = bigCount;
     _coordinateLayer.countY = count;
     
-    if (_showBackgroundLine) {
-        if (_coordinateLayer.unitY == 0 || _coordinateLayer.countY == 0) {
-            return;
+    if (_showBackgroundHLine) {
+        if (_coordinateLayer.unitY != 0 && _coordinateLayer.countY != 0) {
+            [self.backgroundHLineLayer clear];
+            int lineCount = _coordinateLayer.bigUnitYCount;
+            for (int j = 1; j<lineCount ; j++) {
+                CGFloat y =  _coordinateLayer.unitY*_coordinateLayer.countY * j + _coordinateLayer.MinY;
+                CGPoint beginPoint = [_coordinateLayer getPointWithValue:CGPointMake(_coordinateLayer.MinX,y)];
+                CGPoint endPoint = [_coordinateLayer getPointWithValue:CGPointMake(_coordinateLayer.MaxX, y)];
+                [self.backgroundHLineLayer addLineFromPoint:beginPoint toPoint:endPoint];
+            }
         }
-        GJLineSetLayer* lineLayer = [[GJLineSetLayer alloc]init];
-        lineLayer.capType = LineTypeDash;
-        lineLayer.color = [UIColor grayColor];
-        lineLayer.showPoint = NO;
-        lineLayer.frame = _coordinateLayer.bounds;
-        int lineCount = _coordinateLayer.bigUnitYCount;
-        for (int j = 1; j<lineCount -1 ; j++) {
-            CGFloat y =  _coordinateLayer.unitY*_coordinateLayer.countY * j;
-            CGPoint beginPoint = [_coordinateLayer getPointWithValue:CGPointMake(_coordinateLayer.MinX,y)];
-            CGPoint endPoint = [_coordinateLayer getPointWithValue:CGPointMake(_coordinateLayer.MaxX, y)];
-            [lineLayer addLineFromPoint:beginPoint toPoint:endPoint];
+        
+    }
+    
+    if (_showBackgroundVLine) {
+        if (_coordinateLayer.unitX != 0 && _coordinateLayer.countX != 0) {
+            [self.backgroundVLineLayer clear];
+            
+            int lineCount = _coordinateLayer.bigUnitXCount;
+            for (int j = 1; j<lineCount ; j++) {
+                CGFloat x =  _coordinateLayer.unitX*_coordinateLayer.countX * j + _coordinateLayer.MinX;
+                CGPoint beginPoint = [_coordinateLayer getPointWithValue:CGPointMake(x,_coordinateLayer.MinY)];
+                CGPoint endPoint = [_coordinateLayer getPointWithValue:CGPointMake(x, _coordinateLayer.MaxY)];
+                [self.backgroundVLineLayer addLineFromPoint:beginPoint toPoint:endPoint];
+            }
         }
-        [self.layer addSublayer:lineLayer];
     }
 }
+-(GJLineSetLayer *)backgroundHLineLayer{
+    if (_backgroundHLineLayer == nil) {
+        _backgroundHLineLayer = [[GJLineSetLayer alloc]init];
+        _backgroundHLineLayer.capType = LineTypeDash;
+        _backgroundHLineLayer.color = [UIColor grayColor];
+        _backgroundHLineLayer.showPoint = NO;
+        [self.layer addSublayer:_backgroundHLineLayer];
+    }
+
+    _backgroundHLineLayer.frame = _coordinateLayer.bounds;
+    return _backgroundHLineLayer;
+}
+-(GJLineSetLayer *)backgroundVLineLayer{
+    if (_backgroundVLineLayer == nil) {
+        _backgroundVLineLayer = [[GJLineSetLayer alloc]init];
+        _backgroundVLineLayer.capType = LineTypeSolid;
+        _backgroundVLineLayer.color = [UIColor grayColor];
+        _backgroundVLineLayer.showPoint = NO;
+        [self.layer addSublayer:_backgroundVLineLayer];
+    }
+
+    _backgroundVLineLayer.frame = _coordinateLayer.bounds;
+    return _backgroundVLineLayer;
+}
+
 -(void)adjustZeorWithMax:(CGFloat*)max Min:(CGFloat*)min BigCount:(uint*)bigCount Count:(uint)smallCount{
     //修正0位置，
     CGFloat unit =  (*max - *min)/(*bigCount)/smallCount;
@@ -326,11 +361,14 @@
     [self buildSection];
 
 }
+
 -(void)setCharDelegate:(id<GJChartViewDelegate>)charDelegate{
     _charDelegate = charDelegate;
     _coordinateLayer.coordinateDeleagte = charDelegate;
     [self buildSection];
 }
+
+
 
 -(void)setFrame:(CGRect)frame{
     [super setFrame:frame];
@@ -338,8 +376,8 @@
     [self buildSection];
 }
 
--(void)setAutoResizeMax:(BOOL)autoResizeMax{
-    _autoResizeMax = autoResizeMax;
+-(void)setAutoResizeMaxAndMin:(BOOL)autoResizeMaxAndMin{
+    _autoResizeMaxAndMin = autoResizeMaxAndMin;
     [self buildSection];
 }
 -(void)setAutoResizeUnit:(BOOL)autoResizeUnit{

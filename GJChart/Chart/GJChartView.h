@@ -58,9 +58,12 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
  *  条状图的宽与大单元格的比例
  */
 @property(nonatomic,assign)CGFloat squareWRate;
-@property(nonatomic,assign)BOOL autoResizeMax;
+@property(nonatomic,assign)BOOL autoResizeMaxAndMin;
 @property(nonatomic,assign)BOOL autoResizeUnit;
-@property(nonatomic,assign)BOOL showBackgroundLine;
+@property(nonatomic,assign)BOOL showBackgroundHLine;
+@property(nonatomic,assign)BOOL showBackgroundVLine;
+@property(nonatomic,strong)GJLineSetLayer* backgroundHLineLayer;
+@property(nonatomic,strong)GJLineSetLayer* backgroundVLineLayer;
 
 @property(nonatomic,retain,readonly)GJSquareSetLayer* squareLayer;
 @property(nonatomic,retain,readonly)GJCoordinateLayer* coordinateLayer;
