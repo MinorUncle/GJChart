@@ -41,7 +41,7 @@
                 y = cosf(x);
 
             }
-//            y = -y;
+            y = 0;
             [arry addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
         }
         [_data addObject:arry];
@@ -58,16 +58,16 @@
     _coordinateView = [[GJChartView alloc]initWithFrame:_scrollView.bounds];
 
 
-    _coordinateView.autoResizeYMaxAndMin = NO;
-    _coordinateView.coordinateLayer.MaxY = 1;
-    _coordinateView.coordinateLayer.MinY = -1;
-    _coordinateView.autoAdjustYZeroPoint = NO;
+//    _coordinateView.autoResizeYMaxAndMin = NO;
+//    _coordinateView.coordinateLayer.MaxY = 1;
+//    _coordinateView.coordinateLayer.MinY = -1;
+//    _coordinateView.autoAdjustYZeroPoint = NO;
     
 //    _coordinateView.autoResizeXMaxAndMin = NO;
 //    _coordinateView.autoResizeXUnit = YES;
-    _coordinateView.coordinateLayer.countX = 1;
+//    _coordinateView.coordinateLayer.countX = 1;
 //    _coordinateView.coordinateLayer.bigUnitXCount = 34;
-    _coordinateView.autoAdjustXZeroPoint = YES;
+//    _coordinateView.autoAdjustXZeroPoint = YES;
 //    _coordinateView.coordinateLayer.MaxY = -3;
 //    _coordinateView.coordinateLayer.MinY = 23;
 //
@@ -116,7 +116,7 @@
 }
 
 -(NSInteger)numberOfSectionsInCoordinateView:(GJChartView *)coordinateView{
-    return _data.count;
+    return 0;
 }
 
 -(NSArray<NSValue *> *)GJChartView:(GJChartView *)view dataForSection:(NSInteger)section{

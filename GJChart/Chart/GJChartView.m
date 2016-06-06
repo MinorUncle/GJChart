@@ -35,7 +35,7 @@
         _autoResizeXBigUnitCount = YES;
         _showBackgroundHLine = YES;
         _showBackgroundVLine = YES;
-        _autoAdjustXZeroPoint = YES;
+        _autoAdjustXZeroPoint = NO;
         _autoAdjustYZeroPoint = YES;
         [self buildUI];
     }
@@ -206,6 +206,9 @@
             minY = 0;
         }else if(maxY < 0){
             maxY = 0;
+        }
+        if (minY == maxY && minY == 0) {
+            maxY = 1;
         }
         _coordinateLayer.MaxY = maxY;
         _coordinateLayer.MinY = minY ;
