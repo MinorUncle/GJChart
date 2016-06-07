@@ -28,8 +28,8 @@
 }
 -(void)buildData{
     _data = [[NSMutableArray alloc]init];
-    for (int i = 0; i<2; i++) {
-        float x = -3 * M_PI_2;
+    for (int i = 0; i<9; i++) {
+        float x = -i * M_PI_2;
         CGFloat y = -260;
         NSMutableArray* arry = [[NSMutableArray alloc]init];
         for (int j = 0; j<35; j++) {
@@ -41,7 +41,6 @@
                 y = cosf(x);
 
             }
-            y = 0;
             [arry addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
         }
         [_data addObject:arry];
@@ -116,7 +115,7 @@
 }
 
 -(NSInteger)numberOfSectionsInCoordinateView:(GJChartView *)coordinateView{
-    return 0;
+    return _data.count;
 }
 
 -(NSArray<NSValue *> *)GJChartView:(GJChartView *)view dataForSection:(NSInteger)section{
@@ -124,6 +123,13 @@
 }
 -(NSString *)GJChartView:(GJChartView *)view tipTitleForSection:(NSInteger)section{
     return [NSString stringWithFormat:@"%ld",(long)section];
+}
+-(CoordinateViewSectionType)GJChartView:(GJChartView *)view typeWithSection:(NSInteger)section{
+    if (section%2 == 0) {
+        return CoordinateViewSectionTypeBar;
+    }else{
+        return  CoordinateViewSectionTypeLine;
+    }
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{

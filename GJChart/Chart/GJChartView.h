@@ -80,6 +80,9 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
 
 @property(nonatomic,assign)CGFloat tipViewWidth;
 @property(nonatomic,assign)CGFloat tipViewHeight;
+//纵横提示视图的最大个数 默认都是4个  0表示最大
+@property(nonatomic,assign)uint verticalMaxTipCount;
+
 
 
 

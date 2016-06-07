@@ -9,10 +9,13 @@
 
 #import "GJChartView.h"
 
-
+//提示框水平间距，竖直间距通过 tipViewHeight调整
+#define TIP_VIEW_H_MARGIN 2
 @interface GJChartView()
 {
     NSMutableArray* _sectionLayerArry;
+    CGFloat _totalTipXPoint;
+    CGFloat _currentRowMaxWidth;
 }
 
 @end
@@ -25,6 +28,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        _verticalMaxTipCount = 4;
         _sectionLayerArry = [[NSMutableArray alloc]init];
         _squareWRate = 0.2;
         _tipViewWidth = 50;
@@ -34,8 +38,8 @@
         _autoResizeXMaxAndMin = YES;
         _autoResizeXBigUnitCount = YES;
         _showBackgroundHLine = YES;
-        _showBackgroundVLine = YES;
-        _autoAdjustXZeroPoint = NO;
+        _showBackgroundVLine = NO;
+        _autoAdjustXZeroPoint = YES;
         _autoAdjustYZeroPoint = YES;
         [self buildUI];
     }
@@ -100,7 +104,8 @@
                 //tip
                 if ([self.charDataDelegate respondsToSelector:@selector(GJChartView:tipTitleForSection:)]) {
                     NSString* title = [self.charDataDelegate GJChartView:self tipTitleForSection:i];
-                    CGPoint point = CGPointMake([_coordinateLayer getXWithValue:0]+MAX(_coordinateLayer.bigLineH, _coordinateLayer.arrowSize)+10, [_coordinateLayer getYWithValue:_coordinateLayer.MaxY] + self.tipViewHeight*(i+0.5));
+                    CGPoint point = [self getTipViewOrginWithTitle:title textSetLayer:textSet Section:i];
+                    point.y += self.tipViewHeight*(0.5);
                     [lineSet beginWithPoint:point];
                     point.x += self.tipViewWidth*0.5;
                     [lineSet addLineToPoint:point];
@@ -121,10 +126,11 @@
                 
                 if ([self.charDataDelegate respondsToSelector:@selector(GJChartView:tipTitleForSection:)]) {
                     NSString* title = [self.charDataDelegate GJChartView:self tipTitleForSection:i];
-                    CGRect rect = CGRectMake([_coordinateLayer getXWithValue:0]+MAX(_coordinateLayer.bigLineH, _coordinateLayer.arrowSize)+10, [_coordinateLayer getYWithValue:_coordinateLayer.MaxY] + self.tipViewHeight*(i+0.25), self.tipViewWidth, self.tipViewHeight*0.5);
+                    CGPoint point = [self getTipViewOrginWithTitle:title textSetLayer:textSet Section:i];
+                    point.y += self.tipViewHeight*(0.25);
+                    CGRect rect = CGRectMake(point.x,point.y, self.tipViewWidth, self.tipViewHeight*0.5);
                     [squareLayer addSquareWithRect:rect];
-                    
-                    CGPoint point = CGPointMake(CGRectGetMaxX(rect), CGRectGetMidY(rect));
+                    point = CGPointMake(CGRectGetMaxX(rect), CGRectGetMidY(rect));
                     [textSet addTextWithPoint:point text:title textAlignment:TextAlignmentLeft];
 
                 }
@@ -154,6 +160,27 @@
             
             }
     }
+}
+-(CGPoint)getTipViewOrginWithTitle:(NSString*)title textSetLayer:(GJTextSetLayer*)textLayer Section:(NSInteger)index{
+    
+    NSInteger flg;
+    if (_verticalMaxTipCount == 0) {
+        flg = index;
+    }else{
+        flg = index % _verticalMaxTipCount;
+    }
+    if (index == 0) {
+        _totalTipXPoint =[_coordinateLayer getXWithValue:0]+MAX(_coordinateLayer.bigLineH, _coordinateLayer.arrowSize)+10;
+    }else{
+        if (flg == 0) {
+            _totalTipXPoint += _currentRowMaxWidth + TIP_VIEW_H_MARGIN;
+            _currentRowMaxWidth = 0;
+        }
+    }
+    CGSize size = [title sizeWithAttributes:textLayer.font == nil?nil:@{NSFontAttributeName:textLayer.font}];
+    CGFloat currentW = size.width+textLayer.textAlignmentMargin+_tipViewWidth;
+    _currentRowMaxWidth = MAX(_currentRowMaxWidth, currentW);
+    return CGPointMake(_totalTipXPoint, flg* _tipViewHeight);
 }
 -(void)analysisCoordinate{
     CGFloat maxY = -MAXFLOAT;
@@ -307,21 +334,21 @@
     //修正0位置，
     CGFloat unit =  (*max - *min)/(*bigCount)/smallCount;
     if (*max * *min < 0) {//调整0位置
-        CGFloat count = fabsf(*min/unit/smallCount);
+        CGFloat count = fabs(*min/unit/smallCount);
         int iCount = count;
         if (count - iCount > 0.00001 ) {
             (*bigCount) +=1;
             if (*min > 0) {
-                *min = (iCount + 1) * fabsf(unit) *smallCount;
+                *min = (iCount + 1) * fabs(unit) *smallCount;
             }else{
-                *min = -(iCount + 1) * fabsf(unit) *smallCount;
+                *min = -(iCount + 1) * fabs(unit) *smallCount;
             }
             if (*max >0) {
                 //                    NSLog(@"test1 %f,%f,%f",(float)_bigUnitXCount - iCount - 1,fabsf(unitX),(float)_countX);
-                *max = (*bigCount - iCount - 1) * fabsf(unit)  *smallCount;
+                *max = (*bigCount - iCount - 1) * fabs(unit)  *smallCount;
             }else{
                 //                    NSLog(@"test %f,%f,%f",(float)_bigUnitXCount - iCount - 1,fabsf(unitX),(float)_countX);
-                *max = -((float)(*bigCount) - iCount - 1)*fabsf(unit)  * (float)smallCount;
+                *max = -((float)(*bigCount) - iCount - 1)*fabs(unit)  * (float)smallCount;
             }
         }else{
             *bigCount +=2;
