@@ -221,7 +221,7 @@
         return;
     }
     CGFloat unitX = self.unitX;
-    NSLog(@"test %f,%f,%f",(float)_bigUnitXCount,fabsf(unitX),(float)_countX);
+//    NSLog(@"test %f,%f,%f",(float)_bigUnitXCount,fabsf(unitX),(float)_countX);
     
     [_xPath removeAllPoints];
     NSMutableDictionary* textDic = [[NSMutableDictionary alloc]init];

@@ -201,6 +201,9 @@
         if ([self.charDataDelegate respondsToSelector:@selector(GJChartView:dataForSection:)]) {
             values = [self.charDataDelegate GJChartView:self dataForSection:i];
         }
+        if (values.count == 0) {
+            break;
+        }
         maxCount = MAX(maxCount, values.count);
         for (NSValue* value in values) {
             maxX = MAX(maxX, [value CGPointValue].x);
@@ -210,25 +213,14 @@
             minY = MIN(minY, [value CGPointValue].y);
         }
     }
-    if (_autoResizeYBigUnitCount) {
-        if (maxCount != 0 && _coordinateLayer.countY != 0) {
-            if (_coordinateLayer.MaxY * _coordinateLayer.MinY >= 0) {
-                _coordinateLayer.bigUnitYCount =  MAX(maxCount/_coordinateLayer.countY,3);
-            }else{
-                _coordinateLayer.bigUnitYCount =  MAX(maxCount/_coordinateLayer.countY - 1,3);
-            }
-        }
-    }
-    if (_autoResizeXBigUnitCount) {
-        if (_coordinateLayer.countX != 0 && maxCount != 0) {
-            if (_coordinateLayer.MaxX * _coordinateLayer.MinX >= 0) {
-                _coordinateLayer.bigUnitXCount =  MAX(maxCount,3);
-            }else{
-                _coordinateLayer.bigUnitXCount =  MAX(maxCount-1,3);
-            }
-        }
-    }
+
     if (_autoResizeYMaxAndMin) {
+        if (minY == MAXFLOAT) {
+            minY = 0;
+        }
+        if (maxY == -MAXFLOAT) {
+            maxY = 1;
+        }
         if(minY >0){
             minY = 0;
         }else if(maxY < 0){
@@ -241,6 +233,12 @@
         _coordinateLayer.MinY = minY ;
     }
     if (_autoResizeXMaxAndMin) {
+        if (minX == MAXFLOAT) {
+            minX = 0;
+        }
+        if (maxX == -MAXFLOAT) {
+            maxX = 1;
+        }
         if(minX >0){
             minX = 0;
         }else if(maxX < 0){
@@ -249,9 +247,23 @@
         _coordinateLayer.MinX = minX ;
         _coordinateLayer.MaxX = maxX;
     }
-        //修正0位置，
+
+    if (_autoResizeYBigUnitCount && maxCount != 0 && _coordinateLayer.countY != 0) {
+            if (_coordinateLayer.MaxY * _coordinateLayer.MinY >= 0) {
+                _coordinateLayer.bigUnitYCount =  MAX(maxCount/_coordinateLayer.countY,3);
+            }else{
+                _coordinateLayer.bigUnitYCount =  MAX(maxCount/_coordinateLayer.countY - 1,3);
+            }
+    }
+    if (_autoResizeXBigUnitCount && _coordinateLayer.countX != 0 && maxCount != 0) {
+            if (_coordinateLayer.MaxX * _coordinateLayer.MinX >= 0) {
+                _coordinateLayer.bigUnitXCount =  MAX(maxCount,3);
+            }else{
+                _coordinateLayer.bigUnitXCount =  MAX(maxCount-1,3);
+            }
+    }
+            //修正0位置，
     if(_autoAdjustXZeroPoint){
-        
         CGFloat max = _coordinateLayer.MaxX;
         CGFloat min = _coordinateLayer.MinX;
         uint bigCount = _coordinateLayer.bigUnitXCount;
@@ -353,17 +365,6 @@
         }else{
             *bigCount +=2;
             *max += unit * smallCount;
-            *min -= unit * smallCount;
-        }
-    }else{//正好时在左右添加一个
-//        CGFloat unitX = smallCount;//保存，防止改变；
-        
-        if (*max != 0) {
-            *bigCount +=1;
-            *max += unit *smallCount;
-        }
-        if (*min != 0) {
-            *bigCount +=1;
             *min -= unit * smallCount;
         }
     }
