@@ -268,7 +268,7 @@
         CGFloat min = _coordinateLayer.MinX;
         uint bigCount = _coordinateLayer.bigUnitXCount;
         uint count = _coordinateLayer.countX;
-        [self adjustZeorWithMax:&max Min:&min BigCount:&bigCount Count:count];
+        [self adjustZeorWithMax:&max Min:&min BigCount:&bigCount Count:count resize:_autoResizeXMaxAndMin && _autoResizeXBigUnitCount];
         _coordinateLayer.MinX = min;
         _coordinateLayer.MaxX = max;
         _coordinateLayer.bigUnitXCount = bigCount;
@@ -280,7 +280,7 @@
         CGFloat min = _coordinateLayer.MinY;
         uint bigCount = _coordinateLayer.bigUnitYCount;
         uint count = _coordinateLayer.countY;
-        [self adjustZeorWithMax:&max Min:&min BigCount:&bigCount Count:count];
+        [self adjustZeorWithMax:&max Min:&min BigCount:&bigCount Count:count resize:_autoResizeYMaxAndMin && _autoResizeYBigUnitCount];
         _coordinateLayer.MinY = min;
         _coordinateLayer.MaxY = max;
         _coordinateLayer.bigUnitYCount = bigCount;
@@ -342,7 +342,7 @@
     return _backgroundVLineLayer;
 }
 
--(void)adjustZeorWithMax:(CGFloat*)max Min:(CGFloat*)min BigCount:(uint*)bigCount Count:(uint)smallCount{
+-(void)adjustZeorWithMax:(CGFloat*)max Min:(CGFloat*)min BigCount:(uint*)bigCount Count:(uint)smallCount resize:(BOOL)resize{
     //修正0位置，
     CGFloat unit =  (*max - *min)/(*bigCount)/smallCount;
     if (*max * *min < 0) {//调整0位置
@@ -362,9 +362,20 @@
                 //                    NSLog(@"test %f,%f,%f",(float)_bigUnitXCount - iCount - 1,fabsf(unitX),(float)_countX);
                 *max = -((float)(*bigCount) - iCount - 1)*fabs(unit)  * (float)smallCount;
             }
-        }else{
+        }else if(resize){
             *bigCount +=2;
             *max += unit * smallCount;
+            *min -= unit * smallCount;
+        }
+    }else if(resize){//正好时在左右添加一个
+//        CGFloat unitX = smallCount;//保存，防止改变；
+        
+        if (*max != 0) {
+            *bigCount +=1;
+            *max += unit *smallCount;
+        }
+        if (*min != 0) {
+            *bigCount +=1;
             *min -= unit * smallCount;
         }
     }
