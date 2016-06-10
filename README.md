@@ -6,7 +6,7 @@
 自定义是否自动判断最大最小值、坐标尺个数。<br>
 
 ## 简单效果
-![](https://github.com/MinorUncle/GJImageCache/raw/master/GJChart/F77F8EB6-D4A6-4975-A792-2978E59A790C.png)
+![](https://github.com/MinorUncle/GJImageCache/raw/master/GJChart/F77F8EB6-D4A6-4975-A792-2978E59A790C.png)<br>
 你只需要实现以下几个代理：<br>
 图表组数，如一条折线和一组条状图分别为1个。 必实现<br>
 -(NSInteger)numberOfSectionsInCoordinateView:(GJChartView *)coordinateView;<br>
