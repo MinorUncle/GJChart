@@ -28,8 +28,8 @@
 }
 -(void)buildData{
     _data = [[NSMutableArray alloc]init];
-    for (int i = 0; i<9; i++) {
-        float x = -i * M_PI_2;
+    for (int i = 0; i<2; i++) {
+        float x = 0;
         CGFloat y = -260;
         NSMutableArray* arry = [[NSMutableArray alloc]init];
         for (int j = 0; j<35; j++) {
@@ -55,24 +55,6 @@
     
     _scrollView = [[UIScrollView alloc]initWithFrame:rect];
     _coordinateView = [[GJChartView alloc]initWithFrame:_scrollView.bounds];
-
-
-//    _coordinateView.autoResizeYMaxAndMin = NO;
-//    _coordinateView.coordinateLayer.MaxY = 1;
-//    _coordinateView.coordinateLayer.MinY = -1;
-//    _coordinateView.autoAdjustYZeroPoint = NO;
-    
-//    _coordinateView.autoResizeXMaxAndMin = NO;
-//    _coordinateView.autoResizeXUnit = YES;
-//    _coordinateView.coordinateLayer.countX = 1;
-//    _coordinateView.coordinateLayer.bigUnitXCount = 34;
-//    _coordinateView.autoAdjustXZeroPoint = YES;
-//    _coordinateView.coordinateLayer.MaxY = -3;
-//    _coordinateView.coordinateLayer.MinY = 23;
-//
-//    _coordinateView.coordinateLayer.MaxX = -1;
-//    _coordinateView.coordinateLayer.MinX = 3;
-
     _coordinateView.charDelegate = self;
     _coordinateView.charDataDelegate = self;
 
@@ -97,14 +79,13 @@
 
 #pragma mark DELEGATE
 
-//-(NSString *)GJCoordinateLayer:(GJCoordinateLayer *)view titleWithXValue:(CGFloat)value
-//{
-//    int hour = (int)value / 60;
-//    int min = (int)value % 60;
-//    NSString* title = [NSString stringWithFormat:@"%02d:%02d",hour,min];
-////    NSString* title = [NSString stringWithFormat:@"%0.0f",value];
-//    return title;
-//}
+-(NSString *)GJCoordinateLayer:(GJCoordinateLayer *)view titleWithXValue:(CGFloat)value
+{
+    int hour = (int)value / 60;
+    int min = (int)value % 60;
+    NSString* title = [NSString stringWithFormat:@"%02d:%02d",hour,min];
+    return title;
+}
 
 
 -(NSString *)GJChartView:(GJChartView *)view titleWithValue:(CGPoint)point inSection:(NSInteger)section{
@@ -122,7 +103,13 @@
     return _data[section];
 }
 -(NSString *)GJChartView:(GJChartView *)view tipTitleForSection:(NSInteger)section{
-    return [NSString stringWithFormat:@"%ld",(long)section];
+    NSString* tip;
+    if (section == 0) {
+        tip = @"人数";
+    }else{
+        tip = @"收益";
+    }
+    return tip;
 }
 -(CoordinateViewSectionType)GJChartView:(GJChartView *)view typeWithSection:(NSInteger)section{
     if (section%2 == 0) {

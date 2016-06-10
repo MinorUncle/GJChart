@@ -45,7 +45,6 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
 -(NSString *)GJChartView:(GJChartView *)view tipTitleForSection:(NSInteger)section;
 @end
 
-
 @interface GJChartView : UIScrollView
 
 
