@@ -188,7 +188,9 @@
     CGFloat minY = MAXFLOAT;
     CGFloat minX = MAXFLOAT;
     CGFloat maxCount = -MAXFLOAT;
-    
+    uint XBigUnitCount = _coordinateLayer.bigUnitXCount;
+    uint YBigUnitCount = _coordinateLayer.bigUnitYCount;
+
     long capacity = 0;
     if ([self.charDataDelegate respondsToSelector:@selector(numberOfSectionsInCoordinateView:)]) {
         capacity = [self.charDataDelegate numberOfSectionsInCoordinateView:self];
@@ -229,8 +231,9 @@
         if (minY == maxY && minY == 0) {
             maxY = 1;
         }
-        _coordinateLayer.MaxY = maxY;
-        _coordinateLayer.MinY = minY ;
+    }else{
+        maxY = _coordinateLayer.MaxY;
+        minY = _coordinateLayer.MinY;
     }
     if (_autoResizeXMaxAndMin) {
         if (minX == MAXFLOAT) {
@@ -244,50 +247,42 @@
         }else if(maxX < 0){
             maxX = 0;
         }
-        _coordinateLayer.MinX = minX ;
-        _coordinateLayer.MaxX = maxX;
+    }else{
+        maxX = _coordinateLayer.MaxX;
+        minX = _coordinateLayer.MinX;
     }
 
     if (_autoResizeYBigUnitCount && maxCount != 0 && _coordinateLayer.countY != 0) {
-            if (_coordinateLayer.MaxY * _coordinateLayer.MinY >= 0) {
-                _coordinateLayer.bigUnitYCount =  MAX(maxCount/_coordinateLayer.countY,3);
+            if (maxY* minY >= 0) {
+                YBigUnitCount =  MAX(maxCount/_coordinateLayer.countY,3);
             }else{
-                _coordinateLayer.bigUnitYCount =  MAX(maxCount/_coordinateLayer.countY - 1,3);
+                YBigUnitCount =  MAX(maxCount/_coordinateLayer.countY - 1,3);
             }
     }
     if (_autoResizeXBigUnitCount && _coordinateLayer.countX != 0 && maxCount != 0) {
-            if (_coordinateLayer.MaxX * _coordinateLayer.MinX >= 0) {
-                _coordinateLayer.bigUnitXCount =  MAX(maxCount,3);
+            if (maxX * minX >= 0) {
+                XBigUnitCount =  MAX(maxCount,3);
             }else{
-                _coordinateLayer.bigUnitXCount =  MAX(maxCount-1,3);
+                XBigUnitCount =  MAX(maxCount-1,3);
             }
     }
             //修正0位置，
     if(_autoAdjustXZeroPoint){
-        CGFloat max = _coordinateLayer.MaxX;
-        CGFloat min = _coordinateLayer.MinX;
-        uint bigCount = _coordinateLayer.bigUnitXCount;
         uint count = _coordinateLayer.countX;
-        [self adjustZeorWithMax:&max Min:&min BigCount:&bigCount Count:count resize:_autoResizeXMaxAndMin && _autoResizeXBigUnitCount];
-        _coordinateLayer.MinX = min;
-        _coordinateLayer.MaxX = max;
-        _coordinateLayer.bigUnitXCount = bigCount;
-        _coordinateLayer.countX = count;
+        [self adjustZeorWithMax:&maxX Min:&minX BigCount:&XBigUnitCount Count:count resize:_autoResizeXMaxAndMin && _autoResizeXBigUnitCount];
     }
     
     if (_autoAdjustYZeroPoint) {
-        CGFloat max = _coordinateLayer.MaxY;
-        CGFloat min = _coordinateLayer.MinY;
-        uint bigCount = _coordinateLayer.bigUnitYCount;
         uint count = _coordinateLayer.countY;
-        [self adjustZeorWithMax:&max Min:&min BigCount:&bigCount Count:count resize:_autoResizeYMaxAndMin && _autoResizeYBigUnitCount];
-        _coordinateLayer.MinY = min;
-        _coordinateLayer.MaxY = max;
-        _coordinateLayer.bigUnitYCount = bigCount;
-        _coordinateLayer.countY = count;
-        
-
+        [self adjustZeorWithMax:&maxY Min:&minY BigCount:&YBigUnitCount Count:count resize:_autoResizeYMaxAndMin && _autoResizeYBigUnitCount];
     }
+    _coordinateLayer.MaxY = maxY;
+    _coordinateLayer.MinY = minY;
+    _coordinateLayer.MaxX = maxX;
+    _coordinateLayer.MinX = minX;
+    _coordinateLayer.bigUnitYCount = YBigUnitCount;
+    _coordinateLayer.bigUnitXCount = XBigUnitCount;
+
     
      if (_showBackgroundHLine) {
         if (_coordinateLayer.unitY != 0 && _coordinateLayer.countY != 0) {
@@ -300,13 +295,11 @@
                 [self.backgroundHLineLayer addLineFromPoint:beginPoint toPoint:endPoint];
             }
         }
-        
     }
     
     if (_showBackgroundVLine) {
         if (_coordinateLayer.unitX != 0 && _coordinateLayer.countX != 0) {
             [self.backgroundVLineLayer clear];
-            
             int lineCount = _coordinateLayer.bigUnitXCount;
             for (int j = 1; j<lineCount ; j++) {
                 CGFloat x =  _coordinateLayer.unitX*_coordinateLayer.countX * j + _coordinateLayer.MinX;

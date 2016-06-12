@@ -22,6 +22,9 @@
   
     
     GJTextSetLayer* _textSetLayer;
+    NSMutableDictionary* _xTextDic;
+    NSMutableDictionary* _yTextDic;
+
     UIBezierPath* _path;
     UIBezierPath* _xPath;
     UIBezierPath* _yPath;
@@ -56,8 +59,8 @@
         
         _textSetLayer = [[GJTextSetLayer alloc]init];
         [self addSublayer:_textSetLayer];
-        
-
+        _xTextDic = [[NSMutableDictionary alloc]init];
+        _yTextDic = [[NSMutableDictionary alloc]init];
     }
     return self;
 }
@@ -73,58 +76,73 @@
     if (_MaxY == MaxY) {  ///防止重绘
         return;
     }
+    float zY = [self getYWithValue:0];
     _MaxY = MaxY;
     if (_bigUnitYCount && _countY) {
         _unitY = (_MaxY-_MinY)/_bigUnitYCount/_countY;
     }
     [self clear];
     [self updateYCoordinate];
-    [self updateXCoordinate];
+    float y = [self getYWithValue:0];
+    if (y - zY < -0.00001 || y - zY > 0.000001 ) {//y0位置改变，则更新x轴
+        [self updateXCoordinate];
+    }
 }
 -(void)setMinY:(CGFloat)MinY{
     if (_MinY == MinY) {  ///防止重绘
         return;
     }
+    float zY = [self getYWithValue:0];
     _MinY = MinY;
     if (_bigUnitYCount && _countY) {
         _unitY = (_MaxY-_MinY)/_bigUnitYCount/_countY;
     }
     [self clear];
     [self updateYCoordinate];
-    [self updateXCoordinate];
-}
+    float y = [self getYWithValue:0];
+    if (y - zY < -0.00001 || y - zY > 0.000001 ) {
+        [self updateXCoordinate];
+    }}
 -(void)setMaxX:(CGFloat)MaxX{
     if (_MaxX == MaxX) {  ///防止重绘
         return;
     }
-    
+    CGFloat zX = [self getXWithValue:0];
     _MaxX = MaxX;
     if (_countX && _bigUnitXCount) {
         //大幅减少计算
         _unitX = (_MaxX-_MinX)/_bigUnitXCount/_countX;
     }
     [self clear];
+    [self updateXCoordinate];
+    float x = [self getXWithValue:0];
+    if (x - zX < -0.00001 || x - zX > 0.000001 ) {//X0位置改变，则更新x轴
     [self updateYCoordinate];
-    [self updateXCoordinate];}
+    }
+}
 -(void)setMinX:(CGFloat)MinX{
     if (_MinX == MinX) {  ///防止重绘
         return;
     }
-    
+    CGFloat zX = [self getXWithValue:0];
     _MinX = MinX;
     if (_countX && _bigUnitXCount) {
         //大幅减少计算
         _unitX = (_MaxX-_MinX)/_bigUnitXCount/_countX;
     }
     [self clear];
-    [self updateYCoordinate];
     [self updateXCoordinate];
+    float x = [self getXWithValue:0];
+    if (x - zX < -0.00001 || x - zX > 0.000001 ) {//X0位置改变，则更新x轴
+        [self updateYCoordinate];
+    }
 }
 
 -(void)setBigUnitXCount:(uint)bigUnitXCount{
     if (_bigUnitXCount == bigUnitXCount || bigUnitXCount == 0) {  ///防止重绘
         return;
     }
+    CGFloat zX = [self getXWithValue:0];
     _bigUnitXCount = bigUnitXCount;
     if (_countX) {
         //大幅减少计算
@@ -132,19 +150,25 @@
     }
     [self clear];
     [self updateXCoordinate];
-    [self updateYCoordinate];
-}
+    float x = [self getXWithValue:0];
+    if (x - zX < -0.00001 || x - zX > 0.000001 ) {//X0位置改变，则更新x轴
+        [self updateYCoordinate];
+    }}
 -(void)setBigUnitYCount:(uint)bigUnitYCount{
     if (_bigUnitYCount == bigUnitYCount || bigUnitYCount == 0) {  ///防止重绘
         return;
     }
+    float zY = [self getYWithValue:0];
     _bigUnitYCount = bigUnitYCount;
     if (_countY) {
         _unitY = (_MaxY-_MinY)/_bigUnitYCount/_countY;
     }
     [self clear];
-    [self updateXCoordinate];
     [self updateYCoordinate];
+    float y = [self getYWithValue:0];
+    if (y - zY < -0.00001 || y - zY > 0.000001 ) {//y0位置改变，则更新x轴
+        [self updateXCoordinate];
+    }
 }
 
 //-(CGFloat)unitX{
@@ -160,6 +184,8 @@
     if (_countX == countX || countX == 0) {  ///防止重绘
         return;
     }
+    CGFloat zX = [self getXWithValue:0];
+
     _countX = countX;
     if (_bigUnitXCount) {
         //大幅减少计算
@@ -167,21 +193,27 @@
     }
     [self clear];
     [self updateXCoordinate];
-    [self updateYCoordinate];
-
+    float x = [self getXWithValue:0];
+    if (x - zX < -0.00001 || x - zX > 0.000001 ) {//X0位置改变，则更新x轴
+        [self updateYCoordinate];
+    }
 }
 
 -(void)setCountY:(uint)countY{
     if (_countY == countY || countY == 0) {  ///防止重绘
         return;
     }
+    float zY = [self getYWithValue:0];
     _countY = countY;
     if (_bigUnitYCount) {
         _unitY = (_MaxY-_MinY)/_bigUnitYCount/_countY;
     }
     [self clear];
-    [self updateXCoordinate];
     [self updateYCoordinate];
+    float y = [self getYWithValue:0];
+    if (y - zY < -0.00001 || y - zY > 0.000001 ) {//y0位置改变，则更新x轴
+        [self updateXCoordinate];
+    }
 }
 
 -(CGFloat)unitW{
@@ -217,14 +249,14 @@
     return self.bounds.size.height - _contentInsets.top - _contentInsets.bottom - _arrowSize;
 }
 - (void)updateXCoordinate {
-    if (!_bigUnitXCount || !_countX || !self.unitW || _MaxX == _MinX) {
+    if (!_showXCoordinate || !_bigUnitXCount || !_countX || !self.unitW || _MaxX == _MinX) {
         return;
     }
     CGFloat unitX = self.unitX;
 //    NSLog(@"test %f,%f,%f",(float)_bigUnitXCount,fabsf(unitX),(float)_countX);
     
     [_xPath removeAllPoints];
-    NSMutableDictionary* textDic = [[NSMutableDictionary alloc]init];
+    [_xTextDic removeAllObjects];
     CGPoint temPoint;
     [_xPath setLineWidth:50];
     ///x坐标
@@ -274,7 +306,6 @@
         point.x = [self getXWithValue:i * uSigUnitX + minX];
         point.y = zY;
         [_xPath moveToPoint:point];
-
         if(i % _countX == 0){
             NSString* value;
             if ([self.coordinateDeleagte respondsToSelector:@selector(GJCoordinateLayer:titleWithXValue:)]){
@@ -285,7 +316,7 @@
             CGSize size = [value sizeWithAttributes: _textSetLayer.font == nil ? nil : @{NSFontAttributeName:_textSetLayer.font}];
             NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width * 0.5, point.y + 2)];
             if(value != nil){
-                [textDic setObject:value forKey:key];
+                [_xTextDic setObject:value forKey:key];
             }
             point.y -= _bigLineH;
         }else{
@@ -294,17 +325,16 @@
         [_xPath addLineToPoint:point];
     }
     
-    [_textSetLayer addTextWithDic:textDic];
     NSLog(@"REDRAW XCOORDINATE IN FRAME:%@",[NSValue valueWithCGRect:self.frame]);
     [self drawCoordinate];
 }
 - (void)updateYCoordinate {
-    if (!_bigUnitYCount || !_countY  || !self.unitH || _MaxY == _MinY) {
+    if (!_showYCoordinate || !_bigUnitYCount || !_countY  || !self.unitH || _MaxY == _MinY) {
         return;
     }
     CGFloat unitY = self.unitY;
     [_yPath removeAllPoints];
-    NSMutableDictionary* textDic = [[NSMutableDictionary alloc]init];
+    [_yTextDic removeAllObjects];
     CGPoint temPoint;
     [_yPath setLineWidth:50];
     ///Y坐标
@@ -363,7 +393,7 @@
             CGSize size = [value sizeWithAttributes: _textSetLayer.font == nil ? nil : @{NSFontAttributeName:_textSetLayer.font}];
             NSValue* key = [NSValue valueWithCGPoint:CGPointMake(point.x - size.width -2, point.y - size.height*0.5)];
             if (value != nil) {
-                [textDic setObject:value forKey:key];
+                [_yTextDic setObject:value forKey:key];
             }
             
             point.x += _bigLineH;
@@ -372,7 +402,6 @@
         }
         [_yPath addLineToPoint:point];
     }
-    [_textSetLayer addTextWithDic:textDic];
     NSLog(@"REDRAW YCOORDINATE IN FRAME:%@",[NSValue valueWithCGRect:self.frame]);
 
     [self drawCoordinate];
@@ -380,10 +409,12 @@
 - (void)drawCoordinate {
     [_path removeAllPoints];
     if (_showXCoordinate) {
+        [_textSetLayer addTextWithDic:_xTextDic];
         [_path appendPath:_xPath];
     }
     
     if (_showYCoordinate) {
+        [_textSetLayer addTextWithDic:_yTextDic];
         [_path appendPath:_yPath];
     }
     [_path moveToPoint:[self getPointWithValue:CGPointZero]];
@@ -400,7 +431,7 @@
 }
 -(CGFloat)getYWithValue:(CGFloat)value{
     if(self.unitY == 0 ){
-        return 0;
+        return self.frame.size.height - _contentInsets.bottom;
     }
     value = (value - _MinY) / self.unitY * self.unitH;
     value = self.frame.size.height - _contentInsets.bottom - value;

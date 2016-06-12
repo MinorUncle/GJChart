@@ -25,14 +25,14 @@ typedef enum _TextAlignment{
     TextAlignmentBottonRight,
 }TextAlignment;
 @interface GJTextSetLayer : CALayer
-@property(nonatomic,retain,readonly)NSMutableDictionary* textDic;////[nsstring,cgpoint]
+@property(nonatomic,retain,readonly)NSMutableDictionary<NSValue*,NSString*>* textDic;////[nsstring,cgpoint]
 @property(nonatomic,retain)UIFont* font;////
 @property(nonatomic,retain)UIColor* fontColor;////
 @property(nonatomic,assign)CGFloat textAlignmentMargin;////   ///对齐时的距离 默认2， TextAlignmentNone则无事此属性
 
 
 
--(void)addTextWithDic:(NSDictionary*)dic;
+-(void)addTextWithDic:(NSDictionary<NSValue*,NSString*>*)dic;
 -(void)addTextWithPoint:(CGPoint)point text:(NSString*)str textAlignment:(TextAlignment)alignment;
 -(void)clear;  ///清除所有数据
 @end

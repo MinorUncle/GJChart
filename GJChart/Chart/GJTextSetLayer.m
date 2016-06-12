@@ -8,6 +8,7 @@
 
 #import "GJTextSetLayer.h"
 #import <UIKit/UIGraphics.h>
+#import <UIKit/UIScreen.h>
 
 @implementation GJTextSetLayer
 - (instancetype)init
@@ -16,6 +17,7 @@
     if (self) {
         self.textDic = [[NSMutableDictionary alloc]init];
         _textAlignmentMargin = 4;
+        self.contentsScale = [UIScreen mainScreen].scale;
     }
     return self;
 }
@@ -115,7 +117,7 @@
     }
     return point;
 }
--(void)addTextWithDic:(NSDictionary*)dic{
+-(void)addTextWithDic:(NSDictionary<NSValue*,NSString*>*)dic{
     
     for (NSValue* key in dic.allKeys) {
         [self.textDic setObject:dic[key] forKey:key];

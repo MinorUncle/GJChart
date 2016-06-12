@@ -58,6 +58,8 @@
     _coordinateView.charDelegate = self;
     _coordinateView.charDataDelegate = self;
 
+
+
     [self.view addSubview:_scrollView];
     [_scrollView addSubview:_coordinateView];
     [self drawTenMin];

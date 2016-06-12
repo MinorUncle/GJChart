@@ -22,7 +22,7 @@
         _circularLayer = [[GJCircularPointSetLayer alloc]init];
         _showPoint = YES;
         [self addSublayer:_circularLayer];
-        
+        self.contentsScale = [UIScreen mainScreen].scale;
 //        [self setLineDashPattern:@[@3,@3]];
         [self setStrokeColor:[UIColor yellowColor].CGColor];
     }
