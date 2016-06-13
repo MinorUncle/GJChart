@@ -78,13 +78,11 @@
         if ([self.charDelegate respondsToSelector:@selector(GJChartView:typeWithSection:)]) {
             type = [self.charDelegate GJChartView:self typeWithSection:i];
         }
-        
         /**
          *  字符内容layer
          */
         GJTextSetLayer* textSet = [[GJTextSetLayer alloc]init];
         textSet.frame = [self bounds];
-        
         
         
         /**
@@ -204,7 +202,7 @@
             values = [self.charDataDelegate GJChartView:self dataForSection:i];
         }
         if (values.count == 0) {
-            break;
+            continue;
         }
         maxCount = MAX(maxCount, values.count);
         for (NSValue* value in values) {

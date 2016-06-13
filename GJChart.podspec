@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
   s.name             = "GJChart"    #名称
 
-  s.version          = "2.0.0"           #版本号
+  s.version          = "2.0"           #版本号
 
   s.summary          = "ios最简单图表"     #，
 

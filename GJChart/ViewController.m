@@ -102,6 +102,8 @@
 }
 
 -(NSArray<NSValue *> *)GJChartView:(GJChartView *)view dataForSection:(NSInteger)section{
+    if(section <= 0)
+        return nil;
     return _data[section];
 }
 -(NSString *)GJChartView:(GJChartView *)view tipTitleForSection:(NSInteger)section{
