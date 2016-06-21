@@ -385,8 +385,8 @@
         [_yPath moveToPoint:point];
         if(i % _countY == 0){
             NSString* value;
-            if ([self.delegate respondsToSelector:@selector(GJCoordinateLayer:titleWithYValue:)]){
-                value = [self.delegate GJCoordinateLayer:self titleWithYValue:(i * uSigUnitY + minY )];
+            if ([self.coordinateDeleagte respondsToSelector:@selector(GJCoordinateLayer:titleWithYValue:)]){
+                value = [self.coordinateDeleagte GJCoordinateLayer:self titleWithYValue:(i * uSigUnitY + minY )];
             }else{
                 value = [NSString stringWithFormat:@"%.2f",(i * uSigUnitY + minY )];
             }

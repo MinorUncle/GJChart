@@ -29,7 +29,7 @@
 -(void)buildData{
     _data = [[NSMutableArray alloc]init];
     for (int i = 0; i<2; i++) {
-        float x = 10;
+        float x = 0;
         CGFloat y = -260;
         NSMutableArray* arry = [[NSMutableArray alloc]init];
         for (int j = 0; j<7; j++) {
@@ -88,6 +88,13 @@
     int hour = (int)value / 60;
     int min = (int)value % 60;
     NSString* title = [NSString stringWithFormat:@"%f",value];
+    return title;
+}
+
+-(NSString *)GJCoordinateLayer:(GJCoordinateLayer *)view titleWithYValue:(CGFloat)value
+{
+   
+    NSString* title = [NSString stringWithFormat:@"%d人",(int)value];
     return title;
 }
 

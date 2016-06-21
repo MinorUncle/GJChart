@@ -804,11 +804,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GJChart/Chart/GJChartView.m"
-            timestampString = "488191400.953873"
+            timestampString = "488192190.755238"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "377"
-            endingLineNumber = "377"
+            startingLineNumber = "367"
+            endingLineNumber = "367"
             landmarkName = "-adjustZeorWithMax:Min:BigCount:Count:resize:"
             landmarkType = "5">
          </BreakpointContent>
@@ -820,11 +820,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GJChart/Chart/GJChartView.m"
-            timestampString = "488191400.953873"
+            timestampString = "488192190.755238"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "305"
-            endingLineNumber = "305"
+            startingLineNumber = "295"
+            endingLineNumber = "295"
             landmarkName = "-analysisCoordinate"
             landmarkType = "5">
          </BreakpointContent>
@@ -868,11 +868,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GJChart/Chart/GJChartView.m"
-            timestampString = "488191400.953873"
+            timestampString = "488192190.755238"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "467"
-            endingLineNumber = "467"
+            startingLineNumber = "457"
+            endingLineNumber = "457"
             landmarkName = "-setAutoResizeYMaxAndMin:"
             landmarkType = "5">
          </BreakpointContent>
@@ -884,11 +884,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GJChart/Chart/GJChartView.m"
-            timestampString = "488191400.953873"
+            timestampString = "488192190.755238"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "315"
-            endingLineNumber = "315"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
             landmarkName = "-analysisCoordinate"
             landmarkType = "5">
          </BreakpointContent>
@@ -948,11 +948,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GJChart/ViewController.m"
-            timestampString = "488191457.340593"
+            timestampString = "488192398.570202"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "103"
-            endingLineNumber = "103"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
             landmarkName = "-numberOfSectionsInCoordinateView:"
             landmarkType = "5">
          </BreakpointContent>
@@ -964,11 +964,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GJChart/ViewController.m"
-            timestampString = "488191457.340593"
+            timestampString = "488192398.570202"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
             landmarkName = "-GJChartView:dataForSection:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1008,15 +1008,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GJChart/Chart/GJChartView.m"
-            timestampString = "488191400.953873"
+            timestampString = "488192190.755238"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "291"
-            endingLineNumber = "291"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
             landmarkName = "-analysisCoordinate"
             landmarkType = "5">
          </BreakpointContent>
@@ -1028,11 +1028,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GJChart/Chart/GJChartView.m"
-            timestampString = "488191400.953873"
+            timestampString = "488192190.755238"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "290"
-            endingLineNumber = "290"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
             landmarkName = "-analysisCoordinate"
             landmarkType = "5">
          </BreakpointContent>
@@ -1065,6 +1065,22 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "381"
             endingLineNumber = "381"
+            landmarkName = "-updateYCoordinate"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GJChart/Chart/GJCoordinateLayer.m"
+            timestampString = "488192424.395405"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "388"
+            endingLineNumber = "388"
             landmarkName = "-updateYCoordinate"
             landmarkType = "5">
          </BreakpointContent>

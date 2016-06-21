@@ -271,21 +271,11 @@
     }
 
     if (_autoResizeYBigUnitCount && maxCount != 0 && _coordinateLayer.countY != 0) {
-        float bigUnit = (realMaxY-realMinY)/(maxCount-1);
-        
-        if (realMaxY * realMinY > 0) {
-            if (realMaxY>0) {
-                YBigUnitCount =  MAX(realMaxY/bigUnit,3);
-            }else{
-                YBigUnitCount =  MAX(-realMinY/bigUnit,3);
-            }
+        if (maxY* minY >= 0) {
+            YBigUnitCount =  MAX(maxCount/_coordinateLayer.countY,3);
         }else{
-            YBigUnitCount =  MAX((realMaxY - realMinY)/bigUnit,3);
-        }//            if (maxY* minY >= 0) {
-//                YBigUnitCount =  MAX(maxCount/_coordinateLayer.countY,3);
-//            }else{
-//                YBigUnitCount =  MAX(maxCount/_coordinateLayer.countY - 1,3);
-//            }
+            YBigUnitCount =  MAX(maxCount/_coordinateLayer.countY - 1,3);
+        }
     }
     if (_autoResizeXBigUnitCount && _coordinateLayer.countX != 0 && maxCount != 0) {
         float bigUnit = (realMaxX-realMinX)/(maxCount-1);
