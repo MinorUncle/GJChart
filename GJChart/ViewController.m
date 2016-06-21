@@ -29,19 +29,19 @@
 -(void)buildData{
     _data = [[NSMutableArray alloc]init];
     for (int i = 0; i<2; i++) {
-        float x = 0;
+        float x = 10;
         CGFloat y = -260;
         NSMutableArray* arry = [[NSMutableArray alloc]init];
-        for (int j = 0; j<35; j++) {
-            x += M_PI_2;
+        for (int j = 0; j<7; j++) {
             if (i == 0) {
                 y = sinf(x);
 
             }else{
                 y = cosf(x);
-
             }
+            NSLog(@"X=%f  Y=%f",x,y);
             [arry addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
+            x += 1;
         }
         [_data addObject:arry];
     }
@@ -57,6 +57,8 @@
     _coordinateView = [[GJChartView alloc]initWithFrame:_scrollView.bounds];
     _coordinateView.charDelegate = self;
     _coordinateView.charDataDelegate = self;
+//    _coordinateView.autoResizeXBigUnitCount = NO;
+//    _coordinateView.coordinateLayer.bigUnitXCount = 7;
 
 
 
@@ -68,7 +70,7 @@
 
 -(void)drawTenMin{
     CGRect rect = _coordinateView.frame;
-    rect.size.width = self.view.bounds.size.width*4;
+    rect.size.width = self.view.bounds.size.width*3;
     _coordinateView.frame = rect;
     _scrollView.contentSize = rect.size;
 
@@ -85,7 +87,7 @@
 {
     int hour = (int)value / 60;
     int min = (int)value % 60;
-    NSString* title = [NSString stringWithFormat:@"%02d:%02d",hour,min];
+    NSString* title = [NSString stringWithFormat:@"%f",value];
     return title;
 }
 
@@ -103,7 +105,7 @@
 
 -(NSArray<NSValue *> *)GJChartView:(GJChartView *)view dataForSection:(NSInteger)section{
     if(section <= 0)
-        return nil;
+        return  nil;
     return _data[section];
 }
 -(NSString *)GJChartView:(GJChartView *)view tipTitleForSection:(NSInteger)section{

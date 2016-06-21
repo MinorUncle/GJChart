@@ -408,6 +408,7 @@
 }
 - (void)drawCoordinate {
     [_path removeAllPoints];
+    [_textSetLayer clear];
     if (_showXCoordinate) {
         [_textSetLayer addTextWithDic:_xTextDic];
         [_path appendPath:_xPath];

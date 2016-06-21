@@ -185,9 +185,17 @@
     CGFloat maxX = -MAXFLOAT;
     CGFloat minY = MAXFLOAT;
     CGFloat minX = MAXFLOAT;
+    
+    //真实的
+    CGFloat realMaxY = -MAXFLOAT;
+    CGFloat realMaxX = -MAXFLOAT;
+    CGFloat realMinY = MAXFLOAT;
+    CGFloat realMinX = MAXFLOAT;
+    
     CGFloat maxCount = -MAXFLOAT;
     uint XBigUnitCount = _coordinateLayer.bigUnitXCount;
     uint YBigUnitCount = _coordinateLayer.bigUnitYCount;
+
 
     long capacity = 0;
     if ([self.charDataDelegate respondsToSelector:@selector(numberOfSectionsInCoordinateView:)]) {
@@ -204,6 +212,7 @@
         if (values.count == 0) {
             continue;
         }
+        
         maxCount = MAX(maxCount, values.count);
         for (NSValue* value in values) {
             maxX = MAX(maxX, [value CGPointValue].x);
@@ -215,6 +224,8 @@
     }
 
     if (_autoResizeYMaxAndMin) {
+        realMaxY = maxY;
+        realMinY = minY;
         if (minY == MAXFLOAT) {
             minY = 0;
         }
@@ -232,8 +243,14 @@
     }else{
         maxY = _coordinateLayer.MaxY;
         minY = _coordinateLayer.MinY;
+        
+        realMaxY = maxY;
+        realMinY = minY;
     }
     if (_autoResizeXMaxAndMin) {
+        realMaxX = maxX;
+        realMinX = minX;
+        
         if (minX == MAXFLOAT) {
             minX = 0;
         }
@@ -248,21 +265,40 @@
     }else{
         maxX = _coordinateLayer.MaxX;
         minX = _coordinateLayer.MinX;
+        
+        realMaxX = maxX;
+        realMinX = minX;
     }
 
     if (_autoResizeYBigUnitCount && maxCount != 0 && _coordinateLayer.countY != 0) {
-            if (maxY* minY >= 0) {
-                YBigUnitCount =  MAX(maxCount/_coordinateLayer.countY,3);
+        float bigUnit = (realMaxY-realMinY)/(maxCount-1);
+        
+        if (realMaxY * realMinY > 0) {
+            if (realMaxY>0) {
+                YBigUnitCount =  MAX(realMaxY/bigUnit,3);
             }else{
-                YBigUnitCount =  MAX(maxCount/_coordinateLayer.countY - 1,3);
+                YBigUnitCount =  MAX(-realMinY/bigUnit,3);
             }
+        }else{
+            YBigUnitCount =  MAX((realMaxY - realMinY)/bigUnit,3);
+        }//            if (maxY* minY >= 0) {
+//                YBigUnitCount =  MAX(maxCount/_coordinateLayer.countY,3);
+//            }else{
+//                YBigUnitCount =  MAX(maxCount/_coordinateLayer.countY - 1,3);
+//            }
     }
     if (_autoResizeXBigUnitCount && _coordinateLayer.countX != 0 && maxCount != 0) {
-            if (maxX * minX >= 0) {
-                XBigUnitCount =  MAX(maxCount,3);
+        float bigUnit = (realMaxX-realMinX)/(maxCount-1);
+
+        if (realMaxX * realMinX > 0) {
+            if (realMaxX>0) {
+                XBigUnitCount =  MAX(realMaxX/bigUnit,3);
             }else{
-                XBigUnitCount =  MAX(maxCount-1,3);
+                XBigUnitCount =  MAX(-realMinX/bigUnit,3);
             }
+        }else{
+            XBigUnitCount =  MAX((realMaxX - realMinX)/bigUnit,3);
+        }
     }
             //修正0位置，
     if(_autoAdjustXZeroPoint){
