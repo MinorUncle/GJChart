@@ -10,7 +10,7 @@
 #import "GJChartView.h"
 
 
-@interface ViewController ()<GJChartViewDelegate,GJChartViewDataSourceDelegate>
+@interface ViewController ()<GJChartViewDelegate,GJChartViewDataSourceDelegate,UIScrollViewDelegate>
 {
     GJChartView* _coordinateView;
     UIScrollView* _scrollView;
@@ -54,9 +54,12 @@
     
     
     _scrollView = [[UIScrollView alloc]initWithFrame:rect];
+    _scrollView.delegate = self;
+    _scrollView.maximumZoomScale = 50;
     _coordinateView = [[GJChartView alloc]initWithFrame:_scrollView.bounds];
     _coordinateView.charDelegate = self;
     _coordinateView.charDataDelegate = self;
+    _scrollView.directionalLockEnabled = YES;
 //    _coordinateView.autoResizeXBigUnitCount = NO;
 //    _coordinateView.coordinateLayer.bigUnitXCount = 7;
 
@@ -66,14 +69,16 @@
     [_scrollView addSubview:_coordinateView];
     [self drawTenMin];
 }
-
+-(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
+    return _coordinateView;
+}
 
 -(void)drawTenMin{
     CGRect rect = _coordinateView.frame;
     rect.size.width = self.view.bounds.size.width*3;
+    rect.size.height *= 3;
     _coordinateView.frame = rect;
     _scrollView.contentSize = rect.size;
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -85,8 +90,6 @@
 
 -(NSString *)GJCoordinateLayer:(GJCoordinateLayer *)view titleWithXValue:(CGFloat)value
 {
-    int hour = (int)value / 60;
-    int min = (int)value % 60;
     NSString* title = [NSString stringWithFormat:@"%f",value];
     return title;
 }
@@ -97,7 +100,6 @@
     NSString* title = [NSString stringWithFormat:@"%d人",(int)value];
     return title;
 }
-
 
 -(NSString *)GJChartView:(GJChartView *)view titleWithValue:(CGPoint)point inSection:(NSInteger)section{
     if (section == 0) {
@@ -134,6 +136,13 @@
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [self buildData];
+    
+    CGRect rect;
+    
+    rect.size = _scrollView.contentSize;
+    rect.origin = CGPointZero;
+    _coordinateView.frame = rect;
+    
     [_coordinateView reloadData];
 }
 @end

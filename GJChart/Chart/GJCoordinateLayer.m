@@ -243,10 +243,11 @@
 }
 
 -(CGFloat)coordinateW{
-    return self.bounds.size.width - _contentInsets.left - _contentInsets.right - _arrowSize;
+    return self.frame.size.width - _contentInsets.left - _contentInsets.right - _arrowSize;
 }
 -(CGFloat)coordinateH{
-    return self.bounds.size.height - _contentInsets.top - _contentInsets.bottom - _arrowSize;
+    
+    return self.frame.size.height - _contentInsets.top - _contentInsets.bottom - _arrowSize;
 }
 - (void)updateXCoordinate {
     if (!_showXCoordinate || !_bigUnitXCount || !_countX || !self.unitW || _MaxX == _MinX) {
@@ -264,8 +265,6 @@
     [_xPath moveToPoint:point];
     point.x = [self getXWithValue:_MaxX];
     [_xPath addLineToPoint:point];
-    
-   
     
     CGFloat maxX,minX,uSigUnitX;
     if (_MaxX > _MinX) {
@@ -322,6 +321,7 @@
         }else{
             point.y -= _smallLineH;
         }
+        NSLog(@"FRAME:%@",[NSValue valueWithCGPoint:point]);
         [_xPath addLineToPoint:point];
     }
     

@@ -27,6 +27,7 @@
         _bigPath = CGPathCreateMutable();
         _outsideRadius = 3;
         _insideRadius = 2;
+        self.contentsScale = [UIScreen mainScreen].scale;
     }
     return self;
 }
