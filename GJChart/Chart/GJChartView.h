@@ -18,7 +18,12 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
     CoordinateViewSectionTypeLine, ///  线，
     CoordinateViewSectionTypeBar
   //  CoordinateViewSectionTypePie
-
+};
+//坐标轴类型
+typedef NS_ENUM(NSInteger, CoordinateType) {
+    CoordinateTypeDefault, ///  标准笛卡尔
+    CoordinateTypeHorizontal   //X,Y调换
+    //  CoordinateViewSectionTypePie
 };
 @class GJChartView;
 @protocol GJChartViewDelegate <NSObject,CoordinateSystemLayerDelegate>
@@ -27,6 +32,11 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
 -(NSString*) GJChartView:(GJChartView*)view titleWithValue:(CGPoint)point inSection:(NSInteger)section;
 -(CoordinateViewSectionType) GJChartView:(GJChartView*)view typeWithSection:(NSInteger)section;  ///自定义组类型
 -(void)GJChartView:(GJChartView*)view customTextLayerStlye:(GJTextSetLayer*)textLayer customSectionLayerStyle:(CALayer*)sectionLayer inSection:(NSInteger)section;
+
+///自定义x轴名称
+-(NSString*) GJChartView:(GJChartView*)view xTitleWithCoordinateXValue:(CGFloat)value;
+///自定义y轴名称
+-(NSString*) GJChartView:(GJChartView*)view yTitleWithCoordinateYValue:(CGFloat)value;
 @end
 
 @protocol GJChartViewDataSourceDelegate <NSObject>
@@ -51,7 +61,7 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
 
 
 
-@property(nonatomic,assign)CGPoint beginValue;
+//@property(nonatomic,assign)CGPoint beginValue;
 //@property(nonatomic,assign)float speed;   //动画速度 ///未使用
 /**
  *  条状图的宽与大单元格的比例
@@ -68,6 +78,9 @@ typedef NS_ENUM(NSInteger, CoordinateViewSectionType) {
 @property(nonatomic,assign)BOOL autoAdjustXZeroPoint;
 @property(nonatomic,assign)BOOL showBackgroundHLine;
 @property(nonatomic,assign)BOOL showBackgroundVLine;
+
+@property(nonatomic,assign)CoordinateType coordinateType;
+
 @property(nonatomic,strong)GJLineSetLayer* backgroundHLineLayer;
 @property(nonatomic,strong)GJLineSetLayer* backgroundVLineLayer;
 

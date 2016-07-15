@@ -82,6 +82,7 @@
     CGPathRelease(_bigPath);
     _smallPath = CGPathCreateMutable();
     _bigPath = CGPathCreateMutable();
+    [self setNeedsDisplay];
 }
 -(void)reload{    ///更新画面
     [self setNeedsDisplay];
