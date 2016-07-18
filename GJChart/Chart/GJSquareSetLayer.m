@@ -22,7 +22,6 @@
         _fillColor = [UIColor redColor];
         _strokeColor = [UIColor blackColor];
         _lineStyle = UIEdgeInsetsMake(SquareLayerNone, SquareLayerNone, SquareLayerNone, SquareLayerNone);
-        
     }
     return self;
 }
@@ -34,7 +33,6 @@
     }
 }
 -(void)drawSquare{
-
 }
 -(void)drawLine{
 }

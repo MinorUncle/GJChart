@@ -332,6 +332,7 @@
     if (!_showYCoordinate || !_bigUnitYCount || !_countY  || !self.unitH || _MaxY == _MinY) {
         return;
     }
+    
     CGFloat unitY = self.unitY;
     [_yPath removeAllPoints];
     [_yTextDic removeAllObjects];
@@ -420,7 +421,6 @@
     }
     [_path moveToPoint:[self getPointWithValue:CGPointZero]];
     self.path = _path.CGPath;
-    
 }
 
 -(CGFloat)getXWithValue:(CGFloat)value{

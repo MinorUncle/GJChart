@@ -30,16 +30,10 @@
     _data = [[NSMutableArray alloc]init];
     for (int i = 0; i<2; i++) {
         float x = 0;
-        CGFloat y = -260;
+        CGFloat y = 0;
         NSMutableArray* arry = [[NSMutableArray alloc]init];
         for (int j = 0; j<7; j++) {
-            if (i == 0) {
-                y = sinf(x);
-
-            }else{
-                y = cosf(x);
-            }
-            NSLog(@"X=%f  Y=%f",x,y);
+            y +=1;
             [arry addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
             x += 1;
         }
@@ -57,8 +51,10 @@
     _scrollView.delegate = self;
     _scrollView.maximumZoomScale = 50;
     _coordinateView = [[GJChartView alloc]initWithFrame:_scrollView.bounds];
+    _coordinateView.coordinateType = CoordinateTypeHorizontal;
     _coordinateView.charDelegate = self;
     _coordinateView.charDataDelegate = self;
+
     _scrollView.directionalLockEnabled = YES;
 //    _coordinateView.autoResizeXBigUnitCount = NO;
 //    _coordinateView.coordinateLayer.bigUnitXCount = 7;
@@ -76,7 +72,6 @@
 -(void)drawTenMin{
     CGRect rect = _coordinateView.frame;
     rect.size.width = self.view.bounds.size.width*3;
-    rect.size.height *= 3;
     _coordinateView.frame = rect;
     _scrollView.contentSize = rect.size;
 }
@@ -88,16 +83,16 @@
 
 #pragma mark DELEGATE
 
--(NSString *)GJCoordinateLayer:(GJCoordinateLayer *)view titleWithXValue:(CGFloat)value
-{
+///自定义x轴名称
+-(NSString*) GJChartView:(GJChartView*)view xTitleWithCoordinateXValue:(CGFloat)value{
     NSString* title = [NSString stringWithFormat:@"%f",value];
     return title;
 }
-
--(NSString *)GJCoordinateLayer:(GJCoordinateLayer *)view titleWithYValue:(CGFloat)value
+///自定义y轴名称
+-(NSString*) GJChartView:(GJChartView*)view yTitleWithCoordinateYValue:(CGFloat)value
 {
    
-    NSString* title = [NSString stringWithFormat:@"%d人",(int)value];
+    NSString* title = [NSString stringWithFormat:@"%0.1f人",value];
     return title;
 }
 
@@ -127,6 +122,7 @@
     return tip;
 }
 -(CoordinateViewSectionType)GJChartView:(GJChartView *)view typeWithSection:(NSInteger)section{
+    return CoordinateViewSectionTypeBar;
     if (section%2 == 0) {
         return CoordinateViewSectionTypeBar;
     }else{
@@ -142,7 +138,8 @@
     rect.size = _scrollView.contentSize;
     rect.origin = CGPointZero;
     _coordinateView.frame = rect;
-    
-    [_coordinateView reloadData];
+    _coordinateView.showBackgroundHLine = NO;
+
+//    [_coordinateView reloadData];
 }
 @end

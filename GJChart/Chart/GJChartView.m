@@ -17,9 +17,166 @@
     CGFloat _totalTipXPoint;
     CGFloat _currentRowMaxWidth;
 }
-
+//映射坐标轴属性，用于方便实现x,y坐标的转换
+@property(nonatomic,assign)CGFloat MaxY;
+@property(nonatomic,assign)CGFloat MaxX;
+@property(nonatomic,assign)CGFloat MinY;
+@property(nonatomic,assign)CGFloat MinX;
+@property(nonatomic,assign)uint countY;
+@property(nonatomic,assign)uint countX;
+@property(nonatomic,assign)uint bigUnitYCount;
+@property(nonatomic,assign)uint bigUnitXCount;
+@property(nonatomic,assign,readonly)CGFloat unitY;
+@property(nonatomic,assign,readonly)CGFloat unitX;
+@property(nonatomic,assign,readonly)CGFloat unitW;
+@property(nonatomic,assign,readonly)CGFloat unitH;
 @end
 @implementation GJChartView
+-(CGFloat)unitW{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        return _coordinateLayer.unitW;
+    }else{
+        return _coordinateLayer.unitH;
+    }
+}
+-(CGFloat)unitH{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        return _coordinateLayer.unitH;
+    }else{
+        return _coordinateLayer.unitW;
+    }
+}
+
+-(CGFloat)MaxX{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        return _coordinateLayer.MaxX;
+    }else{
+        return _coordinateLayer.MaxY;
+    }
+}
+-(void)setMaxX:(CGFloat)MaxX{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        _coordinateLayer.MaxX = MaxX;
+    }else{
+        _coordinateLayer.MaxY = MaxX;
+    }
+}
+-(CGFloat)MinX{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        return _coordinateLayer.MinX;
+    }else{
+        return _coordinateLayer.MinY;
+    }
+}
+-(void)setMinX:(CGFloat)MinX{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        _coordinateLayer.MinX = MinX;
+    }else{
+        _coordinateLayer.MinY = MinX;
+    }
+}
+
+-(uint)countX{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        return _coordinateLayer.countX;
+    }else{
+        return _coordinateLayer.countY;
+    }
+}
+-(void)setCountX:(uint)countX{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        _coordinateLayer.countX = countX;
+    }else{
+        _coordinateLayer.countY = countX;
+    }
+}
+
+-(CGFloat)MaxY{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        return _coordinateLayer.MaxY;
+    }else{
+        return _coordinateLayer.MaxX;
+    }
+}
+-(void)setMaxY:(CGFloat)MaxY{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        _coordinateLayer.MaxY = MaxY;
+    }else{
+        _coordinateLayer.MaxX = MaxY;
+    }
+}
+-(CGFloat)MinY{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        return _coordinateLayer.MinY;
+    }else{
+        return _coordinateLayer.MinX;
+    }
+}
+-(void)setMinY:(CGFloat)MinY{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        _coordinateLayer.MinY = MinY;
+    }else{
+        _coordinateLayer.MinX = MinY;
+    }
+}
+
+-(uint)countY{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        return _coordinateLayer.countY;
+    }else{
+        return _coordinateLayer.countX;
+    }
+}
+-(void)setCountY:(uint)countY{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        _coordinateLayer.countY = countY;
+    }else{
+        _coordinateLayer.countX = countY;
+    }
+}
+-(CGFloat)unitX{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        return _coordinateLayer.unitX;
+    }else{
+        return _coordinateLayer.unitY;
+    }
+}
+-(CGFloat)unitY{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        return _coordinateLayer.unitY;
+    }else{
+        return _coordinateLayer.unitX;
+    }
+}
+-(uint)bigUnitXCount{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        return _coordinateLayer.bigUnitXCount;
+    }else{
+        return _coordinateLayer.bigUnitYCount;
+    }
+}
+-(void)setBigUnitXCount:(uint)bigUnitXCount{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        _coordinateLayer.bigUnitXCount = bigUnitXCount;
+    }else{
+        _coordinateLayer.bigUnitYCount = bigUnitXCount;
+    }
+}
+-(uint)bigUnitYCount{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        return _coordinateLayer.bigUnitYCount;
+    }else{
+        return _coordinateLayer.bigUnitXCount;
+    }
+}
+-(void)setBigUnitYCount:(uint)bigUnitYCount{
+    if (self.coordinateType == CoordinateTypeDefault) {
+        _coordinateLayer.bigUnitYCount = bigUnitYCount;
+    }else{
+        _coordinateLayer.bigUnitXCount = bigUnitYCount;
+    }
+}
+
 +(Class)layerClass{
     return [GJCoordinateLayer class];
 }
@@ -73,7 +230,16 @@
     
 
     for (int i = 0; i < capacity; i++) {
-        NSArray<NSValue*>* values = [self.charDataDelegate GJChartView:self dataForSection:i];
+        NSMutableArray<NSValue*>* values = [[NSMutableArray alloc]initWithArray:[self.charDataDelegate GJChartView:self dataForSection:i]];
+//        for (int i = 0; i<values.count; i++) {
+//            NSValue* value = values[i];
+//            CGPoint p = [value CGPointValue];
+//            p.x += p.y;
+//            p.y = p.x - p.y;
+//            p.x = p.x - p.y;
+//            value = [NSValue valueWithCGPoint:p];
+//            [values replaceObjectAtIndex:i withObject:value];
+//        }
         CoordinateViewSectionType type = CoordinateViewSectionTypeLine;
         if ([self.charDelegate respondsToSelector:@selector(GJChartView:typeWithSection:)]) {
             type = [self.charDelegate GJChartView:self typeWithSection:i];
@@ -153,7 +319,7 @@
             if ([self.charDelegate respondsToSelector:@selector(GJChartView:titleWithValue:inSection:)]) {
                 titleName = [self.charDelegate GJChartView:self titleWithValue:[value CGPointValue] inSection:i];
             }
-            CGPoint point = [_coordinateLayer getPointWithValue:[value CGPointValue]];
+            CGPoint point = [self _getPointWithValue:[value CGPointValue]];
             [textSet addTextWithPoint:point text:titleName textAlignment:TextAlignmentBotton];
             
             }
@@ -168,7 +334,7 @@
         flg = index % _verticalMaxTipCount;
     }
     if (index == 0) {
-        _totalTipXPoint =[_coordinateLayer getXWithValue:0]+MAX(_coordinateLayer.bigLineH, _coordinateLayer.arrowSize)+10;
+        _totalTipXPoint =[self _getXWithValue:0]+MAX(_coordinateLayer.bigLineH, _coordinateLayer.arrowSize)+10;
     }else{
         if (flg == 0) {
             _totalTipXPoint += _currentRowMaxWidth + TIP_VIEW_H_MARGIN;
@@ -193,8 +359,8 @@
     CGFloat realMinX = MAXFLOAT;
     
     CGFloat maxCount = -MAXFLOAT;
-    uint XBigUnitCount = _coordinateLayer.bigUnitXCount;
-    uint YBigUnitCount = _coordinateLayer.bigUnitYCount;
+    uint XBigUnitCount = self.bigUnitXCount;
+    uint YBigUnitCount = self.bigUnitYCount;
 
 
     long capacity = 0;
@@ -241,8 +407,8 @@
             maxY = 1;
         }
     }else{
-        maxY = _coordinateLayer.MaxY;
-        minY = _coordinateLayer.MinY;
+        maxY = self.MaxY;
+        minY = self.MinY;
         
         realMaxY = maxY;
         realMinY = minY;
@@ -263,21 +429,21 @@
             maxX = 0;
         }
     }else{
-        maxX = _coordinateLayer.MaxX;
-        minX = _coordinateLayer.MinX;
+        maxX = self.MaxX;
+        minX = self.MinX;
         
         realMaxX = maxX;
         realMinX = minX;
     }
 
-    if (_autoResizeYBigUnitCount && maxCount != 0 && _coordinateLayer.countY != 0) {
+    if (_autoResizeYBigUnitCount && maxCount != 0 && self.countY != 0) {
         if (maxY* minY >= 0) {
-            YBigUnitCount =  MAX(maxCount/_coordinateLayer.countY,3);
+            YBigUnitCount =  MAX(maxCount/self.countY,3);
         }else{
-            YBigUnitCount =  MAX(maxCount/_coordinateLayer.countY - 1,3);
+            YBigUnitCount =  MAX(maxCount/self.countY - 1,3);
         }
     }
-    if (_autoResizeXBigUnitCount && _coordinateLayer.countX != 0 && maxCount != 0) {
+    if (_autoResizeXBigUnitCount && self.countX != 0 && maxCount != 0) {
         float bigUnit = (realMaxX-realMinX)/(maxCount-1);
 
         if (realMaxX * realMinX > 0) {
@@ -292,48 +458,75 @@
     }
             //修正0位置，
     if(_autoAdjustXZeroPoint){
-        uint count = _coordinateLayer.countX;
+        uint count = self.countX;
         [self adjustZeorWithMax:&maxX Min:&minX BigCount:&XBigUnitCount Count:count resize:_autoResizeXMaxAndMin && _autoResizeXBigUnitCount];
     }
     
     if (_autoAdjustYZeroPoint) {
-        uint count = _coordinateLayer.countY;
+        uint count = self.countY;
         [self adjustZeorWithMax:&maxY Min:&minY BigCount:&YBigUnitCount Count:count resize:_autoResizeYMaxAndMin && _autoResizeYBigUnitCount];
     }
-    _coordinateLayer.MaxY = maxY;
-    _coordinateLayer.MinY = minY;
-    _coordinateLayer.MaxX = maxX;
-    _coordinateLayer.MinX = minX;
-    _coordinateLayer.bigUnitYCount = YBigUnitCount;
-    _coordinateLayer.bigUnitXCount = XBigUnitCount;
+    self.MaxY = maxY;
+    self.MinY = minY;
+    self.MaxX = maxX;
+    self.MinX = minX;
+    self.bigUnitYCount = YBigUnitCount;
+    self.bigUnitXCount = XBigUnitCount;
 
-    
-     if (_showBackgroundHLine) {
-        if (_coordinateLayer.unitY != 0 && _coordinateLayer.countY != 0) {
-            [self.backgroundHLineLayer clear];
-            int lineCount = _coordinateLayer.bigUnitYCount;
-            for (int j = 1; j<lineCount ; j++) {
-                CGFloat y =  _coordinateLayer.unitY*_coordinateLayer.countY * j + _coordinateLayer.MinY;
-                CGPoint beginPoint = [_coordinateLayer getPointWithValue:CGPointMake(_coordinateLayer.MinX,y)];
-                CGPoint endPoint = [_coordinateLayer getPointWithValue:CGPointMake(_coordinateLayer.MaxX, y)];
-                [self.backgroundHLineLayer addLineFromPoint:beginPoint toPoint:endPoint];
-            }
-        }
+    [self.backgroundHLineLayer clear];
+    if (_showBackgroundHLine) {
+         [self drawBackgroundHLine];
     }
-    
+    [self.backgroundVLineLayer clear];
     if (_showBackgroundVLine) {
-        if (_coordinateLayer.unitX != 0 && _coordinateLayer.countX != 0) {
-            [self.backgroundVLineLayer clear];
-            int lineCount = _coordinateLayer.bigUnitXCount;
-            for (int j = 1; j<lineCount ; j++) {
-                CGFloat x =  _coordinateLayer.unitX*_coordinateLayer.countX * j + _coordinateLayer.MinX;
-                CGPoint beginPoint = [_coordinateLayer getPointWithValue:CGPointMake(x,_coordinateLayer.MinY)];
-                CGPoint endPoint = [_coordinateLayer getPointWithValue:CGPointMake(x, _coordinateLayer.MaxY)];
-                [self.backgroundVLineLayer addLineFromPoint:beginPoint toPoint:endPoint];
-            }
+        [self drawBackgroundVLine];
+    }
+}
+-(void)drawBackgroundVLine{
+    if (self.unitX != 0 && self.countX != 0) {
+        int lineCount = self.bigUnitXCount;
+        for (int j = 1; j<lineCount ; j++) {
+            CGFloat x =  self.unitX*self.countX * j + self.MinX;
+            CGPoint beginPoint = [self _getPointWithValue:CGPointMake(x,self.MinY)];
+            CGPoint endPoint = [self _getPointWithValue:CGPointMake(x, self.MaxY)];
+            [self.backgroundVLineLayer addLineFromPoint:beginPoint toPoint:endPoint];
         }
     }
 }
+-(void)drawBackgroundHLine{
+    if (self.unitY != 0 && self.countY != 0) {
+        int lineCount = self.bigUnitYCount;
+        for (int j = 1; j<lineCount ; j++) {
+            CGFloat y =  self.unitY*self.countY * j + self.MinY;
+            CGPoint beginPoint = [self _getPointWithValue:CGPointMake(self.MinX,y)];
+            CGPoint endPoint = [self _getPointWithValue:CGPointMake(self.MaxX, y)];
+            [self.backgroundHLineLayer addLineFromPoint:beginPoint toPoint:endPoint];
+        }
+    }
+}
+
+
+-(void)setShowBackgroundHLine:(BOOL)showBackgroundHLine{
+    if (_showBackgroundHLine != showBackgroundHLine) {
+        _showBackgroundHLine = showBackgroundHLine;
+        if (showBackgroundHLine) {
+            [self drawBackgroundHLine];
+        }else{
+            [self.backgroundHLineLayer clear];
+        }
+    }
+}
+-(void)setShowBackgroundVLine:(BOOL)showBackgroundVLine{
+    if (_showBackgroundVLine != showBackgroundVLine) {
+        _showBackgroundVLine = showBackgroundVLine;
+        if (showBackgroundVLine) {
+            [self drawBackgroundVLine];
+        }else{
+            [self.backgroundVLineLayer clear];
+        }
+    }
+}
+
 -(GJLineSetLayer *)backgroundHLineLayer{
     if (_backgroundHLineLayer == nil) {
         _backgroundHLineLayer = [[GJLineSetLayer alloc]init];
@@ -402,7 +595,7 @@
     
     NSMutableArray* pointArry = [[NSMutableArray alloc]initWithCapacity:values.count];
     for (NSValue* value in values) {
-        CGPoint point =[_coordinateLayer getPointWithValue:[value CGPointValue]];
+        CGPoint point =[self _getPointWithValue:[value CGPointValue]];
         [pointArry addObject:[NSValue valueWithCGPoint:point]];
     }
     [lineSet addLinesWithPoints:pointArry];
@@ -418,14 +611,25 @@
     [squareLayer addSquareWithRects:rectArry];
 }
 -(CGRect)getSquareRectWithValue:(CGPoint)vaule{
-    CGPoint point =[_coordinateLayer getPointWithValue:vaule];
-    CGFloat bottom = [_coordinateLayer getYWithValue:0];
-    CGFloat x = point.x - _coordinateLayer.unitW * _coordinateLayer.countX * _squareWRate * 0.5;
-    CGFloat y = point.y;
-    CGFloat w = _coordinateLayer.unitW * _coordinateLayer.countX * _squareWRate;
-    CGFloat h = bottom - point.y;
-
-    CGRect rect = CGRectMake(x, y, w, h);
+    CGPoint point =[self _getPointWithValue:vaule];
+    
+    CGRect rect;
+    if (self.coordinateType == CoordinateTypeDefault) {
+        CGFloat bottom = [self _getXWithValue:0];
+        CGFloat x = point.x - self.unitW * self.countX * _squareWRate * 0.5;
+        CGFloat y = point.y;
+        CGFloat w = self.unitW * self.countX * _squareWRate;
+        CGFloat h = bottom - point.y;
+        rect = CGRectMake(x, y, w, h);
+    }else if (self.coordinateType == CoordinateTypeHorizontal){
+        CGFloat bottom = [self _getYWithValue:0];
+        CGFloat x = bottom;//; point.x - self.unitW * self.countX * _squareWRate * 0.5;
+        CGFloat y = point.y  - self.unitW * self.countX * _squareWRate * 0.5;
+        CGFloat w = point.x - bottom;
+        CGFloat h = self.unitW * self.countX * _squareWRate;
+        rect = CGRectMake(x, y, w, h);
+    }
+   
     return rect;
 }
 -(void)setCharDataDelegate:(id<GJChartViewDataSourceDelegate>)charDataDelegate{
@@ -479,8 +683,8 @@
 
 
 -(void)addSquareWithValueRect:(CGRect)valueRect color:(UIColor *)color style:(UIEdgeInsets)style{
-    valueRect.origin.x = [self.coordinateLayer getXWithValue:valueRect.origin.x];
-    valueRect.origin.y = [self.coordinateLayer getYWithValue:valueRect.origin.y];
+    valueRect.origin.x = [self _getXWithValue:valueRect.origin.x];
+    valueRect.origin.y = [self _getYWithValue:valueRect.origin.y];
     valueRect.size.width = valueRect.size.width/ self.coordinateLayer.MaxX * self.coordinateLayer.coordinateW;
     valueRect.size.height = -(valueRect.size.height/ self.coordinateLayer.MaxY * self.coordinateLayer.coordinateH);
     
@@ -494,7 +698,52 @@
     
     [self buildSection];
 }
+-(CGFloat)_getYWithValue:(CGFloat)value{
+    CGFloat Y =0;
+    switch (self.coordinateType) {
+        case CoordinateTypeDefault:
+            Y = [_coordinateLayer getYWithValue:value];
+            break;
+        case CoordinateTypeHorizontal:
+            Y = [_coordinateLayer getXWithValue:value];
+            break;
+        default:
+            break;
+    }
+    return Y;
+}
+-(CGFloat)_getXWithValue:(CGFloat)value{
+    CGFloat X = 0;
+    switch (self.coordinateType) {
+        case CoordinateTypeDefault:
+            X = [_coordinateLayer getXWithValue:value];
+            break;
+        case CoordinateTypeHorizontal:
+            X = [_coordinateLayer getYWithValue:value];
+            break;
+        default:
+            break;
+    }
+    return X;
+}
+-(CGPoint)_getPointWithValue:(CGPoint)value{
+    CGPoint point;
+    switch (self.coordinateType) {
+        case CoordinateTypeDefault:
+            point.x = [_coordinateLayer getXWithValue:value.x];
+            point.y = [_coordinateLayer getYWithValue:value.y];
+            break;
+        case CoordinateTypeHorizontal:
+            point.y = [_coordinateLayer getYWithValue:value.x];
+            point.x = [_coordinateLayer getXWithValue:value.y];
+            break;
+            
+        default:
+            break;
+    }
+    return point;
 
+}
 
 
 @end

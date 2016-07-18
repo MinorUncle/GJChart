@@ -86,6 +86,8 @@
 -(void)clear{
     [path removeAllPoints];
     [_circularLayer clear];
+    self.path = path.CGPath;
+
 }
 -(void)reload{  ///更新画面
     self.path = path.CGPath;
